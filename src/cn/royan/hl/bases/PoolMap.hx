@@ -1,4 +1,4 @@
-package src.cn.royan.hl.bases;
+package cn.royan.hl.bases;
 
 class PoolMap 
 {

@@ -1,4 +1,4 @@
-package src.cn.royan.hl.uis.bases;
+package cn.royan.hl.uis.bases;
 
 import cn.royan.hl.interfaces.uis.IUiPlayBase;
 import cn.royan.hl.uis.InteractiveUiBase;
@@ -12,6 +12,31 @@ class UiBaseBmpdMovieClip extends InteractiveUiBase, implements IUiPlayBase
 	
 	//Constructor
 	public function new() 
+	{
+		super();
+	}
+
+	public function getIn():Void
+	{
+
+	}
+
+	public function getOut():Void
+	{
+
+	}
+
+	public function goTo(frame:Int):Void
+	{
+
+	}
+
+	public function jumpTo(frame:Int):Void
+	{
+
+	}
+
+	public function goFromTo(from:Int, to:Int):Void
 	{
 		
 	}

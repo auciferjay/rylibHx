@@ -1,37 +1,131 @@
-package src.cn.royan.hl.uis.bases;
+package cn.royan.hl.uis.bases;
 
+import cn.royan.hl.geom.Position;
 import cn.royan.hl.interfaces.uis.IUiTextBase;
 import cn.royan.hl.uis.InteractiveUiBase;
 
+import flash.text.TextField;
+import flash.text.TextFormat;
+import flash.text.TextFormatAlign;
+
 class UiBaseText extends InteractiveUiBase, implements IUiTextBase
 {
-
-	public function new() 
+	static public inline var TEXT_ALIGN_LEFT:Int 	= 0;
+	static public inline var TEXT_ALIGN_CENTER:Int 	= 1;
+	static public inline var TEXT_ALIGN_RIGHT:Int	= 2;
+	
+	var inputText:TextField;
+	
+	public function new(label:String="") 
 	{
+		super();
 		
+		inputText = new TextField();
+		inputText.text = label;
+		inputText.mouseEnabled 	= false;
+		inputText.selectable	= false;
+		addChild( inputText );
 	}
 	
-	public function setText(value:String):Void;
-	public function appendText(value:String):Void;
-	public function getText():String;
+	public function setText(value:String):Void
+	{
+		inputText.text = value;
+	}
 	
-	public function setHTMLText(value:String):Void;
-	public function appendHTMLText(value:String):Void;
-	public function getHTMLText():String;
+	public function appendText(value:String):Void
+	{
+		inputText.appendText(value);
+	}
 	
-	public function setTextAlign(value:Int):Void;
-	public function setTextColor(value:UInt):Void;
-	public function setTextSize(value:Int):Void;
+	public function getText():String
+	{
+		return inputText.text;
+	}
 	
-	public function setEmbedFont(value:Bool):Void;
+	public function setHTMLText(value:String):Void
+	{
+		inputText.htmlText = value;
+	}
 	
-	public function setFormat(value:TextFormat):Void;
-	public function getFormat():TextFormat;
-	public function getDefaultFormat():TextFormat;
+	public function appendHTMLText(value:String):Void
+	{
+		inputText.htmlText += value;
+	}
 	
-	public function setScroll(sx:Int=0, sy:Int=0):Void;
-	public function getScroll():Array<Int>;
-	public function getMaxScroll():Array<Int>;
+	public function getHTMLText():String
+	{
+		return inputText.htmlText;
+	}
 	
-	public function setMultiLine(value:Bool):Void;
+	public function setTextAlign(value:Int):Void
+	{
+		var format:TextFormat = inputText.getTextFormat();
+			format.align = switch(value) {
+				case TEXT_ALIGN_CENTER:
+					TextFormatAlign.CENTER;
+				case TEXT_ALIGN_RIGHT:
+					TextFormatAlign.RIGHT;
+				default:
+					TextFormatAlign.LEFT;
+			}
+		inputText.defaultTextFormat = format;
+	}
+	
+	public function setTextColor(value:Int):Void
+	{
+		inputText.textColor = value;
+	}
+	
+	public function setTextSize(value:Int):Void
+	{
+		var format:TextFormat = getFormat();
+			format.size = value;
+		inputText.defaultTextFormat = format;
+	}
+	
+	public function setEmbedFont(value:Bool):Void
+	{
+		inputText.embedFonts = value;
+	}
+	
+	public function setFormat(value:TextFormat, begin:Int=-1, end:Int=-1):Void
+	{
+		inputText.setTextFormat(value,begin,end);
+	}
+	
+	public function getFormat(begin:Int=-1, end:Int=-1):TextFormat
+	{
+		return inputText.getTextFormat(begin, end);
+	}
+	
+	public function setDefaultFormat(value:TextFormat):Void
+	{
+		inputText.defaultTextFormat = value;
+	}
+	
+	public function getDefaultFormat():TextFormat
+	{
+		return inputText.defaultTextFormat;
+	}
+	#if flash
+	public function setScroll(sx:Int = 0, sy:Int = 0):Void
+	{
+		inputText.scrollH = sx;
+		inputText.scrollV = sy;
+	}
+	
+	public function getScroll():Position
+	{
+		return { x:inputText.scrollH, y:inputText.scrollV };
+	}
+	
+	public function getMaxScroll():Position
+	{
+		return { x:inputText.maxScrollH, y:inputText.maxScrollV };
+	}
+	#end
+	public function setMultiLine(value:Bool):Void
+	{
+		inputText.multiline = value;
+	}
 }

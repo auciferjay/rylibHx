@@ -1,5 +1,4 @@
-
-package ;
+package cn.royan.hl.services;
 
 import cn.royan.hl.interfaces.services.IServiceBase;
 

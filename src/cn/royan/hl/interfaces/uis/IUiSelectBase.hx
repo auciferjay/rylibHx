@@ -1,10 +1,11 @@
 package cn.royan.hl.interfaces.uis;
 
 import cn.royan.hl.interfaces.IDisposeBase;
+import cn.royan.hl.interfaces.uis.IUiBase;
 
 import flash.events.EventDispatcher;
 
-interface IUiSelectBase extends IDisposeBase
+interface IUiSelectBase implements IDisposeBase, implements IUiBase
 {
 	function setSelected(value:Bool):Void;
 	function getSelected():Bool;

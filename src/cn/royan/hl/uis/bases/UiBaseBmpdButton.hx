@@ -1,4 +1,4 @@
-package src.cn.royan.hl.uis.bases;
+package cn.royan.hl.uis.bases;
 
 import cn.royan.hl.interfaces.uis.IUiSelectBase;
 import cn.royan.hl.uis.InteractiveUiBase;
@@ -7,25 +7,25 @@ import flash.events.MouseEvent;
 
 import flash.display.BitmapData;
 
-class UiBaseBmpButton extends InteractiveUiBase, implements IUiSelectBase
+class UiBaseBmpdButton extends InteractiveUiBase, implements IUiSelectBase
 {
 	var bgTextures:Array<BitmapData>;
 	var isInGroup:Bool;
 	
-	public function new(texture:Dynamic < Array<BitmapData>, BitmapData > , length:UInt = 5 ) 
+	public function new(texture:Dynamic, length:Int=5 )
 	{
-		
+		super();
 	}
 	
 	//Public methods
-	override public function getDefaultBackgroundColors():Array<UInt> 
+	override public function getDefaultBackgroundColors():Array<Int> 
 	{
-		return [[0xFFFFFF,0x00ff64],[0x00ff64,0x00c850],[0x00c850,0xe9f48e],[0xe9f48e,0xa2a29e],[0xa2a29e,0xFFFFFF]];
+		return [0xFFFFFF,0x00ff64,0x00ff64,0x00c850];
 	}
 	
 	override public function getBackgroundAlphas():Array<Float> 
 	{
-		return [[1.0,1.0],[1.0,1.0],[1.0,1.0],[1.0,1.0],[1.0,1.0]];
+		return [1.0,1.0,1.0,1.0];
 	}
 	
 	public function setSelected(value:Bool):Void
@@ -35,7 +35,7 @@ class UiBaseBmpButton extends InteractiveUiBase, implements IUiSelectBase
 	
 	public function getSelected():Bool
 	{
-		return status == INTERACTIVE_STATUS_SELECTED;
+		return status == InteractiveUiBase.INTERACTIVE_STATUS_SELECTED;
 	}
 	
 	public function setInGroup(value:Bool):Void
@@ -43,9 +43,9 @@ class UiBaseBmpButton extends InteractiveUiBase, implements IUiSelectBase
 		
 	}
 	
-	public function clone():UiBaseBmpButton
+	public function clone():UiBaseBmpdButton
 	{
-		return new UiBaseBmpButton(bgTextures);
+		return new UiBaseBmpdButton(bgTextures);
 	}
 	
 	//Protected methods
@@ -54,7 +54,7 @@ class UiBaseBmpButton extends InteractiveUiBase, implements IUiSelectBase
 		
 	}
 	
-	override private function addToStageHandler(evt:Event = Null):Void 
+	override private function addToStageHandler(evt:Event = null):Void 
 	{
 		super.addToStageHandler(evt);
 		

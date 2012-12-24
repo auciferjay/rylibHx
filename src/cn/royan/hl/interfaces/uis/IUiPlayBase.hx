@@ -2,7 +2,7 @@ package cn.royan.hl.interfaces.uis;
 
 import cn.royan.hl.interfaces.IDisposeBase;
 
-interface IUiPlayBase extends IDisposeBase
+interface IUiPlayBase implements IDisposeBase
 {
 	function getIn():Void;
 	function getOut():Void;

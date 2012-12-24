@@ -6,7 +6,7 @@ import flash.events.IEventDispatcher;
 
 interface IServiceBase extends IEventDispatcher, IDisposeBase
 {
-	function sendRequest(url:String='', extra:Dynamic=Null):Void;
+	function sendRequest(url:String='', extra:Dynamic=null):Void;
 	function setCallbacks(value:Dynamic):Void;
 	function connect():Void;
 	function close():Void;

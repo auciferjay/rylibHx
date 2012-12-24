@@ -1,17 +1,29 @@
 package cn.royan.hl.uis;
 
-import cn.royan.hl.interfaces.uis.IUiBase
+import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.geom.Position;
 import cn.royan.hl.geom.Square;
 
 import flash.display.BitmapData;
+import flash.display.GradientType;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.EventDispatcher;
 import flash.geom.Matrix;
 import flash.geom.Point;
+#if flash
+import flash.utils.Dictionary;
+#end
+
+typedef UiBaseCallBack = {
+	var click:Void->Void;
+	var down:Void->Void;
+	var up:Void->Void;
+	var over:Void->Void;
+	var out:Void->Void;
+}
 
 class InteractiveUiBase extends Sprite, implements IUiBase
 {
@@ -22,29 +34,30 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 	static public inline var INTERACTIVE_STATUS_DISABLE:Int 	= 4;
 	
 	//properties
-	var bgColors:Array<UInt>;
-	var bgAlphas:Array<UInt>;
+	var bgColors:Array<Int>;
+	var bgAlphas:Array<Float>;
 	var bgTexture:BitmapData;
 	var containerWidth:Int;
 	var containerHeight:Int;
-	var callbacks:Dynamic;
+	var callbacks:UiBaseCallBack;
 	var isMouseRender:Bool;
 	var status:Int;
 	var matrix:Matrix;
+	var selected:Bool;
 	var isOnStage:Bool;
 
-	var evtListenerType:Array;
-	var evtListenerDirectory:Array;
+	var evtListenerType:Array<String>;
+	var evtListenerDirectory:Array<Dynamic>;
 	
 	//Constructor
-	function new(texture:BitmapData = Null)
+	public function new(texture:BitmapData = null)
 	{
 		super();
 
 		bgColors = getDefaultBackgroundColors();
 		bgAlphas = getDefaultBackgroundAlphas();
 		
-		if (texture != Null) {
+		if (texture != null) {
 			bgTexture = texture;
 		
 			setSize(bgTexture.width, bgTexture.height);
@@ -52,8 +65,8 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 		
 		isOnStage = false;
 		
-		if (stage) addToStageHandler();
-		else addEventListener(Event.ADDED_TO_STAGE, addToStageHandler);
+		if (stage != null) addToStageHandler();
+		else addEventListener( Event.ADDED_TO_STAGE, addToStageHandler );
 	}
 	
 	//Public methods
@@ -62,16 +75,16 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 		if ( !isOnStage ) return;
 		graphics.clear();
 		if( containerWidth > 0 && containerHeight > 0 ){
-			if( bgTexture != Null ){
+			if( bgTexture != null ){
 				graphics.beginBitmapFill(bgTexture);
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
 				graphics.endFill();
-			}else if( bgAlphas != Null && bgAlphas.length > 1 ){
+			}else if( bgAlphas != null && bgAlphas.length > 1 ){
 				matrix.createGradientBox(containerWidth, containerHeight, Math.PI / 2, 0, 0);
 				graphics.beginGradientFill(GradientType.LINEAR, bgColors, bgAlphas, [0,255], matrix);
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
 				graphics.endFill();
-			}else if(  bgAlphas != Null && bgAlphas.length > 0 && bgAlphas[0] > 0 ){
+			}else if(  bgAlphas != null && bgAlphas.length > 0 && bgAlphas[0] > 0 ){
 				graphics.beginFill( bgColors[0], bgAlphas[0] );
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
 				graphics.endFill();
@@ -83,7 +96,7 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 		}
 	}
 	
-	public function getDefaultBackgroundColors():Array<UInt>
+	public function getDefaultBackgroundColors():Array<Int>
 	{
 		return [0xFFFFFF];
 	}
@@ -93,14 +106,14 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 		return [1.0];
 	}
 	
-	public function setBackgroundColors(value:Array<UInt>):Void
+	public function setBackgroundColors(value:Array<Int>):Void
 	{
 		bgColors = value;
 	}
 	
-	public function getBackgroundColors():Array<UInt>
+	public function getBackgroundColors():Array<Int>
 	{
-		return bgColors
+		return bgColors;
 	}
 	
 	public function setBackgroundAlphas(value:Array<Float>):Void
@@ -132,7 +145,7 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 
 	public function getPosition():Position
 	{
-		return { x:x, y:y };
+		return { x:Std.int(x), y:Std.int(y) };
 	}
 	
 	public function setPositionPoint(point:Position):Void
@@ -141,7 +154,7 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 		y = point.y;
 	}
 	
-	public function setTexture(texture:BitmapData, frames:UInt = 1):Void
+	public function setTexture(texture:BitmapData, frames:Int = 1):Void
 	{
 		bgTexture = texture;
 	}
@@ -156,35 +169,43 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 		return this;
 	}
 
-	override public function addEventListener(type:String, listener:Function, useCapture:Bool = false, priority:int = 0, useWeakReference:Bool = false):Void
+	override public function addEventListener(type:String, listener:Dynamic->Void, useCapture:Bool=false, priority:Int=0, useWeakReference:Bool=false):Void
 	{
-		if ( evtListenerDirectory == Null ) {
+		if ( evtListenerDirectory == null ) {
 			evtListenerDirectory = [];
 			evtListenerType = [];
 		}
-		var dir:Dictionary = new Dictionary();
-		dir[ type ] = listener;
-		evtListenerDirectory.push( dir );
+		#if flash
+		var dic:Dictionary = new Dictionary();
+		#else
+		var dic:Array<Dynamic->Void> = [];
+		#end
+		untyped dic[ type ] = listener;
+		evtListenerDirectory.push( dic );
 		evtListenerType.push( type );
 		super.addEventListener(type, listener, useCapture, priority, useWeakReference);
 	}
 
-	override public function removeEventListener(type:String, listener:Function, useCapture:Bool = false):Void
+	override public function removeEventListener(type:String, listener:Dynamic->Void, useCapture:Bool=false):Void
 	{
 		super.removeEventListener(type, listener, useCapture);
-		if ( evtListenerDirectory != Null ) {
+		if ( evtListenerDirectory != null ) {
 			for ( i in 0...evtListenerDirectory.length ) {
-				var dir:Dictionary = evtListenerDirectory[i];
-				if ( dir[ type ] == Null ) {
+				#if flash
+				var dic:Dictionary = evtListenerDirectory[i];
+				#else
+				var dic:Array<Dynamic->Void> = evtListenerDirectory[i];
+				#end
+				if ( untyped dic[ type ] == null ) {
 					continue;
 				}else {
-					if ( dir[ type ] != listener ) {
-						continue
+					if ( untyped dic[ type ] != listener ) {
+						continue;
 					}else {
 						evtListenerType.splice( i, 1 );
 						evtListenerDirectory.splice( i, 1 );
-						delete dir[ type ];
-						dir = Null;
+						Reflect.deleteField( dic, type );
+						dic = null;
 						break;
 					}
 				}
@@ -194,20 +215,24 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 
 	public function removeAllEventListeners():Void
 	{
-		if ( evtListenerType == Null || evtListenerType.length == 0)
+		if ( evtListenerType == null || evtListenerType.length == 0)
 			return;
 		for ( i in 0...evtListenerType.length)
 		{
 			var type:String = evtListenerType[i];
+			#if flash
 			var dic:Dictionary = evtListenerDirectory[i];
-			var fun:Function = dic[ type ];
+			#else
+			var dic:Array<Dynamic->Void> = evtListenerDirectory[i];
+			#end
+			var fun:Dynamic->Void = untyped dic[ type ];
 			removeEventListener( type, fun );
 		}
 	}
 
 	public function removeAllChildren():Void
 	{
-		while( numChildren ){
+		while( numChildren > 0 ){
 			removeChildAt(0);
 		}
 	}
@@ -223,39 +248,39 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 	{
 		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
 		if( isMouseRender ) draw();
-		if ( callbacks != Null && callbacks["over"] != Null ) callbacks["over"]();
+		if ( callbacks != null && callbacks.over != null ) callbacks.over();
 	}
 	
 	function mouseOutHandler(evt:MouseEvent):Void
 	{
 		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_NORMAL;
 		if( isMouseRender ) draw();
-		if ( callbacks != Null && callbacks["out"] != Null ) callbacks["out"]();
+		if ( callbacks != null && callbacks.out != null ) callbacks.out();
 	}
 	
 	function mouseDownHandler(evt:MouseEvent):Void
 	{
 		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_DOWN;
 		if( isMouseRender ) draw();
-		if ( callbacks != Null && callbacks["down"] != Null ) callbacks["down"]();
+		if ( callbacks != null && callbacks.down != null ) callbacks.down();
 	}
 	
 	function mouseUpHandler(evt:MouseEvent):Void
 	{
 		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
 		if( isMouseRender ) draw();
-		if ( callbacks != Null && callbacks["up"] != Null ) callbacks();
+		if ( callbacks != null && callbacks.up != null ) callbacks.up();
 	}
 	
 	function mouseClickHandler(evt:MouseEvent):Void
 	{
-		if( callbacks != Null && callbacks["click"] != Null ) callbacks["click"]();
+		if( callbacks != null && callbacks.click != null ) callbacks.click();
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE));
 	}
 	
-	function addToStageHandler(evt:Event = Null):Void
+	function addToStageHandler(evt:Event = null):Void
 	{
-		if (hasEventListener(Event.ADDED_TO_STAGE)
+		if ( hasEventListener(Event.ADDED_TO_STAGE) )
 			removeEventListener(Event.ADDED_TO_STAGE, addToStageHandler);
 		
 		addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler );

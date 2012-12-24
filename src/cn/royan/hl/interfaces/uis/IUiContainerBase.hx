@@ -1,6 +1,6 @@
 package cn.royan.hl.interfaces.uis;
 
-interface IUiContainerBase extends IUiItem
+interface IUiContainerBase implements IUiBase
 {
 	function addItem(item:IUiBase):Void;
 	function addItemAt(item:IUiBase, index:Int):Void;
@@ -10,7 +10,7 @@ interface IUiContainerBase extends IUiItem
 	function removeAllItems():Void;
 	
 	function getItemAt(index:Int):IUiBase;
-	function getIndexByItem(item:IUiBase):Void;
+	function getIndexByItem(item:IUiBase):Int;
 	function getItems():Array<IUiBase>;
 	
 	function setHorizontalAlign(value:Int):Void;

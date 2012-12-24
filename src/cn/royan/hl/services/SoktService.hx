@@ -1,5 +1,4 @@
-
-package ;
+package cn.royan.hl.services;
 
 import cn.royan.hl.interfaces.services.IServiceBase;
 
@@ -13,7 +12,7 @@ class SoktService extends EventDispatcher, implements IServiceBase
 
 	}
 
-	public function sendRequest(url:String='', extra:Dynamic=Null) 
+	public function sendRequest(url:String='', extra:Dynamic=null) 
 	{
 		
 	}
