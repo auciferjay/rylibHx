@@ -97,6 +97,8 @@ class UninteractiveUiBase extends Shape, implements IUiBase
 	{
 		containerWidth = cWidth;
 		containerHeight = cHeight;
+
+		draw();
 	}
 	
 	public function getSize():Square
@@ -124,6 +126,8 @@ class UninteractiveUiBase extends Shape, implements IUiBase
 	public function setTexture(texture:BitmapData, frames:Int = 1):Void
 	{
 		bgTexture = texture;
+
+		setSize(bgTexture.width, bgTexture.height);
 	}
 	
 	public function getTexture():BitmapData

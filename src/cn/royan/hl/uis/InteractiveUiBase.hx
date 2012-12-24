@@ -4,6 +4,7 @@ import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.geom.Position;
 import cn.royan.hl.geom.Square;
+import cn.royan.hl.utils.SystemUtils;
 
 import flash.display.BitmapData;
 import flash.display.GradientType;
@@ -74,6 +75,7 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 	{
 		if ( !isOnStage ) return;
 		graphics.clear();
+
 		if( containerWidth > 0 && containerHeight > 0 ){
 			if( bgTexture != null ){
 				graphics.beginBitmapFill(bgTexture);
@@ -130,6 +132,8 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 	{
 		containerWidth = w;
 		containerHeight = h;
+
+		draw();
 	}
 
 	public function getSize():Square
@@ -157,6 +161,8 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 	public function setTexture(texture:BitmapData, frames:Int = 1):Void
 	{
 		bgTexture = texture;
+
+		setSize(bgTexture.width, bgTexture.height);
 	}
 	
 	public function getTexture():BitmapData

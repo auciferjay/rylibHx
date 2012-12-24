@@ -4,6 +4,8 @@ import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiGroupBase;
 import cn.royan.hl.interfaces.uis.IUiSelectBase;
 import cn.royan.hl.events.DatasEvent;
+
+import flash.display.DisplayObject;
 import flash.events.Event;
 
 class UiBaseGroupContainer extends UiBaseContainer, implements IUiGroupBase
@@ -32,12 +34,12 @@ class UiBaseGroupContainer extends UiBaseContainer, implements IUiGroupBase
 		
 		item.getDispatcher().addEventListener(DatasEvent.DATA_DONE, itemSelectHandler);
 		
-		addChild(item);
+		addChild(cast( item, DisplayObject ));
 		
 		draw();
 	}
 	
-	public function getSelectedItems():Array<IUiSelectBase>
+	public function getSelectedItems():Array<IUiBase>
 	{
 		return selectedItems;
 	}
