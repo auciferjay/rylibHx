@@ -2,6 +2,7 @@ package cn.royan.hl.uis;
 
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.events.DatasEvent;
+import cn.royan.hl.bases.CallBackBase;
 import cn.royan.hl.geom.Position;
 import cn.royan.hl.geom.Square;
 import cn.royan.hl.utils.SystemUtils;
@@ -18,14 +19,6 @@ import flash.geom.Point;
 import flash.utils.Dictionary;
 #end
 
-typedef UiBaseCallBack = {
-	var click:Void->Void;
-	var down:Void->Void;
-	var up:Void->Void;
-	var over:Void->Void;
-	var out:Void->Void;
-}
-
 class InteractiveUiBase extends Sprite, implements IUiBase
 {
 	static public inline var INTERACTIVE_STATUS_NORMAL:Int 		= 0;
@@ -40,7 +33,7 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 	var bgTexture:BitmapData;
 	var containerWidth:Int;
 	var containerHeight:Int;
-	var callbacks:UiBaseCallBack;
+	var callbacks:CallBackBase;
 	var isMouseRender:Bool;
 	var status:Int;
 	var matrix:Matrix;
@@ -174,6 +167,11 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 	{
 		return this;
 	}
+	
+	public function setMouseRender(value:Bool):Void
+	{
+		isMouseRender = value;
+	}
 
 	override public function addEventListener(type:String, listener:Dynamic->Void, useCapture:Bool=false, priority:Int=0, useWeakReference:Bool=false):Void
 	{
@@ -280,7 +278,7 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 	
 	function mouseClickHandler(evt:MouseEvent):Void
 	{
-		if( callbacks != null && callbacks.click != null ) callbacks.click();
+		if( callbacks != null && callbacks.done != null ) callbacks.done();
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE));
 	}
 	

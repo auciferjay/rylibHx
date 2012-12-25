@@ -14,9 +14,13 @@ class UiBaseLabelButton extends InteractiveUiBase, implements IUiTextBase, imple
 	var isInGroup:Bool;
 	
 	//Contructor
-	public function new() 
+	public function new(label:String='') 
 	{
 		super();
+
+		btnLabelText = new UiBaseText();
+		btnLabelText.setText(label);
+		addChild(btnLabelText);
 	}
 	
 	//Public methods
