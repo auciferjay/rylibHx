@@ -1,6 +1,7 @@
 package cn.royan.hl.uis;
 
 import cn.royan.hl.interfaces.uis.IUiBase;
+import cn.royan.hl.interfaces.uis.IUiItemStateBase;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.bases.CallBackBase;
 import cn.royan.hl.geom.Position;
@@ -19,7 +20,7 @@ import flash.geom.Point;
 import flash.utils.Dictionary;
 #end
 
-class InteractiveUiBase extends Sprite, implements IUiBase
+class InteractiveUiBase extends Sprite, implements IUiBase, implements IUiItemStateBase
 {
 	static public inline var INTERACTIVE_STATUS_NORMAL:Int 		= 0;
 	static public inline var INTERACTIVE_STATUS_OVER:Int 		= 1;
@@ -28,17 +29,21 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 	static public inline var INTERACTIVE_STATUS_DISABLE:Int 	= 4;
 	
 	//properties
-	var bgColors:Array<Int>;
-	var bgAlphas:Array<Float>;
+	var bgColors:Array<Dynamic>;
+	var bgAlphas:Array<Dynamic>;
 	var bgTexture:BitmapData;
 	var containerWidth:Int;
 	var containerHeight:Int;
 	var callbacks:CallBackBase;
 	var isMouseRender:Bool;
 	var status:Int;
+	var statusLen:Int;
 	var matrix:Matrix;
 	var selected:Bool;
 	var isOnStage:Bool;
+	
+	var excludes:Array<String>;
+	var includes:Array<String>;
 
 	var evtListenerType:Array<String>;
 	var evtListenerDirectory:Array<Dynamic>;
@@ -47,7 +52,8 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 	public function new(texture:BitmapData = null)
 	{
 		super();
-
+		
+		status = INTERACTIVE_STATUS_NORMAL;
 		bgColors = getDefaultBackgroundColors();
 		bgAlphas = getDefaultBackgroundAlphas();
 		
@@ -59,8 +65,7 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 		
 		isOnStage = false;
 		
-		if (stage != null) addToStageHandler();
-		else addEventListener( Event.ADDED_TO_STAGE, addToStageHandler );
+		addEventListener( Event.ADDED_TO_STAGE, addToStageHandler );
 	}
 	
 	//Public methods
@@ -74,49 +79,87 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 				graphics.beginBitmapFill(bgTexture);
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
 				graphics.endFill();
-			}else if( bgAlphas != null && bgAlphas.length > 1 ){
+			}else if( bgColors != null && bgColors.length > 1 ){
 				matrix.createGradientBox(containerWidth, containerHeight, Math.PI / 2, 0, 0);
-				graphics.beginGradientFill(GradientType.LINEAR, bgColors, bgAlphas, [0,255], matrix);
+				graphics.beginGradientFill(GradientType.LINEAR, cast(bgColors), bgAlphas, [0,255], matrix);
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
 				graphics.endFill();
-			}else if(  bgAlphas != null && bgAlphas.length > 0 && bgAlphas[0] > 0 ){
-				graphics.beginFill( bgColors[0], bgAlphas[0] );
+			}else if(  bgColors != null && bgColors.length > 0 && cast(bgColors[0]) > 0 ){
+				graphics.beginFill( cast(bgColors[0]), bgAlphas[0] );
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
 				graphics.endFill();
 			}else{
-				graphics.beginFill( 0xFFFFFF, .1 );
+				graphics.beginFill( 0xFFFFFF, 0 );
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
 				graphics.endFill();
 			}
 		}
 	}
 	
-	public function getDefaultBackgroundColors():Array<Int>
+	public function getDefaultBackgroundColors():Array<Dynamic>
 	{
-		return [0xFFFFFF];
+		return [[0xFFFFFF]];
 	}
 	
-	public function getDefaultBackgroundAlphas():Array<Float>
+	public function getDefaultBackgroundAlphas():Array<Dynamic>
 	{
-		return [1.0];
+		return [[0.0]];
 	}
 	
-	public function setBackgroundColors(value:Array<Int>):Void
+	public function setBackgroundColors(value:Array<Dynamic>):Void
 	{
 		bgColors = value;
+		
+		if( bgColors != null && bgTexture == null )
+			statusLen = Std.int(Math.min(bgColors.length, 5));
+		
+		if( bgColors.length > 1 ){
+			if( matrix == null )
+				matrix = new Matrix();
+			
+			if ( bgAlphas == null ) bgAlphas = [];
+			while ( bgAlphas.length < bgColors.length ) {
+				bgAlphas.push(1);
+			}
+			
+			while ( bgAlphas.length > bgColors.length ) {
+				bgAlphas.pop();
+			}
+		}
+		
+		draw();
 	}
 	
-	public function getBackgroundColors():Array<Int>
+	public function getBackgroundColors():Array<Dynamic>
 	{
 		return bgColors;
 	}
 	
-	public function setBackgroundAlphas(value:Array<Float>):Void
+	public function setBackgroundAlphas(value:Array<Dynamic>):Void
 	{
 		bgAlphas = value;
+		
+		if( bgColors != null && bgTexture == null )
+			statusLen = Std.int(Math.min(bgColors.length, 5));
+		
+		if( bgColors.length > 1 ){
+			if( matrix == null )
+				matrix = new Matrix();
+			
+			if ( bgAlphas == null ) bgAlphas = [];
+			while ( bgAlphas.length < bgColors.length ) {
+				bgAlphas.push(1);
+			}
+			
+			while ( bgAlphas.length > bgColors.length ) {
+				bgAlphas.pop();
+			}
+		}
+		
+		draw();
 	}
 	
-	public function getBackgroundAlphas():Array<Float>
+	public function getBackgroundAlphas():Array<Dynamic>
 	{
 		return bgAlphas;
 	}
@@ -171,6 +214,26 @@ class InteractiveUiBase extends Sprite, implements IUiBase
 	public function setMouseRender(value:Bool):Void
 	{
 		isMouseRender = value;
+	}
+	
+	public function setExclude(args:Array<String>):Void
+	{
+		excludes = args;
+	}
+	
+	public function getExclude():Array<String>
+	{
+		return excludes;
+	}
+	
+	public function setInclude(args:Array<String>):Void
+	{
+		includes = args;
+	}
+	
+	public function getInclude():Array<String>
+	{
+		return includes;
 	}
 
 	override public function addEventListener(type:String, listener:Dynamic->Void, useCapture:Bool=false, priority:Int=0, useWeakReference:Bool=false):Void

@@ -1,15 +1,25 @@
 package cn.royan.hl.uis.bases;
 
 import cn.royan.hl.geom.Position;
-import cn.royan.hl.interfaces.uis.IUiSelectBase;
+import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.interfaces.uis.IUiTextBase;
 import cn.royan.hl.uis.InteractiveUiBase;
+import cn.royan.hl.uis.UninteractiveUiBase;
+import cn.royan.hl.utils.SystemUtils;
 
 import flash.text.TextFormat;
+import flash.display.BitmapData;
+import flash.events.MouseEvent;
 
-class UiBaseLabelButton extends InteractiveUiBase, implements IUiTextBase, implements IUiSelectBase
+class UiBaseLabelButton extends InteractiveUiBase, implements IUiTextBase, implements IUiItemGroupBase
 {
 	//properties
+	var btnLabel:String;
+	var bgTextures:Array<UninteractiveUiBase>;
+	var currentStatus:UninteractiveUiBase;
+	var btnBackground:InteractiveUiBase;
+	var textColors:Array<Dynamic>;
+		
 	var btnLabelText:UiBaseText;
 	var isInGroup:Bool;
 	
@@ -17,36 +27,127 @@ class UiBaseLabelButton extends InteractiveUiBase, implements IUiTextBase, imple
 	public function new(label:String='') 
 	{
 		super();
-
+		
+		bgColors = getDefaultBackgroundColors();
+		bgAlphas = getDefaultBackgroundAlphas();
+		
+		btnLabel = label;
+		statusLen = 5;
+		bgTextures = [];
+		
+		var i:Int;
+		for( i in 0...statusLen){
+			bgTextures[i] = new UninteractiveUiBase();
+			bgTextures[i].setBackgroundColors(Std.is(bgColors[i], Array)?bgColors[i]:[bgColors[i]]);
+			bgTextures[i].setBackgroundAlphas(Std.is(bgAlphas[i], Array)?bgAlphas[i]:[bgAlphas[i]]);
+		}
+		
+		textColors = getDefaultTextColor();
+		
+		btnBackground = new InteractiveUiBase();
+		addChild(btnBackground);
+		
 		btnLabelText = new UiBaseText();
 		btnLabelText.setText(label);
 		addChild(btnLabelText);
+		
+		setMouseRender(true);
+		
+		buttonMode = true;
 	}
 	
 	//Public methods
-	override public function getDefaultBackgroundColors():Array<Int> 
+	override public function draw():Void
 	{
-		return [0xFFFFFF,0x00ff64,0x00ff64,0x00c850,0x00c850,0xe9f48e,0xe9f48e,0xa2a29e,0xa2a29e,0xFFFFFF];
+		btnBackground.removeAllChildren();
+		
+		SystemUtils.print(status);
+		if( bgTextures[status] != null )
+			btnBackground.addChild(bgTextures[status]);
+		
+		btnLabelText.setTextColor(textColors[status]);
 	}
 	
-	override public function getBackgroundAlphas():Array<Float> 
+	override function mouseClickHandler(evt:MouseEvent):Void
 	{
-		return [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0];
+		if( isInGroup ){
+			selected = !selected;
+			status = selected?InteractiveUiBase.INTERACTIVE_STATUS_SELECTED:status;
+			
+			draw();
+		}
+		
+		super.mouseClickHandler(evt);
+	}
+	
+	public function getDefaultTextColor():Array<Dynamic>
+	{
+		return [0x000000,0xFF00FF,0xFFFFFF,0xFFFFFF,0xCCCCCC];
+	}
+	
+	override public function getDefaultBackgroundColors():Array<Dynamic>
+	{
+		return [[0xFF0000,0xFF00FF],[0xFFFF00,0xFF00FF],[0xFF00FF,0x00FFFF],[0x0000FF,0xFF0000],[0xFFF000,0x000FFF]];
+	}
+	
+	override public function getDefaultBackgroundAlphas():Array<Dynamic>
+	{
+		return [[1,1],[1,1],[1,1],[1,1],[1,1]];
+	}
+	
+	public function setTextColors(value:Array<Dynamic>):Void
+	{
+		textColors = value.concat([]);
+		draw();
+	}
+	
+	override public function setBackgroundColors(value:Array<Dynamic>):Void
+	{
+		super.setBackgroundColors(value);
+		var i:Int;
+		for( i in 0...statusLen ){
+			bgTextures[i].setBackgroundColors(Std.is(bgColors[i], Array)?bgColors[i]:[bgColors[i]]);
+		}
+	}
+	
+	override public function setBackgroundAlphas(value:Array<Dynamic>):Void
+	{
+		super.setBackgroundAlphas(value);
+		var i:Int;
+		for( i in 0...statusLen ){
+			bgTextures[i].setBackgroundAlphas(Std.is(bgAlphas[i], Array)?bgAlphas[i]:[bgAlphas[i]]);
+		}
 	}
 	
 	public function setSelected(value:Bool):Void
 	{
-		
+		selected = value;
+		status = selected?InteractiveUiBase.INTERACTIVE_STATUS_SELECTED:InteractiveUiBase.INTERACTIVE_STATUS_NORMAL;
+		draw();
 	}
 	
 	public function getSelected():Bool
 	{
-		return status == InteractiveUiBase.INTERACTIVE_STATUS_SELECTED;
+		return selected;
+	}
+	
+	override public function setTexture(value:BitmapData, frames:Int=5):Void
+	{
+		
 	}
 	
 	public function setInGroup(value:Bool):Void
 	{
 		isInGroup = value;
+	}
+	
+	override public function setSize(cWidth:Int, cHeight:Int):Void
+	{
+		super.setSize(cWidth, cHeight);
+		for ( state in bgTextures ){
+			state.setSize(cWidth, cHeight);
+		}
+		btnLabelText.setSize(cWidth, cHeight);
 	}
 	
 	public function setText(value:String):Void
@@ -137,11 +238,5 @@ class UiBaseLabelButton extends InteractiveUiBase, implements IUiTextBase, imple
 	public function setMultiLine(value:Bool):Void
 	{
 		btnLabelText.setMultiLine(value);
-	}
-	
-	override public function setSize(w:Int, h:Int):Void 
-	{
-		super.setSize(w, h);
-		btnLabelText.setSize(w, h);
 	}
 }

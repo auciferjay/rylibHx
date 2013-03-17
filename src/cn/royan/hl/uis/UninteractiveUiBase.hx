@@ -3,6 +3,7 @@ package cn.royan.hl.uis;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.geom.Position;
 import cn.royan.hl.geom.Square;
+import cn.royan.hl.utils.SystemUtils;
 
 import flash.display.BitmapData;
 import flash.display.GradientType;
@@ -13,8 +14,8 @@ import flash.geom.Matrix;
 class UninteractiveUiBase extends Shape, implements IUiBase
 {
 	//properties
-	var bgColors:Array<Int>;
-	var bgAlphas:Array<Float>;
+	var bgColors:Array<Dynamic>;
+	var bgAlphas:Array<Dynamic>;
 	var bgTexture:BitmapData;
 	var containerWidth:Int;
 	var containerHeight:Int;
@@ -46,49 +47,81 @@ class UninteractiveUiBase extends Shape, implements IUiBase
 				graphics.beginBitmapFill(bgTexture);
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
 				graphics.endFill();
-			}else if( bgAlphas != null && bgAlphas.length > 1 ){
+			}else if ( bgColors != null && bgColors.length > 1 ) {
 				matrix.createGradientBox(containerWidth, containerHeight, Math.PI / 2, 0, 0);
-				graphics.beginGradientFill(GradientType.LINEAR, bgColors, bgAlphas, [0,255], matrix);
+				graphics.beginGradientFill(GradientType.LINEAR, cast(bgColors), bgAlphas, [0,255], matrix);
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
 				graphics.endFill();
-			}else if(  bgAlphas != null && bgAlphas.length > 0 && bgAlphas[0] > 0 ){
-				graphics.beginFill( bgColors[0], bgAlphas[0] );
+			}else if(  bgColors != null && bgColors.length > 0 && cast(bgColors[0]) > 0 ){
+				graphics.beginFill( cast(bgColors[0]), bgAlphas[0] );
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
 				graphics.endFill();
 			}else{
-				graphics.beginFill( 0xFFFFFF, .1 );
+				graphics.beginFill( 0xFFFFFF, 0 );
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
 				graphics.endFill();
 			}
 		}
 	}
 	
-	public function getDefaultBackgroundColors():Array<Int>
+	public function getDefaultBackgroundColors():Array<Dynamic>
 	{
-		return [0xFF0000,0x00FF00];
+		return [0xFF0000];
 	}
 	
-	public function getDefaultBackgroundAlphas():Array<Float>
+	public function getDefaultBackgroundAlphas():Array<Dynamic>
 	{
-		return [1.0,1.0];
+		return [1.0];
 	}
 	
-	public function setBackgroundColors(value:Array<Int>):Void
+	public function setBackgroundColors(value:Array<Dynamic>):Void
 	{
 		bgColors = value;
+		
+		if( bgColors.length > 1 ){
+			if( matrix == null )
+				matrix = new Matrix();
+			
+			if ( bgAlphas == null ) bgAlphas = [];
+			while ( bgAlphas.length < bgColors.length ) {
+				bgAlphas.push(1);
+			}
+			
+			while ( bgAlphas.length > bgColors.length ) {
+				bgAlphas.pop();
+			}
+		}
+		
+		draw();
 	}
 	
-	public function getBackgroundColors():Array<Int>
+	public function getBackgroundColors():Array<Dynamic>
 	{
 		return bgColors;
 	}
 	
-	public function setBackgroundAlphas(value:Array<Float>):Void
+	public function setBackgroundAlphas(value:Array<Dynamic>):Void
 	{
 		bgAlphas = value;
+		
+		if( bgColors.length > 1 ){
+			if( matrix == null )
+				matrix = new Matrix();
+			
+			if ( bgAlphas == null ) bgAlphas = [];
+			while ( bgAlphas.length < bgColors.length ) {
+				bgAlphas.push(1);
+			}
+			
+			while ( bgAlphas.length > bgColors.length ) {
+				bgAlphas.pop();
+			}
+		}
+		
+		draw();
 	}
 	
-	public function getBackgroundAlphas():Array<Float>
+	public function getBackgroundAlphas():Array<Dynamic>
 	{
 		return bgAlphas;
 	}
@@ -109,7 +142,7 @@ class UninteractiveUiBase extends Shape, implements IUiBase
 	public function setPosition(cX:Int, cY:Int):Void
 	{
 		x = cX;
-		x = cY;
+		y = cY;
 	}
 	
 	public function getPosition():Position

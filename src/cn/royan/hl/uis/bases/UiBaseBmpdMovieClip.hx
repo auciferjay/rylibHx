@@ -1,8 +1,8 @@
 package cn.royan.hl.uis.bases;
 
+import cn.royan.hl.interfaces.uis.IUiItemPlayBase;
 import cn.royan.hl.bases.TimerBase;
 import cn.royan.hl.events.DatasEvent;
-import cn.royan.hl.interfaces.uis.IUiPlayBase;
 import cn.royan.hl.uis.InteractiveUiBase;
 import cn.royan.hl.uis.UninteractiveUiBase;
 import cn.royan.hl.utils.SystemUtils;
@@ -14,7 +14,7 @@ import flash.geom.Rectangle;
 import flash.geom.Point;
 import flash.errors.Error;
 
-class UiBaseBmpdMovieClip extends InteractiveUiBase, implements IUiPlayBase
+class UiBaseBmpdMovieClip extends InteractiveUiBase, implements IUiItemPlayBase
 {
 	//properties
 	var bgTextures:Array<BitmapData>;
@@ -35,40 +35,16 @@ class UiBaseBmpdMovieClip extends InteractiveUiBase, implements IUiPlayBase
 		
 		var bmpd:BitmapData;
 		var frameunit:UninteractiveUiBase;
+		bgTextures = [];
 		
 		if( Std.is( texture, BitmapData ) ){
 			total = frames;
 			
-			bgTextures = new Array<BitmapData>();
-			
-			var frameWidth:Int = Std.int( bgTexture.width / row );
-			var frameHeight:Int = Std.int( bgTexture.height / column );
-			
-			setSize(frameWidth, frameHeight);
-			
-			var i:Int;
-			var rectangle:Rectangle = new Rectangle();
-				rectangle.width = frameWidth;
-				rectangle.height = frameHeight;
-			var point:Point = new Point();
-			var curRow:Int;
-			var curCol:Int;
-			
-			for(i in 0...total){
-				curRow = Std.int( i % row );
-				curCol = Std.int( i / row );
-				
-				rectangle.x = curRow * frameWidth;
-				rectangle.y = curCol * frameHeight;
-				
-				bmpd = new BitmapData(frameWidth, frameHeight, true);
-				bmpd.copyPixels( bgTexture, rectangle, point );
-				
-				bgTextures[i] = bmpd;
-			}
+			drawTextures();
 		}else if( Std.is( texture, Array ) ){
 			total = cast( texture ).length;
-			bgTextures = cast texture;
+			
+			bgTextures = cast(texture);
 			
 			setSize(bgTextures[0].width, bgTextures[0].height);
 		}else{
@@ -79,7 +55,7 @@ class UiBaseBmpdMovieClip extends InteractiveUiBase, implements IUiPlayBase
 		autoPlay = auto;
 		sequence = true;
 		current = 1;
-		toFrame = 0;
+		toFrame = 1;
 		frameRate = rate;
 		
 		timer = new TimerBase( Std.int( 1000 / frameRate ), timerHandler );
@@ -91,22 +67,43 @@ class UiBaseBmpdMovieClip extends InteractiveUiBase, implements IUiPlayBase
 		
 		addChild(currentFrame);
 	}
-
-	override public function draw():Void
-	{
-
-	}
 	
-	override public function dispose():Void 
+	function drawTextures():Void
 	{
-		super.dispose();
+		var frameWidth:Int = Std.int(bgTexture.width / total);
+		var frameHeight:Int = Std.int(bgTexture.height);
 		
-		if( bgTextures != null )
-			while ( bgTextures.length > 0 ) {
-				bgTextures.pop().dispose();
-			}
+		var i:Int;
+		var rectangle:Rectangle = new Rectangle();
+			rectangle.width = frameWidth;
+			rectangle.height = frameHeight;
+			
+		var point:Point = new Point();
+		var curRow:Int;
+		var curCol:Int;
 		
-		timer.stop();
+		var bmpd:BitmapData;
+		
+		for ( i in 0...total ) {
+			curRow = Std.int(i % total);
+			curCol = Std.int(i / total);
+			
+			rectangle.x = curRow * frameWidth;
+			rectangle.y = curCol * frameHeight;
+			
+			bmpd = new BitmapData(frameWidth, frameHeight, true);
+			bmpd.copyPixels( bgTexture, rectangle, point );
+			
+			bgTextures[i] = bmpd;
+			
+			//addChild(new Bitmap(bgTextures[i])).x = i * 60 + 60;
+		}
+		SystemUtils.print(bgTextures);
+		
+		setSize(frameWidth, frameHeight);
+		
+		rectangle = null;
+		point = null;
 	}
 	
 	public function clone():UiBaseBmpdMovieClip
@@ -186,7 +183,7 @@ class UiBaseBmpdMovieClip extends InteractiveUiBase, implements IUiPlayBase
 				else timer.stop();
 			}
 		}
-		
+		SystemUtils.print(bgTextures[current - 1]);
 		currentFrame.bitmapData = bgTextures[current - 1];
 		
 		if( current == toFrame && !loop ){
@@ -194,5 +191,19 @@ class UiBaseBmpdMovieClip extends InteractiveUiBase, implements IUiPlayBase
 			else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE));
 			timer.stop();
 		}
+	}
+	
+	override public function draw():Void {}
+	
+	override public function dispose():Void 
+	{
+		super.dispose();
+		
+		if( bgTextures != null )
+			while ( bgTextures.length > 0 ) {
+				bgTextures.pop().dispose();
+			}
+		
+		timer.stop();
 	}
 }

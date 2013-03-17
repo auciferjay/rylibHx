@@ -45,8 +45,11 @@ class TimerBase implements IDisposeBase
 	{
 		if( isStart ) timerNumber--;
 		isStart = false;
-		if ( timerNumber <= 0 )
-			timer.stop();
+	}
+	
+	public function remain():Int
+	{
+		return current;
 	}
 	
 	public function callMethod():Void->Void
@@ -77,6 +80,7 @@ class TimerBase implements IDisposeBase
 	
 	private static function timerHandler():Void
 	{
+		if ( timerNumber <= 0 ) return;
 		for ( time in timerlists ) {
 			if ( time.needRender() ) {
 				time.callMethod()();

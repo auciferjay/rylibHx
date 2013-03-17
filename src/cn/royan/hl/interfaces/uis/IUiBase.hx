@@ -10,12 +10,12 @@ import flash.events.EventDispatcher;
 interface IUiBase implements IDisposeBase
 {
 	function draw():Void;
-	function getDefaultBackgroundColors():Array<Int>;
-	function getDefaultBackgroundAlphas():Array<Float>;
-	function setBackgroundColors(value:Array<Int>):Void;
-	function getBackgroundColors():Array<Int>;
-	function setBackgroundAlphas(value:Array<Float>):Void;
-	function getBackgroundAlphas():Array<Float>;
+	function getDefaultBackgroundColors():Array<Dynamic>;
+	function getDefaultBackgroundAlphas():Array<Dynamic>;
+	function setBackgroundColors(value:Array<Dynamic>):Void;
+	function getBackgroundColors():Array<Dynamic>;
+	function setBackgroundAlphas(value:Array<Dynamic>):Void;
+	function getBackgroundAlphas():Array<Dynamic>;
 	function setSize(cWidth:Int, cHeight:Int):Void;
 	function getSize():Square;
 	function setPosition(cX:Int, cY:Int):Void;

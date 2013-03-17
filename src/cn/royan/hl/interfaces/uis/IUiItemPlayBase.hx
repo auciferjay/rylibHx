@@ -1,8 +1,11 @@
 package cn.royan.hl.interfaces.uis;
 
-import cn.royan.hl.interfaces.IDisposeBase;
+/**
+ * ...
+ * @author RoYan
+ */
 
-interface IUiPlayBase implements IDisposeBase
+interface IUiItemPlayBase implements IUiBase
 {
 	function getIn():Void;
 	function getOut():Void;
