@@ -53,6 +53,9 @@ class InteractiveUiBase extends Sprite, implements IUiBase, implements IUiItemSt
 	{
 		super();
 		
+		containerHeight = 0;
+		containerWidth = 0;
+		
 		status = INTERACTIVE_STATUS_NORMAL;
 		bgColors = getDefaultBackgroundColors();
 		bgAlphas = getDefaultBackgroundAlphas();
@@ -84,14 +87,14 @@ class InteractiveUiBase extends Sprite, implements IUiBase, implements IUiItemSt
 				graphics.beginGradientFill(GradientType.LINEAR, cast(bgColors), bgAlphas, [0,255], matrix);
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
 				graphics.endFill();
-			}else if(  bgColors != null && bgColors.length > 0 && cast(bgColors[0]) > 0 ){
+			}else if(  bgColors != null && bgColors.length > 0 && cast(bgAlphas[0]) > 0 ){
 				graphics.beginFill( cast(bgColors[0]), bgAlphas[0] );
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
 				graphics.endFill();
 			}else{
-				graphics.beginFill( 0xFFFFFF, 0 );
-				graphics.drawRect( 0, 0, containerWidth, containerHeight );
-				graphics.endFill();
+				//graphics.beginFill( 0xFFFFFF, 0 );
+				//graphics.drawRect( 0, 0, containerWidth, containerHeight );
+				//graphics.endFill();
 			}
 		}
 	}
@@ -162,6 +165,11 @@ class InteractiveUiBase extends Sprite, implements IUiBase, implements IUiItemSt
 	public function getBackgroundAlphas():Array<Dynamic>
 	{
 		return bgAlphas;
+	}
+	
+	public function setCallbacks(value:CallBackBase):Void
+	{
+		callbacks = value;
 	}
 	
 	public function setSize(w:Int, h:Int):Void
@@ -315,34 +323,33 @@ class InteractiveUiBase extends Sprite, implements IUiBase, implements IUiItemSt
 	{
 		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
 		if( isMouseRender ) draw();
-		if ( callbacks != null && callbacks.over != null ) callbacks.over();
+		if ( callbacks != null && callbacks.over != null ) callbacks.over(this);
 	}
 	
 	function mouseOutHandler(evt:MouseEvent):Void
 	{
 		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_NORMAL;
 		if( isMouseRender ) draw();
-		if ( callbacks != null && callbacks.out != null ) callbacks.out();
+		if ( callbacks != null && callbacks.out != null ) callbacks.out(this);
 	}
 	
 	function mouseDownHandler(evt:MouseEvent):Void
 	{
 		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_DOWN;
 		if( isMouseRender ) draw();
-		if ( callbacks != null && callbacks.down != null ) callbacks.down();
+		if ( callbacks != null && callbacks.down != null ) callbacks.down(this);
 	}
 	
 	function mouseUpHandler(evt:MouseEvent):Void
 	{
 		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
 		if( isMouseRender ) draw();
-		if ( callbacks != null && callbacks.up != null ) callbacks.up();
+		if ( callbacks != null && callbacks.up != null ) callbacks.up(this);
 	}
 	
 	function mouseClickHandler(evt:MouseEvent):Void
 	{
-		if( callbacks != null && callbacks.done != null ) callbacks.done();
-		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE));
+		if( callbacks != null && callbacks.click != null ) callbacks.click(this);
 	}
 	
 	function addToStageHandler(evt:Event = null):Void

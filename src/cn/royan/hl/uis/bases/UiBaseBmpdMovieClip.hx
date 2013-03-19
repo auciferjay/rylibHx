@@ -187,7 +187,7 @@ class UiBaseBmpdMovieClip extends InteractiveUiBase, implements IUiItemPlayBase
 		currentFrame.bitmapData = bgTextures[current - 1];
 		
 		if( current == toFrame && !loop ){
-			if( callbacks != null && callbacks.done != null ) callbacks.done();
+			if( callbacks != null && callbacks.done != null ) callbacks.done(this);
 			else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE));
 			timer.stop();
 		}

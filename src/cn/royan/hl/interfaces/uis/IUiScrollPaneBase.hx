@@ -5,11 +5,8 @@ package cn.royan.hl.interfaces.uis;
  * @author RoYan
  */
 
-interface IUiScrollerBase extends IUiBase
+interface IUiScrollPane 
 {
-	function show(v:Bool, h:Bool):Void;
-	function setSize(cWidth:Int, cHeight:Int):Void;
-	function setContainerSize(cWidth:Int, cHeight:Int):Void;
 	function setType(type:Int):Void;
 	function setThumbTexture(texture:Dynamic):Void;
 	function setMinTexture(texture:Dynamic):Void;

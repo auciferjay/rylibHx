@@ -1,5 +1,6 @@
 package cn.royan.hl.uis.bases;
 
+import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiContainerBase;
 import cn.royan.hl.interfaces.uis.IUiItemStateBase;
@@ -21,7 +22,6 @@ class UiBaseContainer extends InteractiveUiBase,implements IUiContainerBase, imp
 	var current:String;
 	
 	var items:Array<IUiBase>;
-	var container:InteractiveUiBase;
 	
 	public function new(texture:BitmapData = null)
 	{
@@ -31,9 +31,6 @@ class UiBaseContainer extends InteractiveUiBase,implements IUiContainerBase, imp
 		
 		states = [];
 		
-		container = new InteractiveUiBase();
-		addChild(container);
-		
 		setBackgroundAlphas([0]);
 	}
 	
@@ -41,9 +38,12 @@ class UiBaseContainer extends InteractiveUiBase,implements IUiContainerBase, imp
 	{
 		items.push(item);
 		
-		container.addChild(cast( item, DisplayObject ));
+		addChild(cast( item, DisplayObject ));
 		
 		draw();
+		
+		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
+		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
 	}
 	
 	public function addItemAt(item:IUiBase, index:Int):Void
@@ -55,17 +55,23 @@ class UiBaseContainer extends InteractiveUiBase,implements IUiContainerBase, imp
 		
 		items = prev.concat(next);
 		
-		container.addChild(cast( item, DisplayObject ));
+		addChild(cast( item, DisplayObject ));
 		
 		draw();
+		
+		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
+		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
 	}
 	
 	public function removeItem(item:IUiBase):Void
 	{
 		items.remove(item);
-		container.removeChild(cast(item, DisplayObject));
+		removeChild(cast(item, DisplayObject));
 		
 		draw();
+		
+		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
+		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
 	}
 	
 	public function removeItemAt(index:Int):Void
@@ -74,6 +80,9 @@ class UiBaseContainer extends InteractiveUiBase,implements IUiContainerBase, imp
 		var next:Array<IUiBase> = items.slice(index);
 		
 		removeItem(prev.pop());
+		
+		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
+		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
 		
 		items = prev.concat(next);
 	}
@@ -85,6 +94,9 @@ class UiBaseContainer extends InteractiveUiBase,implements IUiContainerBase, imp
 		}
 		
 		draw();
+		
+		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
+		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
 	}
 	
 	public function getItemAt(index:Int):IUiBase

@@ -61,7 +61,6 @@ class UiBaseLabelButton extends InteractiveUiBase, implements IUiTextBase, imple
 	{
 		btnBackground.removeAllChildren();
 		
-		SystemUtils.print(status);
 		if( bgTextures[status] != null )
 			btnBackground.addChild(bgTextures[status]);
 		

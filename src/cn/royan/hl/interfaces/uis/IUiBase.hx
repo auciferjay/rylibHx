@@ -1,5 +1,6 @@
 package cn.royan.hl.interfaces.uis;
 
+import cn.royan.hl.bases.CallBackBase;
 import cn.royan.hl.interfaces.IDisposeBase;
 import cn.royan.hl.geom.Position;
 import cn.royan.hl.geom.Square;
@@ -10,6 +11,7 @@ import flash.events.EventDispatcher;
 interface IUiBase implements IDisposeBase
 {
 	function draw():Void;
+	function setCallbacks(value:CallBackBase):Void;
 	function getDefaultBackgroundColors():Array<Dynamic>;
 	function getDefaultBackgroundAlphas():Array<Dynamic>;
 	function setBackgroundColors(value:Array<Dynamic>):Void;

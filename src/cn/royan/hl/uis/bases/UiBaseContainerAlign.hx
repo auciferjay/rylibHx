@@ -33,7 +33,7 @@ private typedef ContainerRowConfig = {
 	var length:Int;
 }
 
-class UiBaseContainerAlign extends UiBaseContainer, implements IUiContainerScrolBase
+class UiBaseContainerAlign extends UiBaseContainer
 {
 	static public inline var CONTAINER_HORIZONTAL_LEFT:Int 		= 0;
 	static public inline var CONTAINER_HORIZONTAL_CENTER:Int 	= 1;
@@ -51,8 +51,6 @@ class UiBaseContainerAlign extends UiBaseContainer, implements IUiContainerScrol
 	var margins:ContainerMargin;
 	var itemsWidth:Int;
 	var itemsHeight:Int;
-	
-	var scroller:UiBaseScroller;
 	
 	public function new(texture:BitmapData = null) 
 	{
@@ -195,35 +193,5 @@ class UiBaseContainerAlign extends UiBaseContainer, implements IUiContainerScrol
 			}
 			offsetY += rows[i].height + gapY;
 		}
-	}
-	
-	public function setScrollerSize(cWidth:Int, cHeight:Int):Void
-	{
-		scroller.setSize(cWidth, cHeight);
-	}
-	
-	public function setScrollerType(type:Int):Void
-	{
-		scroller.setType(type);
-	}
-	
-	public function setScrollerThumbTexture(texture:Dynamic):Void
-	{
-		scroller.setThumbTexture(texture);
-	}
-	
-	public function setScrollerMinTexture(texture:Dynamic):Void
-	{
-		scroller.setMinTexture(texture);
-	}
-	
-	public function setScrollerMaxTexture(texture:Dynamic):Void
-	{
-		scroller.setMaxTexture(texture);
-	}
-	
-	public function setScrollerBackgroundTextrue(texture:Dynamic):Void
-	{
-		scroller.setBackgroundTextrue(texture);
 	}
 }

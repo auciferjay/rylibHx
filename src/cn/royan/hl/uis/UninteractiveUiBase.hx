@@ -1,9 +1,11 @@
 package cn.royan.hl.uis;
 
+import cn.royan.hl.bases.CallBackBase;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.geom.Position;
 import cn.royan.hl.geom.Square;
 import cn.royan.hl.utils.SystemUtils;
+import flash.errors.Error;
 
 import flash.display.BitmapData;
 import flash.display.GradientType;
@@ -25,7 +27,10 @@ class UninteractiveUiBase extends Shape, implements IUiBase
 	public function new(texture:BitmapData = null) 
 	{
 		super();
-
+		
+		containerHeight = 0;
+		containerWidth = 0;
+		
 		bgColors = getDefaultBackgroundColors();
 		bgAlphas = getDefaultBackgroundAlphas();
 		
@@ -52,7 +57,7 @@ class UninteractiveUiBase extends Shape, implements IUiBase
 				graphics.beginGradientFill(GradientType.LINEAR, cast(bgColors), bgAlphas, [0,255], matrix);
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
 				graphics.endFill();
-			}else if(  bgColors != null && bgColors.length > 0 && cast(bgColors[0]) > 0 ){
+			}else if(  bgColors != null && bgColors.length > 0 && cast(bgAlphas[0]) > 0 ){
 				graphics.beginFill( cast(bgColors[0]), bgAlphas[0] );
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
 				graphics.endFill();
@@ -124,6 +129,11 @@ class UninteractiveUiBase extends Shape, implements IUiBase
 	public function getBackgroundAlphas():Array<Dynamic>
 	{
 		return bgAlphas;
+	}
+	
+	public function setCallbacks(value:CallBackBase):Void
+	{
+		throw new Error("uninteractivebase");
 	}
 	
 	public function setSize(cWidth:Int, cHeight:Int):Void

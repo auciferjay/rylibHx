@@ -5,10 +5,10 @@ import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.interfaces.uis.IUiContainerGroupBase;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.utils.SystemUtils;
+import flash.events.MouseEvent;
 
 import flash.display.DisplayObject;
 import flash.display.BitmapData;
-import flash.events.Event;
 
 class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainerGroupBase
 {
@@ -40,7 +40,7 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 		items.push(item);
 		keys.push(key);
 		
-		item.getDispatcher().addEventListener(DatasEvent.DATA_DONE, itemSelectHandler);
+		item.getDispatcher().addEventListener(MouseEvent.CLICK, itemSelectHandler);
 		
 		container.addChild(cast( item, DisplayObject ));
 		
@@ -61,7 +61,7 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 		items = prev.concat(next);
 		keys = pkey.concat(nkey);
 		
-		item.getDispatcher().addEventListener(DatasEvent.DATA_DONE, itemSelectHandler);
+		item.getDispatcher().addEventListener(MouseEvent.CLICK, itemSelectHandler);
 		
 		container.addChild(cast( item, DisplayObject ));
 		
@@ -76,7 +76,7 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 		}
 		items.remove(item);
 		
-		item.getDispatcher().removeEventListener(DatasEvent.DATA_DONE, itemSelectHandler);
+		item.getDispatcher().removeEventListener(MouseEvent.CLICK, itemSelectHandler);
 		container.removeChild(cast(item, DisplayObject));
 		
 		draw();
@@ -96,7 +96,7 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 	{
 		while ( items.length > 0 ) {
 			var item:IUiBase = items.shift();
-				item.getDispatcher().removeEventListener(DatasEvent.DATA_DONE, itemSelectHandler);
+				item.getDispatcher().removeEventListener(MouseEvent.CLICK, itemSelectHandler);
 			removeItem(item);
 		}
 	}
@@ -150,7 +150,7 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 		}
 	}
 	
-	function itemSelectHandler(evt:DatasEvent):Void
+	function itemSelectHandler(evt:MouseEvent):Void
 	{
 		var key:Dynamic = getKey( cast(evt.currentTarget) );
 		var giveUpKey:Dynamic = null;
@@ -218,7 +218,7 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 		super.addToStageHandler(evt);
 		
 		for ( item in items ) {
-			item.getDispatcher().addEventListener(DatasEvent.DATA_DONE, itemSelectHandler);
+			item.getDispatcher().addEventListener(MouseEvent.CLICK, itemSelectHandler);
 		}
 	}
 	
@@ -227,7 +227,7 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 		super.removeFromStageHandler(evt);
 		
 		for ( item in items ) {
-			item.getDispatcher().removeEventListener(DatasEvent.DATA_DONE, itemSelectHandler);
+			item.getDispatcher().removeEventListener(MouseEvent.CLICK, itemSelectHandler);
 		}
 	}
 	
