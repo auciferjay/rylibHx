@@ -5,6 +5,8 @@ import flash.text.TextFormat;
 
 interface IUiTextBase implements IUiBase 
 {
+	function autoSize(value:String):Void;
+	
 	function setText(value:String):Void;
 	function appendText(value:String):Void;
 	function getText():String;

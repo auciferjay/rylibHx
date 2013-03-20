@@ -42,6 +42,10 @@ class UiBaseScrollPane extends InteractiveUiBase
 		containerMask = new UninteractiveUiBase();
 		addChild(containerMask);
 		container.mask = containerMask;
+		#elseif js
+		nmeSurface.style.width = container.getSize().width + "px";
+		nmeSurface.style.height = container.getSize().height + "px";
+		nmeSurface.style.setProperty("overflow", "hidden", "");
 		#end
 		
 		setType(type);
@@ -71,6 +75,9 @@ class UiBaseScrollPane extends InteractiveUiBase
 		super.setSize(cWidth, cHeight);
 		#if flash
 		containerMask.setSize(cWidth, cHeight);
+		#elseif js
+		nmeSurface.style.width = cWidth + "px";
+		nmeSurface.style.height = cHeight + "px";
 		#end
 		switch(scrollerType){
 			case SCROLL_TYPE_NONE:

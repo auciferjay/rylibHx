@@ -75,7 +75,7 @@ class UiBaseLabelButton extends InteractiveUiBase, implements IUiTextBase, imple
 			
 			draw();
 		}
-		
+		SystemUtils.print(evt);
 		super.mouseClickHandler(evt);
 	}
 	

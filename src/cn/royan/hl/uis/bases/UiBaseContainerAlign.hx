@@ -119,7 +119,7 @@ class UiBaseContainerAlign extends UiBaseContainer
 		
 		for ( i in 0...items.length ) {
 			var item:IUiBase = items[i];
-			
+				item.setPosition(0, 0);
 			if ( !cast(item,DisplayObject).visible ) continue;
 			
 			if ( rowW + ( (i > 0 ? 1:0) * gapX + item.getSize().width ) > containerWidth - marginL - marginR ) {

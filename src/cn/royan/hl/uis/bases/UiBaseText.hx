@@ -27,6 +27,13 @@ class UiBaseText extends InteractiveUiBase, implements IUiTextBase
 		addChild( inputText );
 	}
 	
+	public function autoSize(value:String):Void
+	{
+		inputText.autoSize = value;
+		
+		setSize(inputText.textWidth, inputText.textHeight);
+	}
+	
 	public function setText(value:String):Void
 	{
 		inputText.text = value;
