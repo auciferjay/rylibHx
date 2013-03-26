@@ -31,6 +31,7 @@ class UiBaseScrollBar extends UiBaseContainerAlign, implements IUiScrollBarBase
 		super();
 		
 		min = new UiBaseLabelButton();
+		min.addEventListener(MouseEvent.MOUSE_DOWN, minMouseDownHandler);
 		addItem(min);
 		
 		background = new InteractiveUiBase();
@@ -40,6 +41,7 @@ class UiBaseScrollBar extends UiBaseContainerAlign, implements IUiScrollBarBase
 		addItem(background);
 		
 		max = new UiBaseLabelButton();
+		max.addEventListener(MouseEvent.MOUSE_DOWN, maxMouseDownHandler);
 		addItem(max);
 		
 		thumb = new UiBaseLabelButton();
@@ -49,6 +51,83 @@ class UiBaseScrollBar extends UiBaseContainerAlign, implements IUiScrollBarBase
 		rect = new Rectangle();
 		
 		setType(type);
+	}
+	
+	override private function addToStageHandler(evt:Event = null):Void 
+	{
+		super.addToStageHandler(evt);
+		
+		#if flash
+		background.addEventListener(MouseEvent.CLICK, backgroundClickHandler);
+		thumb.addEventListener(MouseEvent.MOUSE_DOWN, thumbMouseDownHandler);
+		max.addEventListener(MouseEvent.MOUSE_DOWN, maxMouseDownHandler);
+		min.addEventListener(MouseEvent.MOUSE_DOWN, minMouseDownHandler);
+		#end
+	}
+	
+	function minMouseDownHandler(evt:MouseEvent):Void
+	{
+		min.addEventListener(MouseEvent.MOUSE_UP, minMouseUpHandler);
+		min.stage.addEventListener(MouseEvent.MOUSE_UP, minMouseUpHandler);
+		
+		min.addEventListener(Event.ENTER_FRAME, minEnterHandler);
+	}
+	
+	function minEnterHandler(evt:Event):Void
+	{
+		switch( scrollerType ) {
+			case SCROLLBAR_TYPE_HORIZONTAL:
+				if ( thumb.getPosition().x > rect.x ) {
+					thumb.setPosition(thumb.getPosition().x - 1, thumb.getPosition().y);
+				}
+			case SCROLLBAR_TYPE_VERICAL:
+				if ( thumb.getPosition().y > rect.y ) {
+					thumb.setPosition(thumb.getPosition().x, thumb.getPosition().y - 1);
+				}
+		}
+		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
+		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
+	}
+	
+	function minMouseUpHandler(evt:MouseEvent):Void
+	{
+		min.removeEventListener(MouseEvent.MOUSE_UP, minMouseUpHandler);
+		min.stage.removeEventListener(MouseEvent.MOUSE_UP, minMouseUpHandler);
+		
+		min.removeEventListener(Event.ENTER_FRAME, minEnterHandler);
+	}
+	
+	function maxMouseDownHandler(evt:MouseEvent):Void
+	{
+		max.addEventListener(MouseEvent.MOUSE_UP, maxMouseUpHandler);
+		max.stage.addEventListener(MouseEvent.MOUSE_UP, maxMouseUpHandler);
+		
+		max.addEventListener(Event.ENTER_FRAME, maxEnterHandler);
+	}
+	
+	function maxEnterHandler(evt:Event):Void
+	{
+		switch( scrollerType ) {
+			case SCROLLBAR_TYPE_HORIZONTAL:
+				if ( thumb.getPosition().x < rect.width + rect.x ) {
+					thumb.setPosition(thumb.getPosition().x + 1, thumb.getPosition().y);
+				}
+			case SCROLLBAR_TYPE_VERICAL:
+				if ( thumb.getPosition().y < rect.height + rect.y ) {
+					thumb.setPosition(thumb.getPosition().x, thumb.getPosition().y + 1);
+				}
+		}
+		
+		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
+		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
+	}
+	
+	function maxMouseUpHandler(evt:MouseEvent):Void
+	{
+		max.removeEventListener(MouseEvent.MOUSE_UP, maxMouseUpHandler);
+		max.stage.removeEventListener(MouseEvent.MOUSE_UP, maxMouseUpHandler);
+		
+		max.removeEventListener(Event.ENTER_FRAME, maxEnterHandler);
 	}
 	
 	function backgroundClickHandler(evt:MouseEvent):Void

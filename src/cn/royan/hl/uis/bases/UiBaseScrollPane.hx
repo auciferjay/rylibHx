@@ -6,6 +6,7 @@ import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.uis.InteractiveUiBase;
 import cn.royan.hl.uis.UninteractiveUiBase;
 import cn.royan.hl.utils.SystemUtils;
+import flash.events.Event;
 import flash.geom.Rectangle;
 
 #if js
@@ -53,20 +54,31 @@ class UiBaseScrollPane extends InteractiveUiBase
 		changeHandler();
 	}
 	
+	override private function addToStageHandler(evt:Event = null):Void 
+	{
+		super.addToStageHandler(evt);
+		
+		changeHandler();
+		#if flash
+		if( vScrollBar != null ) vScrollBar.addEventListener(DatasEvent.DATA_CHANGE, vChangeHandler);
+		if ( hScrollBar != null ) hScrollBar.addEventListener(DatasEvent.DATA_CHANGE, hChangeHandler);
+		#end
+	}
+	
 	function changeHandler(evt:DatasEvent = null):Void
 	{
 		if ( container.width > containerWidth && 
 			( scrollerType == SCROLL_TYPE_HORIZONTAL_ONLY || scrollerType == SCROLL_TYPE_HANDV ) ) {
 			if ( !contains(hScrollBar) ) addChild(hScrollBar);
 		}else {
-			if ( contains(hScrollBar) ) removeChild(hScrollBar);
+			if ( hScrollBar != null && contains(hScrollBar) ) removeChild(hScrollBar);
 		}
 		
 		if ( container.height > containerHeight &&
 			( scrollerType == SCROLL_TYPE_VERICAL_ONLY || scrollerType == SCROLL_TYPE_HANDV ) ) {
 			if ( !contains(vScrollBar) ) addChild(vScrollBar);
 		}else {
-			if ( contains(vScrollBar) ) removeChild(vScrollBar);
+			if ( vScrollBar != null && contains(vScrollBar) ) removeChild(vScrollBar);
 		}
 	}
 	
@@ -130,7 +142,6 @@ class UiBaseScrollPane extends InteractiveUiBase
 					hScrollBar.addEventListener(DatasEvent.DATA_CHANGE, hChangeHandler);
 				}
 				if ( vScrollBar == null ) {
-					
 					vScrollBar = new UiBaseScrollBar(UiBaseScrollBar.SCROLLBAR_TYPE_VERICAL);
 					vScrollBar.addEventListener(DatasEvent.DATA_CHANGE, vChangeHandler);
 				}

@@ -7,12 +7,18 @@ import cn.royan.hl.uis.InteractiveUiBase;
 import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
+import flash.text.TextFieldAutoSize;
 
 class UiBaseText extends InteractiveUiBase, implements IUiTextBase
 {
 	static public inline var TEXT_ALIGN_LEFT:Int 	= 0;
 	static public inline var TEXT_ALIGN_CENTER:Int 	= 1;
 	static public inline var TEXT_ALIGN_RIGHT:Int	= 2;
+	
+	static public inline var TEXT_AUTOSIZE_NONE:Int = 0;
+	static public inline var TEXT_AUTOSIZE_LEFT:Int = 1;
+	static public inline var TEXT_AUTOSIZE_CENTER:Int = 2;
+	static public inline var TEXT_AUTOSIZE_RIGHT:Int = 3;
 	
 	var inputText:TextField;
 	
@@ -27,11 +33,27 @@ class UiBaseText extends InteractiveUiBase, implements IUiTextBase
 		addChild( inputText );
 	}
 	
-	public function autoSize(value:String):Void
+	override public function setSize(w:Int, h:Int):Void 
 	{
-		inputText.autoSize = value;
+		super.setSize(w, h);
+		inputText.width = w;
+		inputText.height = h;
+	}
+	
+	public function autoSize(value:Int):Void
+	{
+		switch( value ) {
+			case TEXT_AUTOSIZE_NONE:
+				inputText.autoSize = TextFieldAutoSize.NONE;
+			case TEXT_AUTOSIZE_LEFT:
+				inputText.autoSize = TextFieldAutoSize.LEFT;
+			case TEXT_AUTOSIZE_CENTER:
+				inputText.autoSize = TextFieldAutoSize.CENTER;
+			case TEXT_AUTOSIZE_RIGHT:
+				inputText.autoSize = TextFieldAutoSize.RIGHT;
+		}
 		
-		setSize(inputText.textWidth, inputText.textHeight);
+		setSize(Std.int(inputText.textWidth), Std.int(inputText.textHeight));
 	}
 	
 	public function setText(value:String):Void

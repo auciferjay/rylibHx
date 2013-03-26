@@ -1,11 +1,12 @@
 package cn.royan.hl.interfaces.uis;
 
 import cn.royan.hl.geom.Position;
+import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
 
 interface IUiTextBase implements IUiBase 
 {
-	function autoSize(value:String):Void;
+	function autoSize(value:Int):Void;
 	
 	function setText(value:String):Void;
 	function appendText(value:String):Void;

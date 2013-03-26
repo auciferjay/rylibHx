@@ -98,7 +98,6 @@ class UiBaseBmpdMovieClip extends InteractiveUiBase, implements IUiItemPlayBase
 			
 			//addChild(new Bitmap(bgTextures[i])).x = i * 60 + 60;
 		}
-		SystemUtils.print(bgTextures);
 		
 		setSize(frameWidth, frameHeight);
 		
@@ -183,7 +182,7 @@ class UiBaseBmpdMovieClip extends InteractiveUiBase, implements IUiItemPlayBase
 				else timer.stop();
 			}
 		}
-		SystemUtils.print(bgTextures[current - 1]);
+		
 		currentFrame.bitmapData = bgTextures[current - 1];
 		
 		if( current == toFrame && !loop ){

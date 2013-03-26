@@ -75,7 +75,6 @@ class UiBaseLabelButton extends InteractiveUiBase, implements IUiTextBase, imple
 			
 			draw();
 		}
-		SystemUtils.print(evt);
 		super.mouseClickHandler(evt);
 	}
 	
@@ -92,6 +91,11 @@ class UiBaseLabelButton extends InteractiveUiBase, implements IUiTextBase, imple
 	override public function getDefaultBackgroundAlphas():Array<Dynamic>
 	{
 		return [[1,1],[1,1],[1,1],[1,1],[1,1]];
+	}
+	
+	public function autoSize(value:Int):Void
+	{
+		btnLabelText.autoSize(value);
 	}
 	
 	public function setTextColors(value:Array<Dynamic>):Void

@@ -5,8 +5,9 @@ import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.interfaces.uis.IUiContainerGroupBase;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.utils.SystemUtils;
-import flash.events.MouseEvent;
 
+import flash.events.Event;
+import flash.events.MouseEvent;
 import flash.display.DisplayObject;
 import flash.display.BitmapData;
 
@@ -26,10 +27,10 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 		maxLen = 2;
 		isMust = true;
 		isMulti = true;
-		keys = [];
 		
 		selects = [];
 		values = [];
+		keys = [];
 	}
 	
 	//Public methods
@@ -38,17 +39,22 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 		item.setInGroup(true);
 		
 		items.push(item);
-		keys.push(key);
+		untyped keys.push(key != null ? key : cast(item));
 		
 		item.getDispatcher().addEventListener(MouseEvent.CLICK, itemSelectHandler);
 		
-		container.addChild(cast( item, DisplayObject ));
+		addChild(cast( item, DisplayObject ));
 		
 		draw();
+		
+		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
+		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
 	}
 	
 	public function addGroupItemAt(item:IUiItemGroupBase, index:Int, key:Dynamic = null):Void
 	{
+		item.setInGroup(true);
+		
 		var prev:Array<IUiBase> = items.slice(0, index);
 		var next:Array<IUiBase> = items.slice(index);
 		
@@ -56,16 +62,19 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 		var nkey:Array<Dynamic> = keys.slice(index);
 		
 		prev.push(item);
-		pkey.push(key);
+		untyped pkey.push(key != null ? key : cast(item));
 		
 		items = prev.concat(next);
 		keys = pkey.concat(nkey);
 		
 		item.getDispatcher().addEventListener(MouseEvent.CLICK, itemSelectHandler);
 		
-		container.addChild(cast( item, DisplayObject ));
+		addChild(cast( item, DisplayObject ));
 		
 		draw();
+		
+		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
+		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
 	}
 	
 	public function removeGroupItem(item:IUiItemGroupBase):Void
@@ -77,9 +86,12 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 		items.remove(item);
 		
 		item.getDispatcher().removeEventListener(MouseEvent.CLICK, itemSelectHandler);
-		container.removeChild(cast(item, DisplayObject));
+		removeChild(cast(item, DisplayObject));
 		
 		draw();
+		
+		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
+		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
 	}
 	
 	public function removeGroupItemAt(index:Int):Void
@@ -99,6 +111,9 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 				item.getDispatcher().removeEventListener(MouseEvent.CLICK, itemSelectHandler);
 			removeItem(item);
 		}
+		
+		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
+		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
 	}
 	
 	public function getGroupItemAt(index:Int):IUiItemGroupBase
@@ -124,6 +139,30 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 	public function getValues():Array<Dynamic>
 	{
 		return values;
+	}
+	
+	public function setValues(array:Array<Dynamic>):Void
+	{
+		var i:Int;
+		for( i in 0...values.length){
+			getValue(values[i]).setSelected(false);
+		}
+		values = array;
+		for(i in 0...array.length){
+			getValue(array[i]).setSelected(true);
+		}
+	}
+	
+	function getValue(key:Dynamic):IUiItemGroupBase
+	{
+		for ( item in keys )
+		{
+			if( keys[item] == key )
+			{
+				return item;
+			}
+		}
+		return null;
 	}
 	
 	public function setIsMust(value:Bool):Void
@@ -152,13 +191,13 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 	
 	function itemSelectHandler(evt:MouseEvent):Void
 	{
-		var key:Dynamic = getKey( cast(evt.currentTarget) );
+		var key:Dynamic = getKey(evt.currentTarget);
 		var giveUpKey:Dynamic = null;
 		var index:Int = SystemUtils.arrayIndexOf(values, key);
-		var giveUpIndex:Int = 0;
-		var current:IUiItemGroupBase = cast(items[SystemUtils.arrayIndexOf(keys, key)]);
+		var giveUpIndex:Int = -1;
+		var current:IUiItemGroupBase = cast(items[SystemUtils.arrayIndexOf(items, evt.currentTarget)]);
 		if ( index == -1 ) {
-			if( isMulti ){
+			if ( isMulti ) {
 				if( maxLen <= values.length )
 				{
 					giveUpKey = values[0];
@@ -175,7 +214,7 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 				selects.push(current);
 				current.setSelected(true);
 				
-				dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
+				dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING));
 			}else{
 				giveUpKey = values[0];
 				giveUpIndex = SystemUtils.arrayIndexOf(keys, giveUpKey);
@@ -190,7 +229,7 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 				selects = [current];
 				current.setSelected(true);
 				
-				dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
+				dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING));
 			}
 		}else{//找到(取消)
 			if( !isMust ){//不是必须的
@@ -198,7 +237,7 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 				selects.splice(index, 1);
 				current.setSelected(false);
 				
-				dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
+				dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING));
 			}
 		}
 	}
@@ -219,15 +258,6 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 		
 		for ( item in items ) {
 			item.getDispatcher().addEventListener(MouseEvent.CLICK, itemSelectHandler);
-		}
-	}
-	
-	override private function removeFromStageHandler(evt:Event):Void 
-	{
-		super.removeFromStageHandler(evt);
-		
-		for ( item in items ) {
-			item.getDispatcher().removeEventListener(MouseEvent.CLICK, itemSelectHandler);
 		}
 	}
 	

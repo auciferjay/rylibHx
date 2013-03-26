@@ -7,6 +7,7 @@ import cn.royan.hl.interfaces.uis.IUiItemStateBase;
 import cn.royan.hl.interfaces.uis.IUiContainerStateBase;
 import cn.royan.hl.uis.InteractiveUiBase;
 import cn.royan.hl.utils.SystemUtils;
+import flash.events.Event;
 
 import flash.display.DisplayObject;
 import flash.display.BitmapData;
@@ -32,6 +33,14 @@ class UiBaseContainer extends InteractiveUiBase,implements IUiContainerBase, imp
 		states = [];
 		
 		setBackgroundAlphas([0]);
+	}
+	
+	override private function addToStageHandler(evt:Event = null):Void 
+	{
+		super.addToStageHandler(evt);
+		
+		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
+		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
 	}
 	
 	public function addItem(item:IUiBase):Void

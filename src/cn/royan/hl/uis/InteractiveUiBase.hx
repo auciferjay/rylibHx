@@ -292,6 +292,7 @@ class InteractiveUiBase extends Sprite, implements IUiBase, implements IUiItemSt
 	{
 		if ( evtListenerType == null || evtListenerType.length == 0)
 			return;
+		
 		for ( i in 0...evtListenerType.length)
 		{
 			var type:String = evtListenerType[i];
@@ -300,8 +301,12 @@ class InteractiveUiBase extends Sprite, implements IUiBase, implements IUiItemSt
 			#else
 			var dic:Array<Dynamic->Void> = evtListenerDirectory[i];
 			#end
-			var fun:Dynamic->Void = untyped dic[ type ];
-			removeEventListener( type, fun );
+			if ( dic == null || untyped dic[ type ] == null ) {
+				continue;
+			}else {
+				var fun:Dynamic->Void = untyped dic[ type ];
+				removeEventListener( type, fun );
+			}
 		}
 	}
 
@@ -356,12 +361,12 @@ class InteractiveUiBase extends Sprite, implements IUiBase, implements IUiItemSt
 	{
 		if ( hasEventListener(Event.ADDED_TO_STAGE) )
 			removeEventListener(Event.ADDED_TO_STAGE, addToStageHandler);
-		
-		addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler );
-		addEventListener(MouseEvent.MOUSE_OUT, 	mouseOutHandler );
-		addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler );
-		addEventListener(MouseEvent.MOUSE_UP, 	mouseUpHandler );
-		addEventListener(MouseEvent.CLICK, 		mouseClickHandler );
+			
+		addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler, 	false, 99, true );
+		addEventListener(MouseEvent.MOUSE_OUT, 	mouseOutHandler, 	false, 99, true );
+		addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler, 	false, 99, true );
+		addEventListener(MouseEvent.MOUSE_UP, 	mouseUpHandler, 	false, 99, true );
+		addEventListener(MouseEvent.CLICK, 		mouseClickHandler, 	false, 99, true );
 		
 		addEventListener(Event.REMOVED_FROM_STAGE, removeFromStageHandler);
 		
@@ -374,7 +379,10 @@ class InteractiveUiBase extends Sprite, implements IUiBase, implements IUiItemSt
 	{
 		isOnStage = false;
 		
+		#if flash
 		removeAllEventListeners();
+		#end
+		
 		addEventListener(Event.ADDED_TO_STAGE, addToStageHandler);
 	}
 	//Private methods
