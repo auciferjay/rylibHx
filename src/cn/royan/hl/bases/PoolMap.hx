@@ -1,4 +1,5 @@
 package cn.royan.hl.bases;
+import flash.utils.Dictionary;
 
 class PoolMap 
 {

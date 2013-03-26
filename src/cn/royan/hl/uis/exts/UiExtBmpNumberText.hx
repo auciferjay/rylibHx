@@ -1,8 +1,8 @@
 package cn.royan.hl.uis.exts;
 
-import browser.display.BitmapData;
 import cn.royan.hl.uis.bases.UiBaseContainerAlign;
 import cn.royan.hl.uis.bases.UiBaseBmpdMovieClip;
+import flash.display.BitmapData;
 
 /**
  * ...
@@ -13,9 +13,9 @@ class UiExtBmpNumberText extends UiBaseContainerAlign
 {
 
 	private var isAlwaysShow:Bool;
-	private var num:int;
+	private var num:Int;
 		
-	public function new(texture:BitmapData, length:int = 1)
+	public function new(texture:BitmapData, length:Int = 1)
 	{
 		super();
 		
@@ -34,17 +34,17 @@ class UiExtBmpNumberText extends UiBaseContainerAlign
 	public function setValue(value:Int):Void
 	{
 		for( i in 0...items.length ){
-			(getItemAt(i) as UiBaseBmpdMovieClip).jumpTo(1);
-			(getItemAt(i) as UiBaseBmpdMovieClip).visible = isAlwaysShow;
+			cast(getItemAt(i), UiBaseBmpdMovieClip).jumpTo(1);
+			cast(getItemAt(i), UiBaseBmpdMovieClip).visible = isAlwaysShow;
 		}
 		num = value;
 		
-		var str:String = value.toString();
+		var str:String = Std.string(value);
 		var i:Int = str.length;
 		var j:Int = 1;
 		while( i >= 0 || j <= Math.min(items.length, str.length) ){
-			(getItemAt(items.length - j) as UiBaseBmpdMovieClip).visible = true;
-			(getItemAt(items.length - j) as UiBaseBmpdMovieClip).jumpTo(1 + Std.parseInt(str.charAt(i)));
+			cast(getItemAt(items.length - j), UiBaseBmpdMovieClip).visible = true;
+			cast(getItemAt(items.length - j), UiBaseBmpdMovieClip).jumpTo(1 + Std.parseInt(str.charAt(i)));
 			
 			i--;
 			j++;

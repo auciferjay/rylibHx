@@ -1,6 +1,5 @@
 package cn.royan.hl.uis.bases;
-import browser.display.Graphics;
-import browser.Lib;
+
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.uis.InteractiveUiBase;
@@ -10,6 +9,8 @@ import flash.events.Event;
 import flash.geom.Rectangle;
 
 #if js
+import browser.display.Graphics;
+import browser.Lib;
 import browser.Html5Dom;
 #end
 /**

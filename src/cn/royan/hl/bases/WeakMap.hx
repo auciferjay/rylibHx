@@ -1,4 +1,4 @@
-package src.cn.royan.hl.bases;
+package cn.royan.hl.bases;
 
 /**
  * ...
@@ -7,10 +7,10 @@ package src.cn.royan.hl.bases;
 
 class WeakMap 
 {
-
-	public function new() 
-	{
-		
-	}
+	static var __instance:WeakMap;
 	
+	public static function getInstance():WeakMap
+	{
+		return __instance;
+	}
 }
