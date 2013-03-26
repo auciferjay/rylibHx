@@ -1,7 +1,6 @@
 package cn.royan.hl.bases;
 
 import cn.royan.hl.interfaces.IDisposeBase;
-import cn.royan.hl.utils.SystemUtils;
 
 import haxe.Timer;
 

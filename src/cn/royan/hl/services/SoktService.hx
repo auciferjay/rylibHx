@@ -9,7 +9,7 @@ class SoktService extends EventDispatcher, implements IServiceBase
 
 	public function new()
 	{
-
+		super();
 	}
 
 	public function sendRequest(url:String='', extra:Dynamic=null) 
@@ -39,7 +39,11 @@ class SoktService extends EventDispatcher, implements IServiceBase
 
 	public function getIsServicing():Bool
 	{
-
+		return false;
 	}
-
+	
+	public function dispose():Void
+	{
+		
+	}
 }

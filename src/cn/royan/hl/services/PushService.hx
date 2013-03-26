@@ -9,10 +9,10 @@ class PushService extends EventDispatcher, implements IServiceBase
 
 	public function new()
 	{
-
+		super();
 	}
 
-	public function sendRequest(url:String='', extra:Dynamic=Null) 
+	public function sendRequest(url:String='', extra:Dynamic=null) 
 	{
 		
 	}
@@ -39,6 +39,11 @@ class PushService extends EventDispatcher, implements IServiceBase
 
 	public function getIsServicing():Bool
 	{
-
+		return false;
+	}
+	
+	public function dispose():Void
+	{
+		
 	}
 }

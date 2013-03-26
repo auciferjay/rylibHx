@@ -6,7 +6,6 @@ import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.bases.CallBackBase;
 import cn.royan.hl.geom.Position;
 import cn.royan.hl.geom.Square;
-import cn.royan.hl.utils.SystemUtils;
 
 import flash.display.BitmapData;
 import flash.display.GradientType;

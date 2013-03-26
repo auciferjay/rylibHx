@@ -5,7 +5,6 @@ import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.interfaces.uis.IUiTextBase;
 import cn.royan.hl.uis.InteractiveUiBase;
 import cn.royan.hl.uis.UninteractiveUiBase;
-import cn.royan.hl.utils.SystemUtils;
 
 import flash.text.TextFormat;
 import flash.display.BitmapData;

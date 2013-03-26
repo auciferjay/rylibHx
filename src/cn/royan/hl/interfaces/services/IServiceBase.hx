@@ -4,7 +4,7 @@ import cn.royan.hl.interfaces.IDisposeBase;
 
 import flash.events.IEventDispatcher;
 
-interface IServiceBase extends IEventDispatcher, IDisposeBase
+interface IServiceBase implements IEventDispatcher, implements IDisposeBase
 {
 	function sendRequest(url:String='', extra:Dynamic=null):Void;
 	function setCallbacks(value:Dynamic):Void;

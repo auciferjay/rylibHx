@@ -4,9 +4,8 @@ import cn.royan.hl.bases.CallBackBase;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.geom.Position;
 import cn.royan.hl.geom.Square;
-import cn.royan.hl.utils.SystemUtils;
-import flash.errors.Error;
 
+import flash.errors.Error;
 import flash.display.BitmapData;
 import flash.display.GradientType;
 import flash.display.Shape;

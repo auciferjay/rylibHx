@@ -4,7 +4,7 @@ import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.uis.InteractiveUiBase;
 import cn.royan.hl.uis.UninteractiveUiBase;
-import cn.royan.hl.utils.SystemUtils;
+
 import flash.events.Event;
 import flash.geom.Rectangle;
 

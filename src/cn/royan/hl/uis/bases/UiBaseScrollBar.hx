@@ -2,7 +2,7 @@ package cn.royan.hl.uis.bases;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiScrollBarBase;
 import cn.royan.hl.uis.InteractiveUiBase;
-import cn.royan.hl.utils.SystemUtils;
+
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.geom.Rectangle;

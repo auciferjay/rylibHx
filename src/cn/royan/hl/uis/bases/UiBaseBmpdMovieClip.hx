@@ -5,7 +5,6 @@ import cn.royan.hl.bases.TimerBase;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.uis.InteractiveUiBase;
 import cn.royan.hl.uis.UninteractiveUiBase;
-import cn.royan.hl.utils.SystemUtils;
 
 import flash.events.Event;
 import flash.display.Bitmap;
@@ -134,7 +133,6 @@ class UiBaseBmpdMovieClip extends InteractiveUiBase, implements IUiItemPlayBase
 
 	public function goFromTo(from:Int, to:Int):Void
 	{
-		SystemUtils.print("Playing from["+from+"] to ["+to+"]");
 		if( from == to ) return;
 		
 		loop = false;
