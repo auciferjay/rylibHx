@@ -6,11 +6,11 @@ import haxe.Timer;
 
 class TimerBase implements IDisposeBase
 {
-	static private var timerlists:Array<TimerBase> = [];
+	static private inline var TIMERBASE_DELAY:Int = 10;
+	
 	static private var timer:Timer;
 	static private var timerNumber:Int;
-	
-	static public inline var TIMERBASE_DELAY:Int = 10;
+	static private var timerlists:Array<TimerBase> = [];
 	
 	var delay:Int;
 	var callFun:Void->Void;
@@ -36,7 +36,7 @@ class TimerBase implements IDisposeBase
 		
 		if( !isStart ) timerNumber++;
 		isStart = true;
-		last = Std.int( Timer.stamp() * 1000 );
+		last = Std.int( Date.now().getTime() );
 		current = delay;
 	}
 	
@@ -59,8 +59,8 @@ class TimerBase implements IDisposeBase
 	public function needRender():Bool
 	{
 		if( !isStart ) return false;
-		current -= Std.int( Timer.stamp() * 1000 - last );
-		last = Std.int( Timer.stamp() * 1000 );
+		current -= Std.int( Date.now().getTime() - last );
+		last = Std.int( Date.now().getTime() );
 		var isInit:Bool = current < TIMERBASE_DELAY;
 		if( isInit ) current = delay;
 		return isStart && isInit;

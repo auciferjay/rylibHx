@@ -10,4 +10,5 @@ typedef CallBackBase = {
 	@:optional var over:Dynamic->Void;
 	@:optional var out:Dynamic->Void;
 	@:optional var click:Dynamic->Void;
+	@:optional var error:Dynamic->Void;
 }

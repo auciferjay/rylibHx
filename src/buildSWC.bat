@@ -1,3 +1,3 @@
-haxe -swf rylibHx.swc MyLibClasses --macro include('cn')
+haxe -swf rylibHx.swc MyLibClasses.hx --macro include('cn')
 
 pause

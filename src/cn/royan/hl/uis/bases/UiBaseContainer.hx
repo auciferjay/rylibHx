@@ -17,7 +17,7 @@ import flash.display.BitmapData;
  * @author RoYan
  */
 
-class UiBaseContainer extends InteractiveUiBase,implements IUiContainerBase, implements IUiContainerStateBase
+class UiBaseContainer extends InteractiveUiBase, implements IUiContainerBase, implements IUiContainerStateBase
 {
 	var states:Array<String>;
 	var current:String;

@@ -1,10 +1,11 @@
 package cn.royan.hl.services;
 
+import cn.royan.hl.bases.DispatcherBase;
 import cn.royan.hl.interfaces.services.IServiceBase;
 
 import flash.events.EventDispatcher;
 
-class SoktService extends EventDispatcher, implements IServiceBase
+class SoktService extends DispatcherBase, implements IServiceBase
 {
 
 	public function new()

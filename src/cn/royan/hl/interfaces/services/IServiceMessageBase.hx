@@ -4,7 +4,7 @@ import cn.royan.hl.interfaces.IDisposeBase;
 
 import flash.utils.IDataInput;
 
-interface IServiceMessageBase extends 
+interface IServiceMessageBase implements IDisposeBase
 {
 	function writeMessageType(type:Int):Void;
 	function writeMessageValue(value:Dynamic):Void;

@@ -1,10 +1,11 @@
 package cn.royan.hl.services;
 
+import cn.royan.hl.bases.DispatcherBase;
 import cn.royan.hl.interfaces.services.IServiceBase;
 
 import flash.events.EventDispatcher;
 
-class PushService extends EventDispatcher, implements IServiceBase 
+class PushService extends DispatcherBase, implements IServiceBase 
 {
 
 	public function new()
