@@ -3,7 +3,7 @@ package cn.royan.hl.uis;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiItemStateBase;
 import cn.royan.hl.events.DatasEvent;
-import cn.royan.hl.bases.CallBackBase;
+import cn.royan.hl.bases.Dictionary;
 import cn.royan.hl.geom.Position;
 import cn.royan.hl.geom.Square;
 
@@ -15,9 +15,6 @@ import flash.events.MouseEvent;
 import flash.events.EventDispatcher;
 import flash.geom.Matrix;
 import flash.geom.Point;
-#if flash
-import flash.utils.Dictionary;
-#end
 
 class InteractiveUiBase extends Sprite, implements IUiBase, implements IUiItemStateBase
 {
@@ -33,7 +30,7 @@ class InteractiveUiBase extends Sprite, implements IUiBase, implements IUiItemSt
 	var bgTexture:BitmapData;
 	var containerWidth:Int;
 	var containerHeight:Int;
-	var callbacks:CallBackBase;
+	var callbacks:Dynamic;
 	var isMouseRender:Bool;
 	var status:Int;
 	var statusLen:Int;
@@ -166,7 +163,7 @@ class InteractiveUiBase extends Sprite, implements IUiBase, implements IUiItemSt
 		return bgAlphas;
 	}
 	
-	public function setCallbacks(value:CallBackBase):Void
+	public function setCallbacks(value:Dynamic):Void
 	{
 		callbacks = value;
 	}
@@ -249,12 +246,8 @@ class InteractiveUiBase extends Sprite, implements IUiBase, implements IUiItemSt
 			evtListenerDirectory = [];
 			evtListenerType = [];
 		}
-		#if flash
 		var dic:Dictionary = new Dictionary();
-		#else
-		var dic:Array<Dynamic->Void> = [];
-		#end
-		untyped dic[ type ] = listener;
+		Reflect.setField(dic, type, listener);
 		evtListenerDirectory.push( dic );
 		evtListenerType.push( type );
 		super.addEventListener(type, listener, useCapture, priority, useWeakReference);
@@ -265,15 +258,11 @@ class InteractiveUiBase extends Sprite, implements IUiBase, implements IUiItemSt
 		super.removeEventListener(type, listener, useCapture);
 		if ( evtListenerDirectory != null ) {
 			for ( i in 0...evtListenerDirectory.length ) {
-				#if flash
 				var dic:Dictionary = evtListenerDirectory[i];
-				#else
-				var dic:Array<Dynamic->Void> = evtListenerDirectory[i];
-				#end
-				if ( untyped dic[ type ] == null ) {
+				if ( Reflect.field(dic, type) == null ) {
 					continue;
 				}else {
-					if ( untyped dic[ type ] != listener ) {
+					if ( Reflect.field(dic, type) != listener ) {
 						continue;
 					}else {
 						evtListenerType.splice( i, 1 );
@@ -295,15 +284,11 @@ class InteractiveUiBase extends Sprite, implements IUiBase, implements IUiItemSt
 		for ( i in 0...evtListenerType.length)
 		{
 			var type:String = evtListenerType[i];
-			#if flash
 			var dic:Dictionary = evtListenerDirectory[i];
-			#else
-			var dic:Array<Dynamic->Void> = evtListenerDirectory[i];
-			#end
-			if ( dic == null || untyped dic[ type ] == null ) {
+			if ( dic == null ||  Reflect.field(dic, type) == null ) {
 				continue;
 			}else {
-				var fun:Dynamic->Void = untyped dic[ type ];
+				var fun:Dynamic->Void =  Reflect.field(dic, type);
 				removeEventListener( type, fun );
 			}
 		}

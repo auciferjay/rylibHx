@@ -107,7 +107,7 @@ class BytesUtils
 	public static function isSWF(bytes:ByteArray):Bool
 	{
 		bytes.position = 0;
-		var header:String = bytes.readMultiByte(3, 'utf8');
+		var header:String = bytes.readUTFBytes(3);
 		bytes.position = 0;
 		return header == "CWS" || header == "FWS";
 	}
@@ -115,7 +115,7 @@ class BytesUtils
 	public static function isXML(bytes:ByteArray):Bool
 	{
 		bytes.position = 0;
-		var header:String = bytes.readMultiByte(5, 'utf8');
+		var header:String = bytes.readUTFBytes(5);
 		bytes.position = 0;
 		return header == "<?xml";
 	}
@@ -166,7 +166,7 @@ class BytesUtils
 	public static function isFLV(bytes:ByteArray):Bool
 	{
 		bytes.position = 0;
-		var header:String = bytes.readMultiByte(3, 'utf8');
+		var header:String = bytes.readUTFBytes(3);
 		bytes.position = 0;
 		return header == "FLV";
 	}
@@ -174,7 +174,7 @@ class BytesUtils
 	public static function isMP3(bytes:ByteArray):Bool
 	{
 		bytes.position = 0;
-		var header:String = bytes.readMultiByte(3, 'utf8');
+		var header:String = bytes.readUTFBytes(3);
 		bytes.position = 0;
 		return header == "ID3";
 	}
@@ -202,7 +202,7 @@ class BytesUtils
 			var result:ByteArray = new ByteArray();
 			for ( i in 3...bytes.length ) {
 				if (flag >= key.length) flag = 0;
-				result.writeByte(bytes[i] - key.charCodeAt(flag));
+				result.writeByte(bytes.readByte() - key.charCodeAt(flag));
 				flag++;
 			}
 			return result;

@@ -81,7 +81,7 @@ class SystemUtils
 	public static function getInstanceByClassName(className:String, ?parameters:Array<Dynamic>):Dynamic
 	{
 		var InstanceClass:Class<Dynamic> = Type.resolveClass(className);
-		if( parameters.length > 0 )
+		if( parameters != null && parameters.length > 0 )
 			return PoolMap.getInstanceByType( InstanceClass, parameters);
 		
 		return PoolMap.getInstanceByType(InstanceClass);

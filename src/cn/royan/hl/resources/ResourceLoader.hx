@@ -1,5 +1,5 @@
 package cn.royan.hl.resources;
-import cn.royan.hl.bases.CallBackBase;
+
 import cn.royan.hl.bases.Dictionary;
 import cn.royan.hl.bases.DispatcherBase;
 import cn.royan.hl.bases.WeakMap;
@@ -19,7 +19,7 @@ import haxe.Timer;
 
 class ResourceLoader extends DispatcherBase, implements IDisposeBase
 {
-		static var __loaderMap:Dictionary;
+		static var __loaderMap:Dictionary = new Dictionary();
 		static var __weakMap:WeakMap = WeakMap.getInstance();
 		
 		var uid:String;
@@ -32,21 +32,21 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 		var takeService:TakeService;
 		var currentPath:String;
 		
-		var callbacks:CallBackBase;
+		var callbacks:Dynamic;
 		
 		var root:DisplayObjectContainer;
 		var loader:UiBaseLoader;
 		
-		public static function getInstance(key:String, container:DisplayObjectContainer, version:String="1.0"):ResourceLoader
+		public static function getInstance(key:String, container:DisplayObjectContainer, version:String="1.0", type:Int = ConfigFile.CONFIG_FILE_TYPE_XML):ResourceLoader
 		{
 			if( Reflect.field(__loaderMap,key) == null )
 			{
-				Reflect.setField(__loaderMap, key, new ResourceLoader(key, container, version));
+				Reflect.setField(__loaderMap, key, new ResourceLoader(key, container, version, type));
 			}
 			return Reflect.field(__loaderMap,key);
 		}
 		
-		function new(key:String, container:DisplayObjectContainer, version:String)
+		function new(key:String, container:DisplayObjectContainer, version:String, type:Int)
 		{
 			super();
 			
@@ -57,20 +57,26 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 			moduleKey = key;
 			moduleVer = version;
 			
+			setConfigType(type);
+			
+			#if flash
 			currentPath = "component/loadinglibs.swf";
 			
-			takeService = new TakeService("version="+moduleVer);
+			takeService = PoolMap.getInstanceByType( TakeService, ["version="+moduleVer] );
 			takeService.setCallbacks({done:loaderOnCompleteHandler,
 									  doing:loaderOnProgressHandler,
 									  error:loaderOnErrorHandler } );
 			takeService.sendRequest(currentPath);
 			takeService.connect();
+			#else
+			loaderOnCompleteHandler(null);
+			#end
 		}
 		
 		public function load():Void
 		{
 			currentPath = moduleKey + ConfigFile.getExtension(configType);
-			takeService.sendRequest(currentPath);
+			takeService.sendRequest("xml/"+currentPath);
 			takeService.connect();
 		}
 		
@@ -80,7 +86,7 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 			callbacks = null;
 		}
 		
-		public function setConfigType(value:UInt):Void
+		public function setConfigType(value:Int):Void
 		{
 			configType = value;
 		}
@@ -90,7 +96,7 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 			return __weakMap.getValue(path + uid);
 		}
 		
-		public function setCallbacks(value:CallBackBase):Void
+		public function setCallbacks(value:Dynamic):Void
 		{
 			callbacks = value;
 		}
@@ -110,20 +116,25 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 			SystemUtils.print("[Class ResourceLoader]:Loader File OnComplete");
 			__weakMap.set(currentPath + uid, data);
 			
+			#if flash
 			takeService.dispose();
+			PoolMap.disposeInstance(takeService);
 			
 			loader = cast(SystemUtils.getInstanceByClassName("LoaderClass"), UiBaseLoader);
+			#else
+			loader = new UiBaseLoader();
+			#end
 			loader.addEventListener(DatasEvent.DATA_DONE, loaderAnimationCompleteHandler);
 			
 			root.addChild( loader );
 			
-			PoolMap.disposeInstance(takeService);
-			
 			takeService = PoolMap.getInstanceByType( TakeService, ["version="+moduleVer] );
 			takeService.setCallbacks({done:configFileOnCompleteHandler,
 									  doing:configFileOnProgressHandler,
-									  error:configFileOnErrorHandler});
+									  error:configFileOnErrorHandler } );
+			#if flash
 			load();
+			#end
 		}
 		
 		function loaderAnimationCompleteHandler(evt:DatasEvent):Void
@@ -134,11 +145,13 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 		function loaderOnErrorHandler(message:String):Void
 		{
 			SystemUtils.print("[Class ResourceLoader]:Loader File OnError");
+			if ( callbacks != null && callbacks.error != null ) callbacks.error(message);
 		}
 		
 		function configFileOnProgressHandler(data: { var loaded:Int; var total:Int; } ):Void
 		{
 			SystemUtils.print("[Class ResourceLoader]:Config File onProgress");
+			if ( callbacks != null && callbacks.doing != null ) callbacks.doing(data);
 		}
 		
 		function configFileOnCompleteHandler(data:Dynamic):Void
@@ -159,6 +172,7 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 		function configFileOnErrorHandler(message:String):Void
 		{
 			SystemUtils.print("[Class ResourceLoader]:Config File OnError");
+			if ( callbacks != null && callbacks.error != null ) callbacks.error(message);
 		}
 		
 		function synFileStartLoadHandler():Void
@@ -215,6 +229,7 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 		function synFileOnErrorHandler(message:String):Void
 		{
 			SystemUtils.print("[Class ResourceLoader]:syn File OnError");
+			if ( callbacks != null && callbacks.error != null ) callbacks.error(message);
 		}
 		
 		function asynFileStartLoadHandler():Void
@@ -248,6 +263,7 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 		
 		function asynFileOnProgressHandler(data: { var loaded:Int; var total:Int; } ):Void
 		{
+			
 		}
 		
 		function asynFileOnCompleteHandler(data:Dynamic):Void
@@ -271,7 +287,7 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 		{
 			for( key in Reflect.fields(__loaderMap) )
 			{
-				if( Reflect.field(__loaderMap,key).getResourceByPath(path) ){
+				if( cast(Reflect.field(__loaderMap,key), ResourceLoader).getResourceByPath(path) != null ){
 					return true;
 					break;
 				}

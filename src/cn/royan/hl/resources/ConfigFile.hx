@@ -2,11 +2,8 @@ package cn.royan.hl.resources;
 import cn.royan.hl.bases.Dictionary;
 import cn.royan.hl.interfaces.IDisposeBase;
 import cn.royan.hl.utils.SystemUtils;
+import haxe.Json;
 
-import flash.xml.XML;
-import flash.xml.XMLList;
-import flash.xml.XMLNode;
-import flash.xml.XMLDocument;
 import flash.errors.Error;
 /**
  * ...
@@ -15,18 +12,18 @@ import flash.errors.Error;
 
 class ConfigFile implements IDisposeBase
 {
-	static public inline var CONFIG_FILE_TYPE_JSON:UInt = 0;
-	static public inline var CONFIG_FILE_TYPE_XML:UInt 	= 1;
-	static public inline var CONFIG_FILE_TYPE_TEXT:UInt = 2;
+	static public inline var CONFIG_FILE_TYPE_JSON:Int 	= 0;
+	static public inline var CONFIG_FILE_TYPE_XML:Int 	= 1;
+	static public inline var CONFIG_FILE_TYPE_TEXT:Int 	= 2;
 	
 	var type:Int;
-	var configData:Dictionary;
+	var configData:Dynamic;
 	
 	public function new(data:String, type:Int=CONFIG_FILE_TYPE_JSON)
 	{
 		this.type = type;
 		
-		configData = new Dictionary();
+		configData = {};
 		
 		switch(type){
 			case ConfigFile.CONFIG_FILE_TYPE_JSON:
@@ -50,83 +47,40 @@ class ConfigFile implements IDisposeBase
 	
 	function parseJsonToObject(data:String):Void
 	{
-		
+		configData = Json.parse(data);
 	}
 	
 	function parseXMLToObject(data:String):Void
 	{
-		try{
-			var xml:XML = new XML(data);
-			SystemUtils.print("[Class ConfigFile]:XML To Object");
-			
-			parseXMLListToObject(xml.children(), configData);
-			SystemUtils.readObject(configData);
-			
-		}catch(e:Error){
-			var xmlDoc:XMLDocument = new XMLDocument();
-				xmlDoc.ignoreWhite = true;
-				xmlDoc.parseXML(data);
-			
-			parseXMLNodeToObject(xmlDoc, configData);
-			SystemUtils.print("[Class ConfigFile]:XMLDocument To Object");
-//			PoolMap.disposeInstance(xmlDoc);
-			xmlDoc = null;
-		}
+		var xml:Xml = Xml.parse(data);
+		
+		parseXMLListToObject(xml.elements(), configData);
 	}
 	
-	function parseXMLListToObject(xmlList:XMLList, parent:Dynamic):Void
+	function parseXMLListToObject(xmlList:Iterator<Xml>, parent:Dynamic):Void
 	{
-		var i:Int = 0;
-		var len:Int = xmlList.length();
-		for( i in 0...len ){
-			var child:Dynamic = new Dictionary();
+		while( xmlList.hasNext() ){
+			var child:Dynamic = {};
 			
-			if( Reflect.field(parent, xmlList[i].name()) == null ){
-				Reflect.setField(parent, xmlList[i].name(), child);
+			var xml:Xml = xmlList.next();
+			if ( Reflect.field(parent, xml.nodeName) == null ) {
+				Reflect.setField(parent, xml.nodeName, child);
 			}
-			else if( Std.is(Reflect.field(parent, xmlList[i].name()), Array) ){
-				cast(Reflect.field(parent, xmlList[i].name())).push( child );
+			else if( Std.is(Reflect.field(parent, xml.nodeName), Array) ){
+				cast(Reflect.field(parent, xml.nodeName)).push( child );
 			}else{
-				var temp:Dynamic = Reflect.field(parent, xmlList[i].name());
-				Reflect.setField(parent, xmlList[i].name(), [temp]);
-				cast(Reflect.field(parent, xmlList[i].name())).push( child );
+				var temp:Dynamic = Reflect.field(parent, xml.nodeName);
+				Reflect.setField(parent, xml.nodeName, [temp]);
+				cast(Reflect.field(parent, xml.nodeName)).push( child );
 			}
-			if( xmlList[i].children().length() > 0 ){
-				parseXMLListToObject(xmlList[i].children(), child);
-			}
-			
-			var j:Int = 0;
-			var len2:Int = xmlList[i].attributes().length();
-			for (j in 0...len2) {
-				Reflect.setField(child, xmlList[i].attributes()[j].name().toString(), xmlList[i].attributes()[j].toString());
-			}
-		}
-	}
-	
-	function parseXMLNodeToObject(xmlNode:XMLNode, parent:Dynamic):Void
-	{
-		var i:Int = 0;
-		var nodes:Array<Dynamic> = xmlNode.childNodes;
-		var len:Int = nodes.length;
-		for(i in 0...len){
-			var child:Dynamic = new Dictionary();
-			
-			if( Reflect.field(parent, nodes[i].nodeName) == null ){
-				Reflect.setField(parent, nodes[i].nodeName, child);
-			}
-			else if( Std.is(Reflect.field(parent, nodes[i].nodeName), Array) ){
-				cast(Reflect.field(parent, nodes[i].nodeName)).push( child );
-			}else{
-				var temp:Dynamic = Reflect.field(parent, nodes[i].nodeName);
-				Reflect.setField(parent, nodes[i].nodeName, temp);
-				cast(Reflect.field(parent, nodes[i].nodeName)).push( child );
-			}
-			if( nodes[i].childNodes.length > 0 ){
-				parseXMLNodeToObject(nodes[i], child);
+			if( xml.elements() != null ){
+				parseXMLListToObject(xml.elements(), child);
 			}
 			
-			for (prop in Reflect.fields(nodes[i].attributes)) {
-				Reflect.setField(child, prop, Reflect.field(nodes[i].attributes, prop));
+			var attributes:Iterator<String> = xml.attributes();
+			while (attributes.hasNext()) {
+				var attribute:String = attributes.next();
+				Reflect.setField(child, attribute, xml.get(attribute));
 			}
 		}
 	}
@@ -142,7 +96,7 @@ class ConfigFile implements IDisposeBase
 		}
 	}
 	
-	static public function getExtension(configType:UInt):String
+	static public function getExtension(configType:Int):String
 	{
 		switch( configType ){
 			case ConfigFile.CONFIG_FILE_TYPE_JSON:
