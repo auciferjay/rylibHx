@@ -107,7 +107,7 @@ class UiBaseContainerAlign extends UiBaseContainer
 		var marginR:Int = margins!=null?margins.right:0;
 		
 		var gapX:Int = gaps!=null?gaps.x:0;
-		var gapY:Int = gaps!=null?gaps.x:0;
+		var gapY:Int = gaps!=null?gaps.y:0;
 		
 		itemsWidth = 0;
 		itemsHeight = 0;
@@ -156,7 +156,7 @@ class UiBaseContainerAlign extends UiBaseContainer
 		var marginR:Int = margins!=null?margins.right:0;
 		
 		var gapX:Int = gaps!=null?gaps.x:0;
-		var gapY:Int = gaps!=null?gaps.x:0;
+		var gapY:Int = gaps!=null?gaps.y:0;
 		
 		var offsetX:Int;
 		var offsetY:Int;
