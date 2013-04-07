@@ -214,7 +214,7 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 				selects.push(current);
 				current.setSelected(true);
 				
-				dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING));
+				dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING, values));
 			}else{
 				giveUpKey = values[0];
 				giveUpIndex = SystemUtils.arrayIndexOf(keys, giveUpKey);
@@ -229,7 +229,7 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 				selects = [current];
 				current.setSelected(true);
 				
-				dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING));
+				dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING, values));
 			}
 		}else{//找到(取消)
 			if( !isMust ){//不是必须的
@@ -237,7 +237,7 @@ class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainer
 				selects.splice(index, 1);
 				current.setSelected(false);
 				
-				dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING));
+				dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING, values));
 			}
 		}
 	}
