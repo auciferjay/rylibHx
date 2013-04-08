@@ -11,7 +11,7 @@ import flash.display.Shape;
 import flash.events.EventDispatcher;
 import flash.geom.Matrix;
 
-class UninteractiveUiBase extends Shape, implements IUiBase
+class UninteractiveUiN extends Shape, implements IUiBase
 {
 	//properties
 	var bgColors:Array<Dynamic>;

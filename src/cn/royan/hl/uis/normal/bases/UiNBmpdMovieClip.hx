@@ -3,8 +3,8 @@ package cn.royan.hl.uis.normal.bases;
 import cn.royan.hl.interfaces.uis.IUiItemPlayBase;
 import cn.royan.hl.bases.TimerBase;
 import cn.royan.hl.events.DatasEvent;
-import cn.royan.hl.uis.normal.InteractiveUiBase;
-import cn.royan.hl.uis.normal.UninteractiveUiBase;
+import cn.royan.hl.uis.normal.InteractiveUiN;
+import cn.royan.hl.uis.normal.UninteractiveUiN;
 
 import flash.events.Event;
 import flash.display.Bitmap;
@@ -13,7 +13,7 @@ import flash.geom.Rectangle;
 import flash.geom.Point;
 import flash.errors.Error;
 
-class UiBaseBmpdMovieClip extends InteractiveUiBase, implements IUiItemPlayBase
+class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 {
 	//properties
 	var bgTextures:Array<BitmapData>;
@@ -33,7 +33,7 @@ class UiBaseBmpdMovieClip extends InteractiveUiBase, implements IUiItemPlayBase
 		super(Std.is( texture, BitmapData )?cast( texture, BitmapData ):null);
 		
 		var bmpd:BitmapData;
-		var frameunit:UninteractiveUiBase;
+		var frameunit:UninteractiveUiN;
 		bgTextures = [];
 		
 		if( Std.is( texture, BitmapData ) ){
@@ -104,9 +104,9 @@ class UiBaseBmpdMovieClip extends InteractiveUiBase, implements IUiItemPlayBase
 		point = null;
 	}
 	
-	public function clone():UiBaseBmpdMovieClip
+	public function clone():UiNBmpdMovieClip
 	{
-		return new UiBaseBmpdMovieClip(bgTextures, frameRate, autoPlay);
+		return new UiNBmpdMovieClip(bgTextures, frameRate, autoPlay);
 	}
 	
 	public function getIn():Void

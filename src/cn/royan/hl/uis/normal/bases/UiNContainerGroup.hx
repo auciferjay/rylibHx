@@ -11,7 +11,7 @@ import flash.events.MouseEvent;
 import flash.display.DisplayObject;
 import flash.display.BitmapData;
 
-class UiBaseContainerGroup extends UiBaseContainerAlign, implements IUiContainerGroupBase
+class UiNContainerGroup extends UiNContainerAlign, implements IUiContainerGroupBase
 {
 	var isMulti:Bool;
 	var isMust:Bool;

@@ -3,23 +3,23 @@ package cn.royan.hl.uis.normal.bases;
 import cn.royan.hl.geom.Position;
 import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.interfaces.uis.IUiTextBase;
-import cn.royan.hl.uis.normal.InteractiveUiBase;
-import cn.royan.hl.uis.normal.UninteractiveUiBase;
+import cn.royan.hl.uis.normal.InteractiveUiN;
+import cn.royan.hl.uis.normal.UninteractiveUiN;
 
 import flash.text.TextFormat;
 import flash.display.BitmapData;
 import flash.events.MouseEvent;
 
-class UiBaseLabelButton extends InteractiveUiBase, implements IUiTextBase, implements IUiItemGroupBase
+class UiNLabelButton extends InteractiveUiN, implements IUiTextBase, implements IUiItemGroupBase
 {
 	//properties
 	var btnLabel:String;
-	var bgTextures:Array<UninteractiveUiBase>;
-	var currentStatus:UninteractiveUiBase;
-	var btnBackground:InteractiveUiBase;
+	var bgTextures:Array<UninteractiveUiN>;
+	var currentStatus:UninteractiveUiN;
+	var btnBackground:InteractiveUiN;
 	var textColors:Array<Dynamic>;
 		
-	var btnLabelText:UiBaseText;
+	var btnLabelText:UiNText;
 	var isInGroup:Bool;
 	
 	//Contructor
@@ -36,17 +36,17 @@ class UiBaseLabelButton extends InteractiveUiBase, implements IUiTextBase, imple
 		
 		var i:Int;
 		for( i in 0...statusLen){
-			bgTextures[i] = new UninteractiveUiBase();
+			bgTextures[i] = new UninteractiveUiN();
 			bgTextures[i].setBackgroundColors(Std.is(bgColors[i], Array)?bgColors[i]:[bgColors[i]]);
 			bgTextures[i].setBackgroundAlphas(Std.is(bgAlphas[i], Array)?bgAlphas[i]:[bgAlphas[i]]);
 		}
 		
 		textColors = getDefaultTextColor();
 		
-		btnBackground = new InteractiveUiBase();
+		btnBackground = new InteractiveUiN();
 		addChild(btnBackground);
 		
-		btnLabelText = new UiBaseText();
+		btnLabelText = new UiNText();
 		btnLabelText.setText(label);
 		addChild(btnLabelText);
 		
@@ -70,7 +70,7 @@ class UiBaseLabelButton extends InteractiveUiBase, implements IUiTextBase, imple
 	{
 		if( isInGroup ){
 			selected = !selected;
-			status = selected?InteractiveUiBase.INTERACTIVE_STATUS_SELECTED:status;
+			status = selected?InteractiveUiN.INTERACTIVE_STATUS_SELECTED:status;
 			
 			draw();
 		}
@@ -124,7 +124,7 @@ class UiBaseLabelButton extends InteractiveUiBase, implements IUiTextBase, imple
 	public function setSelected(value:Bool):Void
 	{
 		selected = value;
-		status = selected?InteractiveUiBase.INTERACTIVE_STATUS_SELECTED:InteractiveUiBase.INTERACTIVE_STATUS_NORMAL;
+		status = selected?InteractiveUiN.INTERACTIVE_STATUS_SELECTED:InteractiveUiN.INTERACTIVE_STATUS_NORMAL;
 		draw();
 	}
 	

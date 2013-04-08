@@ -1,12 +1,12 @@
 package cn.royan.hl.uis.normal.bases;
-import cn.royan.hl.uis.normal.InteractiveUiBase;
+import cn.royan.hl.uis.normal.InteractiveUiN;
 
 /**
  * ...
  * @author RoYan
  */
 
-class UiBaseLoader extends InteractiveUiBase
+class UiNLoader extends InteractiveUiN
 {
 
 	public function new() 

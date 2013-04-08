@@ -5,7 +5,7 @@ import cn.royan.hl.interfaces.uis.IUiItemStateBase;
 import cn.royan.hl.interfaces.uis.IUiContainerBase;
 import cn.royan.hl.interfaces.uis.IUiContainerScrolBase;
 import cn.royan.hl.interfaces.uis.IUiContainerStateBase;
-import cn.royan.hl.uis.normal.InteractiveUiBase;
+import cn.royan.hl.uis.normal.InteractiveUiN;
 
 import flash.display.DisplayObject;
 import flash.display.BitmapData;
@@ -33,7 +33,7 @@ private typedef ContainerRowConfig = {
 	var length:Int;
 }
 
-class UiBaseContainerAlign extends UiBaseContainer
+class UiNContainerAlign extends UiNContainer
 {
 	static public inline var CONTAINER_HORIZONTAL_LEFT:Int 		= 0;
 	static public inline var CONTAINER_HORIZONTAL_CENTER:Int 	= 1;

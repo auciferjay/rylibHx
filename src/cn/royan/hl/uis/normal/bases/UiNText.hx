@@ -2,14 +2,14 @@ package cn.royan.hl.uis.normal.bases;
 
 import cn.royan.hl.geom.Position;
 import cn.royan.hl.interfaces.uis.IUiTextBase;
-import cn.royan.hl.uis.normal.InteractiveUiBase;
+import cn.royan.hl.uis.normal.InteractiveUiN;
 
 import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 import flash.text.TextFieldAutoSize;
 
-class UiBaseText extends InteractiveUiBase, implements IUiTextBase
+class UiNText extends InteractiveUiN, implements IUiTextBase
 {
 	static public inline var TEXT_ALIGN_LEFT:Int 	= 0;
 	static public inline var TEXT_ALIGN_CENTER:Int 	= 1;

@@ -16,7 +16,7 @@ import flash.events.EventDispatcher;
 import flash.geom.Matrix;
 import flash.geom.Point;
 
-class InteractiveUiBase extends Sprite, implements IUiBase, implements IUiItemStateBase
+class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemStateBase
 {
 	static public inline var INTERACTIVE_STATUS_NORMAL:Int 		= 0;
 	static public inline var INTERACTIVE_STATUS_OVER:Int 		= 1;

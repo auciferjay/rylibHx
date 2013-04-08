@@ -7,7 +7,7 @@ import cn.royan.hl.bases.PoolMap;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.IDisposeBase;
 import cn.royan.hl.services.TakeService;
-import cn.royan.hl.uis.normal.bases.UiBaseLoader;
+import cn.royan.hl.uis.normal.bases.UiNLoader;
 import cn.royan.hl.utils.SystemUtils;
 import flash.display.DisplayObjectContainer;
 import haxe.Timer;
@@ -35,7 +35,7 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 		var callbacks:Dynamic;
 		
 		var root:DisplayObjectContainer;
-		var loader:UiBaseLoader;
+		var loader:UiNLoader;
 		
 		public static function getInstance(key:String, container:DisplayObjectContainer, version:String="1.0", type:Int = ConfigFile.CONFIG_FILE_TYPE_XML):ResourceLoader
 		{
@@ -120,9 +120,9 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 			takeService.dispose();
 			PoolMap.disposeInstance(takeService);
 			
-			loader = cast(SystemUtils.getInstanceByClassName("LoaderClass"), UiBaseLoader);
+			loader = cast(SystemUtils.getInstanceByClassName("LoaderClass"), UiNLoader);
 			#else
-			loader = new UiBaseLoader();
+			loader = new UiNLoader();
 			#end
 			loader.addEventListener(DatasEvent.DATA_DONE, loaderAnimationCompleteHandler);
 			

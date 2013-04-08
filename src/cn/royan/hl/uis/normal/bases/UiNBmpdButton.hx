@@ -1,7 +1,7 @@
 package cn.royan.hl.uis.normal.bases;
 
 import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
-import cn.royan.hl.uis.normal.InteractiveUiBase;
+import cn.royan.hl.uis.normal.InteractiveUiN;
 import flash.errors.Error;
 
 import flash.events.Event;
@@ -11,7 +11,7 @@ import flash.display.BitmapData;
 import flash.geom.Rectangle;
 import flash.geom.Point;
 
-class UiBaseBmpdButton extends InteractiveUiBase, implements IUiItemGroupBase
+class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 {
 	var bgTextures:Array<BitmapData>;
 	var currentStatus:Bitmap;
@@ -104,7 +104,7 @@ class UiBaseBmpdButton extends InteractiveUiBase, implements IUiItemGroupBase
 	{
 		if( isInGroup ){
 			selected = !selected;
-			status = selected?InteractiveUiBase.INTERACTIVE_STATUS_SELECTED:status;
+			status = selected?InteractiveUiN.INTERACTIVE_STATUS_SELECTED:status;
 			
 			draw();
 		}
@@ -121,9 +121,9 @@ class UiBaseBmpdButton extends InteractiveUiBase, implements IUiItemGroupBase
 		}
 	}
 	
-	public function clone():UiBaseBmpdButton
+	public function clone():UiNBmpdButton
 	{
-		return new UiBaseBmpdButton(bgTextures);
+		return new UiNBmpdButton(bgTextures);
 	}
 	
 	override public function getDefaultBackgroundColors():Array<Dynamic>
@@ -139,7 +139,7 @@ class UiBaseBmpdButton extends InteractiveUiBase, implements IUiItemGroupBase
 	public function setSelected(value:Bool):Void
 	{
 		selected = value;
-		status = selected?InteractiveUiBase.INTERACTIVE_STATUS_SELECTED:InteractiveUiBase.INTERACTIVE_STATUS_NORMAL;
+		status = selected?InteractiveUiN.INTERACTIVE_STATUS_SELECTED:InteractiveUiN.INTERACTIVE_STATUS_NORMAL;
 		draw();
 	}
 	

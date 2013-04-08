@@ -1,7 +1,7 @@
 package cn.royan.hl.uis.normal.bases;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiScrollBarBase;
-import cn.royan.hl.uis.normal.InteractiveUiBase;
+import cn.royan.hl.uis.normal.InteractiveUiN;
 
 import flash.events.Event;
 import flash.events.MouseEvent;
@@ -12,15 +12,15 @@ import flash.geom.Rectangle;
  * @author RoYan
  */
 
-class UiBaseScrollBar extends UiBaseContainerAlign, implements IUiScrollBarBase
+class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 {
 	public static inline var SCROLLBAR_TYPE_HORIZONTAL:Int 	= 0;
 	public static inline var SCROLLBAR_TYPE_VERICAL:Int 	= 1;
 	
-	var min:UiBaseLabelButton;
-	var max:UiBaseLabelButton;
-	var thumb:UiBaseLabelButton;
-	var background:InteractiveUiBase;
+	var min:UiNLabelButton;
+	var max:UiNLabelButton;
+	var thumb:UiNLabelButton;
+	var background:InteractiveUiN;
 	
 	var rect:Rectangle;
 	
@@ -30,21 +30,21 @@ class UiBaseScrollBar extends UiBaseContainerAlign, implements IUiScrollBarBase
 	{
 		super();
 		
-		min = new UiBaseLabelButton();
+		min = new UiNLabelButton();
 		min.addEventListener(MouseEvent.MOUSE_DOWN, minMouseDownHandler);
 		addItem(min);
 		
-		background = new InteractiveUiBase();
+		background = new InteractiveUiN();
 		background.addEventListener(MouseEvent.CLICK, backgroundClickHandler);
 		background.setBackgroundColors([0xCCCCCC]);
 		background.setBackgroundAlphas([1]);
 		addItem(background);
 		
-		max = new UiBaseLabelButton();
+		max = new UiNLabelButton();
 		max.addEventListener(MouseEvent.MOUSE_DOWN, maxMouseDownHandler);
 		addItem(max);
 		
-		thumb = new UiBaseLabelButton();
+		thumb = new UiNLabelButton();
 		thumb.addEventListener(MouseEvent.MOUSE_DOWN, thumbMouseDownHandler);
 		addChild(thumb);
 		

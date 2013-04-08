@@ -1,10 +1,10 @@
 package cn.royan.hl.uis.normal.exts;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
-import cn.royan.hl.uis.normal.bases.UiBaseContainerGroup;
-import cn.royan.hl.uis.normal.bases.UiBaseLabelButton;
-import cn.royan.hl.uis.normal.bases.UiBaseScrollPane;
-import cn.royan.hl.uis.normal.InteractiveUiBase;
+import cn.royan.hl.uis.normal.bases.UiNContainerGroup;
+import cn.royan.hl.uis.normal.bases.UiNLabelButton;
+import cn.royan.hl.uis.normal.bases.UiNScrollPane;
+import cn.royan.hl.uis.normal.InteractiveUiN;
 import cn.royan.hl.utils.SystemUtils;
 
 /**
@@ -16,23 +16,23 @@ typedef ItemType = {
 	var value:Dynamic;
 }
  
-class UiExtCombobox extends InteractiveUiBase
+class UiNExtCombobox extends InteractiveUiN
 {
-	var group:UiBaseContainerGroup;
-	var listView:UiBaseScrollPane;
+	var group:UiNContainerGroup;
+	var listView:UiNScrollPane;
 	var items:Array<ItemType>;
-	var title:UiBaseLabelButton;
+	var title:UiNLabelButton;
 	
 	public function new() 
 	{
 		super();
 		
-		title = new UiBaseLabelButton("Select");
+		title = new UiNLabelButton("Select");
 		title.setCallbacks({click:titleClickHandler});
 		title.setSize(50, 20);
 		addChild(title);
 		
-		group = new UiBaseContainerGroup();
+		group = new UiNContainerGroup();
 		#if !flash
 		group.addEventListener(DatasEvent.DATA_DOING, groupDoingHandler);
 		#end
@@ -40,11 +40,11 @@ class UiExtCombobox extends InteractiveUiBase
 		group.setIsMulti(false);
 		items = [];
 		
-		listView = new UiBaseScrollPane(group, UiBaseScrollPane.SCROLL_TYPE_VERICAL_ONLY);
+		listView = new UiNScrollPane(group, UiNScrollPane.SCROLL_TYPE_VERICAL_ONLY);
 		//addChild(listView);
 	}
 	
-	function titleClickHandler(obj:UiBaseLabelButton):Void
+	function titleClickHandler(obj:UiNLabelButton):Void
 	{
 		if ( contains(listView) )
 			removeChild(listView);
@@ -74,7 +74,7 @@ class UiExtCombobox extends InteractiveUiBase
 	
 	public function addItem(item:ItemType):Void
 	{
-		var instance:UiBaseLabelButton = new UiBaseLabelButton(item.label);
+		var instance:UiNLabelButton = new UiNLabelButton(item.label);
 			instance.setSize(getSize().width, 20);
 		items.push(item);
 		
@@ -83,7 +83,7 @@ class UiExtCombobox extends InteractiveUiBase
 	
 	public function addItemAt(item:ItemType, index:Int):Void
 	{
-		var instance:UiBaseLabelButton = new UiBaseLabelButton(item.label);
+		var instance:UiNLabelButton = new UiNLabelButton(item.label);
 		
 		var prev:Array<ItemType> = items.slice(0, index);
 		var next:Array<ItemType> = items.slice(index);

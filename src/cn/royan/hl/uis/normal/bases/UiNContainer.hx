@@ -5,7 +5,7 @@ import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiContainerBase;
 import cn.royan.hl.interfaces.uis.IUiItemStateBase;
 import cn.royan.hl.interfaces.uis.IUiContainerStateBase;
-import cn.royan.hl.uis.normal.InteractiveUiBase;
+import cn.royan.hl.uis.normal.InteractiveUiN;
 import cn.royan.hl.utils.SystemUtils;
 import flash.events.Event;
 
@@ -17,7 +17,7 @@ import flash.display.BitmapData;
  * @author RoYan
  */
 
-class UiBaseContainer extends InteractiveUiBase, implements IUiContainerBase, implements IUiContainerStateBase
+class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implements IUiContainerStateBase
 {
 	var states:Array<String>;
 	var current:String;

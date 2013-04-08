@@ -1,7 +1,7 @@
 package cn.royan.hl.uis.normal.exts;
 
-import cn.royan.hl.uis.normal.bases.UiBaseContainerAlign;
-import cn.royan.hl.uis.normal.bases.UiBaseBmpdMovieClip;
+import cn.royan.hl.uis.normal.bases.UiNContainerAlign;
+import cn.royan.hl.uis.normal.bases.UiNBmpdMovieClip;
 import flash.display.BitmapData;
 
 /**
@@ -9,7 +9,7 @@ import flash.display.BitmapData;
  * @author RoYan
  */
 
-class UiExtBmpNumberText extends UiBaseContainerAlign
+class UiNExtBmpNumberText extends UiNContainerAlign
 {
 
 	private var isAlwaysShow:Bool;
@@ -19,10 +19,10 @@ class UiExtBmpNumberText extends UiBaseContainerAlign
 	{
 		super();
 		
-		var instance:UiBaseBmpdMovieClip = new UiBaseBmpdMovieClip(texture, 10, false, 10, 1, 10);
+		var instance:UiNBmpdMovieClip = new UiNBmpdMovieClip(texture, 10, false, 10, 1, 10);
 		
 		for( i in 0...length ){
-			cast(addItem(instance.clone()), UiBaseBmpdMovieClip).visible = isAlwaysShow;
+			cast(addItem(instance.clone()), UiNBmpdMovieClip).visible = isAlwaysShow;
 		}
 	}
 	
@@ -34,8 +34,8 @@ class UiExtBmpNumberText extends UiBaseContainerAlign
 	public function setValue(value:Int):Void
 	{
 		for( i in 0...items.length ){
-			cast(getItemAt(i), UiBaseBmpdMovieClip).jumpTo(1);
-			cast(getItemAt(i), UiBaseBmpdMovieClip).visible = isAlwaysShow;
+			cast(getItemAt(i), UiNBmpdMovieClip).jumpTo(1);
+			cast(getItemAt(i), UiNBmpdMovieClip).visible = isAlwaysShow;
 		}
 		num = value;
 		
@@ -43,8 +43,8 @@ class UiExtBmpNumberText extends UiBaseContainerAlign
 		var i:Int = str.length;
 		var j:Int = 1;
 		while( i >= 0 || j <= Math.min(items.length, str.length) ){
-			cast(getItemAt(items.length - j), UiBaseBmpdMovieClip).visible = true;
-			cast(getItemAt(items.length - j), UiBaseBmpdMovieClip).jumpTo(1 + Std.parseInt(str.charAt(i)));
+			cast(getItemAt(items.length - j), UiNBmpdMovieClip).visible = true;
+			cast(getItemAt(items.length - j), UiNBmpdMovieClip).jumpTo(1 + Std.parseInt(str.charAt(i)));
 			
 			i--;
 			j++;

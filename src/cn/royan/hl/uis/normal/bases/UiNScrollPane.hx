@@ -2,8 +2,8 @@ package cn.royan.hl.uis.normal.bases;
 
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiBase;
-import cn.royan.hl.uis.normal.InteractiveUiBase;
-import cn.royan.hl.uis.normal.UninteractiveUiBase;
+import cn.royan.hl.uis.normal.InteractiveUiN;
+import cn.royan.hl.uis.normal.UninteractiveUiN;
 
 import flash.events.Event;
 import flash.geom.Rectangle;
@@ -18,21 +18,21 @@ import browser.Html5Dom;
  * @author RoYan
  */
 
-class UiBaseScrollPane extends InteractiveUiBase
+class UiNScrollPane extends InteractiveUiN
 {
 	public static inline var SCROLL_TYPE_NONE:Int				= 0;
 	public static inline var SCROLL_TYPE_HORIZONTAL_ONLY:Int 	= 1;
 	public static inline var SCROLL_TYPE_VERICAL_ONLY:Int 		= 2;
 	public static inline var SCROLL_TYPE_HANDV:Int				= 3;
 	
-	var container:InteractiveUiBase;
-	var containerMask:UninteractiveUiBase;
+	var container:InteractiveUiN;
+	var containerMask:UninteractiveUiN;
 	var scrollerType:Int;
 	
-	var hScrollBar:UiBaseScrollBar;
-	var vScrollBar:UiBaseScrollBar;
+	var hScrollBar:UiNScrollBar;
+	var vScrollBar:UiNScrollBar;
 	
-	public function new(container:InteractiveUiBase, type:Int = SCROLL_TYPE_HANDV) 
+	public function new(container:InteractiveUiN, type:Int = SCROLL_TYPE_HANDV) 
 	{
 		super();
 		
@@ -41,7 +41,7 @@ class UiBaseScrollPane extends InteractiveUiBase
 		container.addEventListener(DatasEvent.DATA_CHANGE, changeHandler);
 		addChild(container);
 		#if flash
-		containerMask = new UninteractiveUiBase();
+		containerMask = new UninteractiveUiN();
 		addChild(containerMask);
 		container.mask = containerMask;
 		#elseif js
@@ -123,7 +123,7 @@ class UiBaseScrollPane extends InteractiveUiBase
 					removeChild( hScrollBar );
 			case SCROLL_TYPE_VERICAL_ONLY:
 				if ( vScrollBar == null ) {
-					vScrollBar = new UiBaseScrollBar(UiBaseScrollBar.SCROLLBAR_TYPE_VERICAL);
+					vScrollBar = new UiNScrollBar(UiNScrollBar.SCROLLBAR_TYPE_VERICAL);
 					vScrollBar.addEventListener(DatasEvent.DATA_CHANGE, vChangeHandler);
 				}
 					
@@ -131,7 +131,7 @@ class UiBaseScrollPane extends InteractiveUiBase
 					removeChild( hScrollBar );
 			case SCROLL_TYPE_HORIZONTAL_ONLY:
 				if ( hScrollBar == null ) {
-					hScrollBar = new UiBaseScrollBar(UiBaseScrollBar.SCROLLBAR_TYPE_HORIZONTAL);
+					hScrollBar = new UiNScrollBar(UiNScrollBar.SCROLLBAR_TYPE_HORIZONTAL);
 					hScrollBar.addEventListener(DatasEvent.DATA_CHANGE, hChangeHandler);
 				}
 				
@@ -139,11 +139,11 @@ class UiBaseScrollPane extends InteractiveUiBase
 					removeChild( vScrollBar );
 			case SCROLL_TYPE_HANDV:
 				if ( hScrollBar == null ) {
-					hScrollBar = new UiBaseScrollBar(UiBaseScrollBar.SCROLLBAR_TYPE_HORIZONTAL);
+					hScrollBar = new UiNScrollBar(UiNScrollBar.SCROLLBAR_TYPE_HORIZONTAL);
 					hScrollBar.addEventListener(DatasEvent.DATA_CHANGE, hChangeHandler);
 				}
 				if ( vScrollBar == null ) {
-					vScrollBar = new UiBaseScrollBar(UiBaseScrollBar.SCROLLBAR_TYPE_VERICAL);
+					vScrollBar = new UiNScrollBar(UiNScrollBar.SCROLLBAR_TYPE_VERICAL);
 					vScrollBar.addEventListener(DatasEvent.DATA_CHANGE, vChangeHandler);
 				}
 		}
