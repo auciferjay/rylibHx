@@ -4,19 +4,19 @@ package ;
  * ...
  * @author RoYan
  */
-import cn.royan.hl.uis.InteractiveUiBase;
-import cn.royan.hl.uis.UninteractiveUiBase;
-import cn.royan.hl.uis.bases.UiBaseBmpdButton;
-import cn.royan.hl.uis.bases.UiBaseBmpdMovieClip;
-import cn.royan.hl.uis.bases.UiBaseContainer;
-import cn.royan.hl.uis.bases.UiBaseContainerAlign;
-import cn.royan.hl.uis.bases.UiBaseContainerGroup;
-import cn.royan.hl.uis.bases.UiBaseLabelButton;
-import cn.royan.hl.uis.bases.UiBaseScrollBar;
-import cn.royan.hl.uis.bases.UiBaseScrollPane;
-import cn.royan.hl.uis.bases.UiBaseText;
-import cn.royan.hl.uis.exts.UiExtBmpNumberText;
-import cn.royan.hl.uis.exts.UiExtCombobox;
+import cn.royan.hl.uis.normal.InteractiveUiBase;
+import cn.royan.hl.uis.normal.UninteractiveUiBase;
+import cn.royan.hl.uis.normal.bases.UiBaseBmpdButton;
+import cn.royan.hl.uis.normal.bases.UiBaseBmpdMovieClip;
+import cn.royan.hl.uis.normal.bases.UiBaseContainer;
+import cn.royan.hl.uis.normal.bases.UiBaseContainerAlign;
+import cn.royan.hl.uis.normal.bases.UiBaseContainerGroup;
+import cn.royan.hl.uis.normal.bases.UiBaseLabelButton;
+import cn.royan.hl.uis.normal.bases.UiBaseScrollBar;
+import cn.royan.hl.uis.normal.bases.UiBaseScrollPane;
+import cn.royan.hl.uis.normal.bases.UiBaseText;
+import cn.royan.hl.uis.normal.exts.UiExtBmpNumberText;
+import cn.royan.hl.uis.normal.exts.UiExtCombobox;
 
 import cn.royan.hl.events.DatasEvent;
 

@@ -1,7 +1,7 @@
-package cn.royan.hl.uis.bases;
+package cn.royan.hl.uis.normal.bases;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiScrollBarBase;
-import cn.royan.hl.uis.InteractiveUiBase;
+import cn.royan.hl.uis.normal.InteractiveUiBase;
 
 import flash.events.Event;
 import flash.events.MouseEvent;

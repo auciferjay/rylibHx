@@ -1,4 +1,4 @@
-package cn.royan.hl.uis.bases;
+package cn.royan.hl.uis.normal.bases;
 
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiItemGroupBase;

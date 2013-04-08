@@ -7,7 +7,7 @@ import cn.royan.hl.bases.PoolMap;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.IDisposeBase;
 import cn.royan.hl.services.TakeService;
-import cn.royan.hl.uis.bases.UiBaseLoader;
+import cn.royan.hl.uis.normal.bases.UiBaseLoader;
 import cn.royan.hl.utils.SystemUtils;
 import flash.display.DisplayObjectContainer;
 import haxe.Timer;

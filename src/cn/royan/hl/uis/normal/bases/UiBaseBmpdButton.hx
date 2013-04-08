@@ -1,7 +1,7 @@
-package cn.royan.hl.uis.bases;
+package cn.royan.hl.uis.normal.bases;
 
 import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
-import cn.royan.hl.uis.InteractiveUiBase;
+import cn.royan.hl.uis.normal.InteractiveUiBase;
 import flash.errors.Error;
 
 import flash.events.Event;

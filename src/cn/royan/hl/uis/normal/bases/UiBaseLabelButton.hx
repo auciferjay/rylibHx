@@ -1,10 +1,10 @@
-package cn.royan.hl.uis.bases;
+package cn.royan.hl.uis.normal.bases;
 
 import cn.royan.hl.geom.Position;
 import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.interfaces.uis.IUiTextBase;
-import cn.royan.hl.uis.InteractiveUiBase;
-import cn.royan.hl.uis.UninteractiveUiBase;
+import cn.royan.hl.uis.normal.InteractiveUiBase;
+import cn.royan.hl.uis.normal.UninteractiveUiBase;
 
 import flash.text.TextFormat;
 import flash.display.BitmapData;

@@ -1,10 +1,10 @@
-package cn.royan.hl.uis.bases;
+package cn.royan.hl.uis.normal.bases;
 
 import cn.royan.hl.interfaces.uis.IUiItemPlayBase;
 import cn.royan.hl.bases.TimerBase;
 import cn.royan.hl.events.DatasEvent;
-import cn.royan.hl.uis.InteractiveUiBase;
-import cn.royan.hl.uis.UninteractiveUiBase;
+import cn.royan.hl.uis.normal.InteractiveUiBase;
+import cn.royan.hl.uis.normal.UninteractiveUiBase;
 
 import flash.events.Event;
 import flash.display.Bitmap;

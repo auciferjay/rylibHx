@@ -1,11 +1,11 @@
-package cn.royan.hl.uis.bases;
+package cn.royan.hl.uis.normal.bases;
 
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiContainerBase;
 import cn.royan.hl.interfaces.uis.IUiItemStateBase;
 import cn.royan.hl.interfaces.uis.IUiContainerStateBase;
-import cn.royan.hl.uis.InteractiveUiBase;
+import cn.royan.hl.uis.normal.InteractiveUiBase;
 import cn.royan.hl.utils.SystemUtils;
 import flash.events.Event;
 

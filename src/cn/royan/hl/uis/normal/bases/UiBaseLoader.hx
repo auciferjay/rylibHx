@@ -1,5 +1,5 @@
-package cn.royan.hl.uis.bases;
-import cn.royan.hl.uis.InteractiveUiBase;
+package cn.royan.hl.uis.normal.bases;
+import cn.royan.hl.uis.normal.InteractiveUiBase;
 
 /**
  * ...

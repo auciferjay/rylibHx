@@ -1,7 +1,7 @@
-package cn.royan.hl.uis.exts;
+package cn.royan.hl.uis.normal.exts;
 
-import cn.royan.hl.uis.bases.UiBaseContainerAlign;
-import cn.royan.hl.uis.bases.UiBaseBmpdMovieClip;
+import cn.royan.hl.uis.normal.bases.UiBaseContainerAlign;
+import cn.royan.hl.uis.normal.bases.UiBaseBmpdMovieClip;
 import flash.display.BitmapData;
 
 /**

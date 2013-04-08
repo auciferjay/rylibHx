@@ -72,13 +72,16 @@ class TakeService extends DispatcherBase, implements IServiceBase
 		
 		var uri:String = urlrequest.url.substr(0, 7);
 		
+		#if !flash
 		if ( uri == "http://" || uri == "https:/" ) {
+		#end
 			urlstream = new URLLoader();
 			urlstream.addEventListener(Event.COMPLETE, onComplete);
 			urlstream.addEventListener(ProgressEvent.PROGRESS, onProgress);
 			urlstream.addEventListener(IOErrorEvent.IO_ERROR, onError);
 			urlstream.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
 			urlstream.load(urlrequest);
+		#if !flash
 		}else {
 			var asset:Dynamic = ApplicationMain.getAsset(urlrequest.url);
 			if ( asset == null ) {
@@ -98,6 +101,7 @@ class TakeService extends DispatcherBase, implements IServiceBase
 				else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE, asset));	
 			}
 		}
+		#end
 	}
 	
 	public function close():Void

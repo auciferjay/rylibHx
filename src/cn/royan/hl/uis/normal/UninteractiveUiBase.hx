@@ -1,6 +1,5 @@
-package cn.royan.hl.uis;
+package cn.royan.hl.uis.normal;
 
-import cn.royan.hl.bases.CallBackBase;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.geom.Position;
 import cn.royan.hl.geom.Square;
@@ -130,7 +129,7 @@ class UninteractiveUiBase extends Shape, implements IUiBase
 		return bgAlphas;
 	}
 	
-	public function setCallbacks(value:CallBackBase):Void
+	public function setCallbacks(value:Dynamic):Void
 	{
 		throw new Error("uninteractivebase");
 	}
