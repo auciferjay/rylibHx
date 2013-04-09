@@ -5,6 +5,7 @@ import cn.royan.hl.bases.TimerBase;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.uis.normal.InteractiveUiN;
 import cn.royan.hl.uis.normal.UninteractiveUiN;
+import cn.royan.hl.uis.sparrow.Sparrow;
 
 import flash.events.Event;
 import flash.display.Bitmap;
@@ -16,7 +17,7 @@ import flash.errors.Error;
 class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 {
 	//properties
-	var bgTextures:Array<BitmapData>;
+	var bgTextures:Array<Sparrow>;
 	var timer:TimerBase;
 	var current:Int;
 	var total:Int;
@@ -30,13 +31,13 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 	//Constructor
 	public function new(texture:Dynamic, rate:Int = 10, auto:Bool = true, row:Int = 1, column:Int = 1, frames:Int = 1) 
 	{
-		super(Std.is( texture, BitmapData )?cast( texture, BitmapData ):null);
+		super(Std.is( texture, Sparrow )?cast( texture, Sparrow ):null);
 		
 		var bmpd:BitmapData;
 		var frameunit:UninteractiveUiN;
 		bgTextures = [];
 		
-		if( Std.is( texture, BitmapData ) ){
+		if( Std.is( texture, Sparrow ) ){
 			total = frames;
 			
 			drawTextures();
@@ -45,7 +46,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 			
 			bgTextures = cast(texture);
 			
-			setSize(bgTextures[0].width, bgTextures[0].height);
+			setSize(Std.int(bgTextures[0].regin.width), Std.int(bgTextures[0].regin.height));
 		}else{
 			throw new Error("texture is wrong type(BitmapData or Vector.<BitmapData>)");
 		}
@@ -62,15 +63,15 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 		currentFrame = new Bitmap();
 		
 		if( bgTextures[current-1] != null )
-			currentFrame.bitmapData = bgTextures[current - 1];
+			currentFrame.bitmapData.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point());
 		
 		addChild(currentFrame);
 	}
 	
 	function drawTextures():Void
 	{
-		var frameWidth:Int = Std.int(bgTexture.width / total);
-		var frameHeight:Int = Std.int(bgTexture.height);
+		var frameWidth:Int = Std.int(bgTexture.bitmapdata.width / total);
+		var frameHeight:Int = Std.int(bgTexture.bitmapdata.height);
 		
 		var i:Int;
 		var rectangle:Rectangle = new Rectangle();
@@ -81,8 +82,6 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 		var curRow:Int;
 		var curCol:Int;
 		
-		var bmpd:BitmapData;
-		
 		for ( i in 0...total ) {
 			curRow = Std.int(i % total);
 			curCol = Std.int(i / total);
@@ -90,8 +89,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 			rectangle.x = curRow * frameWidth;
 			rectangle.y = curCol * frameHeight;
 			
-			bmpd = new BitmapData(frameWidth, frameHeight, true);
-			bmpd.copyPixels( bgTexture, rectangle, point );
+			var bmpd:Sparrow = Sparrow.fromSparrow(bgTexture, rectangle.clone());
 			
 			bgTextures[i] = bmpd;
 			
@@ -128,7 +126,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 	{
 		loop = false;
 		current = frame;
-		currentFrame.bitmapData = bgTextures[current - 1];
+		currentFrame.bitmapData.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point());
 	}
 
 	public function goFromTo(from:Int, to:Int):Void
@@ -140,7 +138,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 		current = from;
 		toFrame = to;
 		
-		currentFrame.bitmapData = bgTextures[current - 1];
+		currentFrame.bitmapData.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point());
 		
 		timer.start();
 	}
@@ -181,7 +179,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 			}
 		}
 		
-		currentFrame.bitmapData = bgTextures[current - 1];
+		currentFrame.bitmapData.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point());
 		
 		if( current == toFrame && !loop ){
 			if( callbacks != null && callbacks.done != null ) callbacks.done(this);

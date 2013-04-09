@@ -5,6 +5,7 @@ import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.interfaces.uis.IUiTextBase;
 import cn.royan.hl.uis.normal.InteractiveUiN;
 import cn.royan.hl.uis.normal.UninteractiveUiN;
+import cn.royan.hl.uis.sparrow.Sparrow;
 
 import flash.text.TextFormat;
 import flash.display.BitmapData;
@@ -133,7 +134,7 @@ class UiNLabelButton extends InteractiveUiN, implements IUiTextBase, implements 
 		return selected;
 	}
 	
-	override public function setTexture(value:BitmapData, frames:Int=5):Void
+	override public function setTexture(value:Sparrow, frames:Int=5):Void
 	{
 		
 	}

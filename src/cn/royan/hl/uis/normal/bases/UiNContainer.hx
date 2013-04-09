@@ -6,11 +6,11 @@ import cn.royan.hl.interfaces.uis.IUiContainerBase;
 import cn.royan.hl.interfaces.uis.IUiItemStateBase;
 import cn.royan.hl.interfaces.uis.IUiContainerStateBase;
 import cn.royan.hl.uis.normal.InteractiveUiN;
+import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.utils.SystemUtils;
 import flash.events.Event;
 
 import flash.display.DisplayObject;
-import flash.display.BitmapData;
 
 /**
  * ...
@@ -24,7 +24,7 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 	
 	var items:Array<IUiBase>;
 	
-	public function new(texture:BitmapData = null)
+	public function new(texture:Sparrow = null)
 	{
 		super(texture);
 		

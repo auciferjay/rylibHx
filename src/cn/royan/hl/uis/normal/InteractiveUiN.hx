@@ -6,6 +6,7 @@ import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.bases.Dictionary;
 import cn.royan.hl.geom.Position;
 import cn.royan.hl.geom.Square;
+import cn.royan.hl.uis.sparrow.Sparrow;
 
 import flash.display.BitmapData;
 import flash.display.GradientType;
@@ -27,7 +28,7 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 	//properties
 	var bgColors:Array<Dynamic>;
 	var bgAlphas:Array<Dynamic>;
-	var bgTexture:BitmapData;
+	var bgTexture:Sparrow;
 	var containerWidth:Int;
 	var containerHeight:Int;
 	var callbacks:Dynamic;
@@ -45,7 +46,7 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 	var evtListenerDirectory:Array<Dynamic>;
 	
 	//Constructor
-	public function new(texture:BitmapData = null)
+	public function new(texture:Sparrow = null)
 	{
 		super();
 		
@@ -58,8 +59,8 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 		
 		if (texture != null) {
 			bgTexture = texture;
-		
-			setSize(bgTexture.width, bgTexture.height);
+			matrix = new Matrix();
+			setSize(Std.int(bgTexture.regin.width), Std.int(bgTexture.regin.height));
 		}
 		
 		isOnStage = false;
@@ -74,8 +75,10 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 		graphics.clear();
 
 		if( containerWidth > 0 && containerHeight > 0 ){
-			if( bgTexture != null ){
-				graphics.beginBitmapFill(bgTexture);
+			if ( bgTexture != null ) {
+				matrix.tx = bgTexture.regin.x;
+				matrix.ty = bgTexture.regin.y;
+				graphics.beginBitmapFill(bgTexture.bitmapdata, matrix);
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
 				graphics.endFill();
 			}else if( bgColors != null && bgColors.length > 1 ){
@@ -198,14 +201,14 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 		y = point.y;
 	}
 	
-	public function setTexture(texture:BitmapData, frames:Int = 1):Void
+	public function setTexture(texture:Sparrow, frames:Int = 1):Void
 	{
 		bgTexture = texture;
 
-		setSize(bgTexture.width, bgTexture.height);
+		setSize(Std.int(bgTexture.regin.width), Std.int(bgTexture.regin.height));
 	}
 	
-	public function getTexture():BitmapData
+	public function getTexture():Sparrow
 	{
 		return bgTexture;
 	}

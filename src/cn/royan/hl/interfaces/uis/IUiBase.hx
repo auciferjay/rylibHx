@@ -3,9 +3,14 @@ package cn.royan.hl.interfaces.uis;
 import cn.royan.hl.interfaces.IDisposeBase;
 import cn.royan.hl.geom.Position;
 import cn.royan.hl.geom.Square;
+import cn.royan.hl.uis.sparrow.Sparrow;
 
-import flash.display.BitmapData;
 import flash.events.EventDispatcher;
+
+/**
+ * ...
+ * @author RoYan
+ */
 
 interface IUiBase implements IDisposeBase
 {
@@ -22,7 +27,7 @@ interface IUiBase implements IDisposeBase
 	function setPosition(cX:Int, cY:Int):Void;
 	function getPosition():Position;
 	function setPositionPoint(point:Position):Void;
-	function setTexture(texture:BitmapData, frames:Int=1):Void;
-	function getTexture():BitmapData;
+	function setTexture(texture:Sparrow, frames:Int=1):Void;
+	function getTexture():Sparrow;
 	function getDispatcher():EventDispatcher;
 }

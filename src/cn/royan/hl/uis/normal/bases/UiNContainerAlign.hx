@@ -6,9 +6,9 @@ import cn.royan.hl.interfaces.uis.IUiContainerBase;
 import cn.royan.hl.interfaces.uis.IUiContainerScrolBase;
 import cn.royan.hl.interfaces.uis.IUiContainerStateBase;
 import cn.royan.hl.uis.normal.InteractiveUiN;
+import cn.royan.hl.uis.sparrow.Sparrow;
 
 import flash.display.DisplayObject;
-import flash.display.BitmapData;
 
 /**
  * ...
@@ -52,7 +52,7 @@ class UiNContainerAlign extends UiNContainer
 	var itemsWidth:Int;
 	var itemsHeight:Int;
 	
-	public function new(texture:BitmapData = null) 
+	public function new(texture:Sparrow = null) 
 	{
 		super(texture);
 	}

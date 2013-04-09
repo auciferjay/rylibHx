@@ -4,12 +4,13 @@ import cn.royan.hl.geom.Position;
 import cn.royan.hl.geom.Square;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiItemStateBase;
+import cn.royan.hl.uis.sparrow.Sparrow;
 import flash.display.BitmapData;
+import flash.events.EventDispatcher;
 import flash.geom.Matrix;
 import starling.display.Image;
 import starling.display.Sprite;
 import starling.events.Event;
-import starling.events.EventDispatcher;
 import starling.events.TouchEvent;
 /**
  * ...
@@ -26,7 +27,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	//properties
 	var bgColors:Array<Dynamic>;
 	var bgAlphas:Array<Dynamic>;
-	var bgTexture:BitmapData;
+	var bgTexture:Sparrow;
 	var containerWidth:Int;
 	var containerHeight:Int;
 	var callbacks:Dynamic;
@@ -46,7 +47,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	public var graphics:Image;
 	
 	//Constructor
-	public function new(texture:BitmapData = null)
+	public function new(texture:Sparrow = null)
 	{
 		super();
 		
@@ -59,8 +60,8 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		
 		if (texture != null) {
 			bgTexture = texture;
-		
-			setSize(bgTexture.width, bgTexture.height);
+			matrix = new Matrix();
+			setSize(Std.int(bgTexture.regin.width), Std.int(bgTexture.regin.height));
 		}
 		
 		isOnStage = false;
@@ -189,21 +190,21 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		y = point.y;
 	}
 	
-	public function setTexture(texture:BitmapData, frames:Int = 1):Void
+	public function setTexture(texture:Sparrow, frames:Int = 1):Void
 	{
 		bgTexture = texture;
 
-		setSize(bgTexture.width, bgTexture.height);
+		setSize(Std.int(bgTexture.regin.width), Std.int(bgTexture.regin.height));
 	}
 	
-	public function getTexture():BitmapData
+	public function getTexture():Sparrow
 	{
 		return bgTexture;
 	}
 	
 	public function getDispatcher():EventDispatcher
 	{
-		return this;
+		return null;
 	}
 	
 	public function setMouseRender(value:Bool):Void
@@ -299,28 +300,28 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	//Protected methods
 	function mouseOverHandler(evt:TouchEvent):Void
 	{
-		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
+		//if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
 		if( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.over != null ) callbacks.over(this);
 	}
 	
 	function mouseOutHandler(evt:TouchEvent):Void
 	{
-		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_NORMAL;
+		//if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_NORMAL;
 		if( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.out != null ) callbacks.out(this);
 	}
 	
 	function mouseDownHandler(evt:TouchEvent):Void
 	{
-		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_DOWN;
+		//if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_DOWN;
 		if( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.down != null ) callbacks.down(this);
 	}
 	
 	function mouseUpHandler(evt:TouchEvent):Void
 	{
-		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
+		//if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
 		if( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.up != null ) callbacks.up(this);
 	}
@@ -335,11 +336,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		if ( hasEventListener(Event.ADDED_TO_STAGE) )
 			removeEventListener(Event.ADDED_TO_STAGE, addToStageHandler);
 			
-		addEventListener(TouchEvent.TOUCH, mouseOverHandler, 	false, 99, true );
-		//addEventListener(MouseEvent.MOUSE_OUT, 	mouseOutHandler, 	false, 99, true );
-		//addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler, 	false, 99, true );
-		//addEventListener(MouseEvent.MOUSE_UP, 	mouseUpHandler, 	false, 99, true );
-		//addEventListener(MouseEvent.CLICK, 		mouseClickHandler, 	false, 99, true );
+		addEventListener(TouchEvent.TOUCH, mouseOverHandler );
 		
 		addEventListener(Event.REMOVED_FROM_STAGE, removeFromStageHandler);
 		

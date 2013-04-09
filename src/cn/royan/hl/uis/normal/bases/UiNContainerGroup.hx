@@ -4,12 +4,12 @@ import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.interfaces.uis.IUiContainerGroupBase;
 import cn.royan.hl.events.DatasEvent;
+import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.utils.SystemUtils;
 
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.display.DisplayObject;
-import flash.display.BitmapData;
 
 class UiNContainerGroup extends UiNContainerAlign, implements IUiContainerGroupBase
 {
@@ -20,7 +20,7 @@ class UiNContainerGroup extends UiNContainerAlign, implements IUiContainerGroupB
 	var selects:Array<IUiItemGroupBase>;
 	var values:Array<Dynamic>;
 	
-	public function new(texture:BitmapData = null) 
+	public function new(texture:Sparrow = null) 
 	{
 		super(texture);
 		

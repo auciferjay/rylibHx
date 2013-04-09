@@ -4,6 +4,11 @@ import cn.royan.hl.geom.Position;
 import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
 
+/**
+ * ...
+ * @author RoYan
+ */
+
 interface IUiTextBase implements IUiBase 
 {
 	function autoSize(value:Int):Void;
