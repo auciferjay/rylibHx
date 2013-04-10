@@ -76,8 +76,8 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 
 		if( containerWidth > 0 && containerHeight > 0 ){
 			if ( bgTexture != null ) {
-				matrix.tx = bgTexture.regin.x;
-				matrix.ty = bgTexture.regin.y;
+				matrix.tx = -bgTexture.regin.x;
+				matrix.ty = -bgTexture.regin.y;
 				graphics.beginBitmapFill(bgTexture.bitmapdata, matrix);
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
 				graphics.endFill();
@@ -201,14 +201,25 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 		y = point.y;
 	}
 	
-	public function setTexture(texture:Sparrow, frames:Int = 1):Void
+	public function setEnabled(value:Bool):Void
 	{
-		bgTexture = texture;
-
-		setSize(Std.int(bgTexture.regin.width), Std.int(bgTexture.regin.height));
+		status = value?INTERACTIVE_STATUS_NORMAL:INTERACTIVE_STATUS_DISABLE;
+		mouseChildren = value;
+		mouseEnabled = value;
 	}
 	
-	public function getTexture():Sparrow
+	public function setTexture(texture:Dynamic, frames:Int = 1):Void
+	{
+		if ( !Std.is(texture, Sparrow) ) {
+			throw "";
+		}else {
+			bgTexture = texture;
+			
+			setSize(Std.int(bgTexture.regin.width), Std.int(bgTexture.regin.height));
+		}
+	}
+	
+	public function getTexture():Dynamic
 	{
 		return bgTexture;
 	}

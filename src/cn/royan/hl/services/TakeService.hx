@@ -178,8 +178,8 @@ class TakeService extends DispatcherBase, implements IServiceBase
 	
 	function loaderOnComplete(evt:Event):Void
 	{
-		if( callbacks != null && callbacks.done != null ) callbacks.done(swfLoader);
-		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE, swfLoader));
+		if( callbacks != null && callbacks.done != null ) callbacks.done(serviceData);
+		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE, serviceData));
 		
 		swfLoader = null;
 	}

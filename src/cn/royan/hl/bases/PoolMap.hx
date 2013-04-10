@@ -55,6 +55,8 @@ class PoolMap
 		var keys:Array<Dynamic> = __weakMap.getKeys(object);
 		var pool:Array<Dynamic>;
 		
+		if ( keys == null ) keys = [];
+		
 		if( keys.length > 1 || keys.length == 0){
 			SystemUtils.print("dispose: " + type);
 			pool = getPool( type );

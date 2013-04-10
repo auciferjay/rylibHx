@@ -27,7 +27,7 @@ interface IUiBase implements IDisposeBase
 	function setPosition(cX:Int, cY:Int):Void;
 	function getPosition():Position;
 	function setPositionPoint(point:Position):Void;
-	function setTexture(texture:Sparrow, frames:Int=1):Void;
-	function getTexture():Sparrow;
+	function setTexture(texture:Dynamic, frames:Int=1):Void;
+	function getTexture():Dynamic;
 	function getDispatcher():EventDispatcher;
 }

@@ -64,7 +64,7 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 		
 		items = prev.concat(next);
 		
-		addChild(cast( item, DisplayObject ));
+		addChildAt(cast( item, DisplayObject ), index);
 		
 		draw();
 		

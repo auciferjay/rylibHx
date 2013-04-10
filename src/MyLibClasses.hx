@@ -18,6 +18,12 @@ import cn.royan.hl.uis.normal.bases.UiNText;
 import cn.royan.hl.uis.normal.exts.UiNExtBmpNumberText;
 import cn.royan.hl.uis.normal.exts.UiNExtCombobox;
 
+import cn.royan.hl.uis.starling.InteractiveUiS;
+
+import cn.royan.hl.uis.sparrow.Sparrow;
+import cn.royan.hl.uis.sparrow.SparrowAtlas;
+import cn.royan.hl.uis.sparrow.SparrowManager;
+
 import cn.royan.hl.events.DatasEvent;
 
 import cn.royan.hl.bases.TimerBase;
@@ -34,6 +40,8 @@ import cn.royan.hl.services.TakeService;
 
 import cn.royan.hl.resources.ConfigFile;
 import cn.royan.hl.resources.ResourceLoader;
+
+import flash.Lib;
  
 class MyLibClasses 
 {

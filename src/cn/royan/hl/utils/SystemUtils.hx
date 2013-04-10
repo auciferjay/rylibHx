@@ -9,15 +9,24 @@ import haxe.Timer;
 import flash.system.ApplicationDomain;
 import flash.system.LoaderContext;
 import flash.errors.Error;
+import flash.Lib;
 #end
 
 class SystemUtils 
 {
 	static inline var ukey:Array<String> = ["A", "B", "C", "D", "E", "F", "G", "H"];
+	static inline var UID_CHARS:String = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	
+	static public var showDebug:Bool = false;
 	
 	static public function print(v:Dynamic, ?info:PosInfos):Void
 	{
-		Log.trace(Timer.stamp + "|[" + info.className + "][" + info.methodName+"]:"+v);
+		if ( showDebug ) {
+			if ( info == null )
+				Log.trace(Timer.stamp() + "|[" + info.className + "][" + info.methodName + "]:" + v);
+			else
+				Lib.trace(Timer.stamp() + "|" + v);
+		}
 	}
 	
 	static public function arrayIndexOf(array:Array<Dynamic>, value:Dynamic):Int
@@ -40,19 +49,23 @@ class SystemUtils
 		
 	static public function createUniqueID():String
 	{
-		var uid:String = "";
-		var time:Int = Std.int(Date.now().getTime());
-		var timecut:Int = Std.int(time & 0xFFF);
-		var i:Int;
-		var sum:String = "";
-		for ( i in 0...12 ) {
-			sum = (time & 7) + sum;
-			time >>= 3;
+		return random(8) + '-' + random(4) + '-' + random(4) + '-' + random(4) + '-' + random(12);
+	}
+	
+	private static inline function random(?size:Int):String {
+		
+		if (size == null) size = 32;
+		
+		var nchars = UID_CHARS.length;
+		var uid = new StringBuf();
+		
+		for (i in 0 ... size) {
+			
+			uid.add(UID_CHARS.charAt(Std.int(Math.random() * nchars)));
+			
 		}
-		for ( i in 0...12 ) {
-			uid = uid + ukey[Std.parseInt(sum.substr(i,1))];
-		}
-		return uid + "-" + timecut;
+		
+		return uid.toString();
 	}
 		
 	public static function readObject(object:Dynamic, index:Int = 0):Void

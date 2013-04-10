@@ -4,12 +4,14 @@ import cn.royan.hl.geom.Position;
 import cn.royan.hl.geom.Square;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiItemStateBase;
-import cn.royan.hl.uis.sparrow.Sparrow;
+
 import flash.display.BitmapData;
 import flash.events.EventDispatcher;
 import flash.geom.Matrix;
+
 import starling.display.Image;
 import starling.display.Sprite;
+import starling.textures.Texture;
 import starling.events.Event;
 import starling.events.TouchEvent;
 /**
@@ -27,7 +29,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	//properties
 	var bgColors:Array<Dynamic>;
 	var bgAlphas:Array<Dynamic>;
-	var bgTexture:Sparrow;
+	var bgTexture:Texture;
 	var containerWidth:Int;
 	var containerHeight:Int;
 	var callbacks:Dynamic;
@@ -47,7 +49,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	public var graphics:Image;
 	
 	//Constructor
-	public function new(texture:Sparrow = null)
+	public function new(texture:Texture = null)
 	{
 		super();
 		
@@ -60,8 +62,10 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		
 		if (texture != null) {
 			bgTexture = texture;
-			matrix = new Matrix();
-			setSize(Std.int(bgTexture.regin.width), Std.int(bgTexture.regin.height));
+			
+			graphics = new Image( bgTexture );
+			addChild( graphics );
+			setSize(Std.int(bgTexture.width), Std.int(bgTexture.height));
 		}
 		
 		isOnStage = false;
@@ -76,7 +80,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		
 		if( containerWidth > 0 && containerHeight > 0 ){
 			if( bgTexture != null ){
-				
+				graphics.texture = bgTexture;
 			}else if( bgColors != null && bgColors.length > 1 ){
 				
 			}else if(  bgColors != null && bgColors.length > 0 && cast(bgAlphas[0]) > 0 ){
@@ -132,7 +136,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		
 		if( bgColors != null && bgTexture == null )
 			statusLen = Std.int(Math.min(bgColors.length, 5));
-		
+			
 		if( bgColors.length > 1 ){
 			if( matrix == null )
 				matrix = new Matrix();
@@ -190,14 +194,19 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		y = point.y;
 	}
 	
-	public function setTexture(texture:Sparrow, frames:Int = 1):Void
+	public function setTexture(texture:Dynamic, frames:Int = 1):Void
 	{
-		bgTexture = texture;
-
-		setSize(Std.int(bgTexture.regin.width), Std.int(bgTexture.regin.height));
+		if ( !Std.is(texture, Texture) )
+		{
+			throw "";
+		}else {
+			bgTexture = texture;
+			
+			setSize(Std.int(bgTexture.width), Std.int(bgTexture.height));
+		}
 	}
 	
-	public function getTexture():Sparrow
+	public function getTexture():Dynamic
 	{
 		return bgTexture;
 	}
@@ -232,60 +241,6 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		return includes;
 	}
 
-	override public function addEventListener(type:String, listener:Dynamic->Void):Void
-	{
-		if ( evtListenerDirectory == null ) {
-			evtListenerDirectory = [];
-			evtListenerType = [];
-		}
-		var dic:Dictionary = new Dictionary();
-		Reflect.setField(dic, type, listener);
-		evtListenerDirectory.push( dic );
-		evtListenerType.push( type );
-		super.addEventListener(type, listener);
-	}
-
-	override public function removeEventListener(type:String, listener:Dynamic->Void):Void
-	{
-		super.removeEventListener(type, listener);
-		if ( evtListenerDirectory != null ) {
-			for ( i in 0...evtListenerDirectory.length ) {
-				var dic:Dictionary = evtListenerDirectory[i];
-				if ( Reflect.field(dic, type) == null ) {
-					continue;
-				}else {
-					if ( Reflect.field(dic, type) != listener ) {
-						continue;
-					}else {
-						evtListenerType.splice( i, 1 );
-						evtListenerDirectory.splice( i, 1 );
-						Reflect.deleteField( dic, type );
-						dic = null;
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	public function removeAllEventListeners():Void
-	{
-		if ( evtListenerType == null || evtListenerType.length == 0)
-			return;
-		
-		for ( i in 0...evtListenerType.length)
-		{
-			var type:String = evtListenerType[i];
-			var dic:Dictionary = evtListenerDirectory[i];
-			if ( dic == null ||  Reflect.field(dic, type) == null ) {
-				continue;
-			}else {
-				var fun:Dynamic->Void =  Reflect.field(dic, type);
-				removeEventListener( type, fun );
-			}
-		}
-	}
-
 	public function removeAllChildren():Void
 	{
 		removeChildren();
@@ -294,7 +249,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	override public function dispose():Void
 	{
 		removeAllChildren();
-		removeAllEventListeners();
+		removeEventListeners();
 	}
 	
 	//Protected methods
@@ -349,9 +304,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	{
 		isOnStage = false;
 		
-		#if flash
-		removeAllEventListeners();
-		#end
+		removeEventListeners();
 		
 		addEventListener(Event.ADDED_TO_STAGE, addToStageHandler);
 	}

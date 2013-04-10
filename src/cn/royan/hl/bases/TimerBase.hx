@@ -1,6 +1,7 @@
 package cn.royan.hl.bases;
 
 import cn.royan.hl.interfaces.IDisposeBase;
+import cn.royan.hl.utils.SystemUtils;
 
 import haxe.Timer;
 
@@ -36,7 +37,7 @@ class TimerBase implements IDisposeBase
 		
 		if( !isStart ) timerNumber++;
 		isStart = true;
-		last = Std.int( Date.now().getTime() );
+		last = Std.int( Timer.stamp() * 1000 );
 		current = delay;
 	}
 	
@@ -59,8 +60,8 @@ class TimerBase implements IDisposeBase
 	public function needRender():Bool
 	{
 		if( !isStart ) return false;
-		current -= Std.int( Date.now().getTime() - last );
-		last = Std.int( Date.now().getTime() );
+		current -= Std.int( Timer.stamp() * 1000 - last );
+		last = Std.int( Timer.stamp() * 1000 );
 		var isInit:Bool = current < TIMERBASE_DELAY;
 		if( isInit ) current = delay;
 		return isStart && isInit;

@@ -48,10 +48,9 @@ class UninteractiveUiN extends Shape, implements IUiBase
 		graphics.clear();
 		if( containerWidth > 0 && containerHeight > 0 ){
 			if ( bgTexture != null ) {
-				matrix.tx = bgTexture.regin.x;
-				matrix.ty = bgTexture.regin.y;
+				matrix.tx = -bgTexture.regin.x;
+				matrix.ty = -bgTexture.regin.y;
 				graphics.beginBitmapFill(bgTexture.bitmapdata, matrix);
-				graphics.beginBitmapFill(bgTexture.bitmapdata);
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
 				graphics.endFill();
 			}else if ( bgColors != null && bgColors.length > 1 ) {
@@ -168,14 +167,18 @@ class UninteractiveUiN extends Shape, implements IUiBase
 		y = point.y;
 	}
 	
-	public function setTexture(texture:Sparrow, frames:Int = 1):Void
+	public function setTexture(texture:Dynamic, frames:Int = 1):Void
 	{
-		bgTexture = texture;
-
-		setSize(Std.int(bgTexture.regin.width), Std.int(bgTexture.regin.height));
+		if ( !Std.is(texture, Sparrow) ) {
+			throw "";
+		}else {
+			bgTexture = texture;
+			
+			setSize(Std.int(bgTexture.regin.width), Std.int(bgTexture.regin.height));
+		}
 	}
 	
-	public function getTexture():Sparrow
+	public function getTexture():Dynamic
 	{
 		return bgTexture;
 	}

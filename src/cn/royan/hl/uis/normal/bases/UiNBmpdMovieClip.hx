@@ -6,6 +6,7 @@ import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.uis.normal.InteractiveUiN;
 import cn.royan.hl.uis.normal.UninteractiveUiN;
 import cn.royan.hl.uis.sparrow.Sparrow;
+import cn.royan.hl.utils.SystemUtils;
 
 import flash.events.Event;
 import flash.display.Bitmap;
@@ -26,7 +27,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 	var sequence:Bool;
 	var loop:Bool;
 	var autoPlay:Bool;
-	var currentFrame:Bitmap;
+	var currentFrame:BitmapData;
 	
 	//Constructor
 	public function new(texture:Dynamic, rate:Int = 10, auto:Bool = true, row:Int = 1, column:Int = 1, frames:Int = 1) 
@@ -60,23 +61,28 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 		
 		timer = new TimerBase( Std.int( 1000 / frameRate ), timerHandler );
 		
-		currentFrame = new Bitmap();
+		currentFrame = new BitmapData(containerWidth, containerHeight, true, 0x00000000);
 		
 		if( bgTextures[current-1] != null )
-			currentFrame.bitmapData.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point());
+			currentFrame.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point());
 		
-		addChild(currentFrame);
+		addChild(new Bitmap(currentFrame));
 	}
 	
 	function drawTextures():Void
 	{
-		var frameWidth:Int = Std.int(bgTexture.bitmapdata.width / total);
-		var frameHeight:Int = Std.int(bgTexture.bitmapdata.height);
+		var frameWidth:Int = Std.int(bgTexture.regin.width / total);
+		var frameHeight:Int = Std.int(bgTexture.regin.height);
+		
+		if ( bgTexture.frame != null ) {
+			frameWidth = Std.int(bgTexture.frame.width / total);
+			//frameHeight = Std.int(bgTexture.frame.height);
+		}
 		
 		var i:Int;
 		var rectangle:Rectangle = new Rectangle();
-			rectangle.width = frameWidth;
-			rectangle.height = frameHeight;
+			rectangle.width = frameWidth + (bgTexture.frame!=null?bgTexture.frame.x:0);
+			rectangle.height = frameHeight;// + (bgTexture.frame != null?bgTexture.frame.y:0);
 			
 		var point:Point = new Point();
 		var curRow:Int;
@@ -86,8 +92,8 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 			curRow = Std.int(i % total);
 			curCol = Std.int(i / total);
 			
-			rectangle.x = curRow * frameWidth;
-			rectangle.y = curCol * frameHeight;
+			rectangle.x = curRow * frameWidth + bgTexture.regin.x;
+			rectangle.y = curCol * frameHeight + bgTexture.regin.y;
 			
 			var bmpd:Sparrow = Sparrow.fromSparrow(bgTexture, rectangle.clone());
 			
@@ -126,7 +132,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 	{
 		loop = false;
 		current = frame;
-		currentFrame.bitmapData.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point());
+		currentFrame.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point());
 	}
 
 	public function goFromTo(from:Int, to:Int):Void
@@ -138,9 +144,19 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 		current = from;
 		toFrame = to;
 		
-		currentFrame.bitmapData.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point());
+		currentFrame.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point());
 		
 		timer.start();
+	}
+	
+	public function play():Void
+	{
+		timer.start();
+	}
+	
+	public function stop():Void
+	{
+		timer.stop();
 	}
 	
 	//Protected methods
@@ -179,7 +195,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 			}
 		}
 		
-		currentFrame.bitmapData.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point());
+		currentFrame.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point());
 		
 		if( current == toFrame && !loop ){
 			if( callbacks != null && callbacks.done != null ) callbacks.done(this);
