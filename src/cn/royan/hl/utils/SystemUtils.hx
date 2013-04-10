@@ -22,7 +22,7 @@ class SystemUtils
 	static public function print(v:Dynamic, ?info:PosInfos):Void
 	{
 		if ( showDebug ) {
-			if ( info == null )
+			if ( info != null )
 				Log.trace(Timer.stamp() + "|[" + info.className + "][" + info.methodName + "]:" + v);
 			else
 				Lib.trace(Timer.stamp() + "|" + v);

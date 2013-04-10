@@ -20,8 +20,6 @@ class PoolMap
 		
 	private static function createInstanceByType(type:Class<Dynamic>, parameters:Array<Dynamic>):Dynamic
 	{
-		SystemUtils.print("create:"+type);
-		
 		var waterDrop:WaterDrop = new WaterDrop(type, parameters);
 		__weakMap.set(waterDrop.key, waterDrop.target);
 		
@@ -58,7 +56,6 @@ class PoolMap
 		if ( keys == null ) keys = [];
 		
 		if( keys.length > 1 || keys.length == 0){
-			SystemUtils.print("dispose: " + type);
 			pool = getPool( type );
 			if (pool.length >= maxValue)
 				pool.shift();
@@ -67,11 +64,9 @@ class PoolMap
 		}else{
 			var params:Array<String> = Std.string(keys[0]).split("|");
 			if( params[params.length - 1] != "0" ){
-				SystemUtils.print("destroy: " + type);
 				__weakMap.clear(keys[0]);
 				object = null;
 			}else{
-				SystemUtils.print("dispose: " + type);
 				pool = getPool( type );
 				if(pool.length >= maxValue)
 					pool.shift();
