@@ -24,8 +24,10 @@ class SystemUtils
 		if ( showDebug ) {
 			if ( info != null )
 				Log.trace(Timer.stamp() + "|[" + info.className + "][" + info.methodName + "]:" + v);
+			#if flash
 			else
 				Lib.trace(Timer.stamp() + "|" + v);
+			#end
 		}
 	}
 	
