@@ -41,7 +41,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 		currentStatus = new BitmapData(containerWidth, containerHeight, true, 0x00000000);
 		
 		if( bgTextures[status] != null )
-			currentStatus.copyPixels(bgTextures[status].bitmapdata, bgTextures[status].regin, new Point());
+			currentStatus.copyPixels(bgTextures[status].bitmapdata, bgTextures[status].regin, new Point(bgTextures[status].frame.x, bgTextures[status].frame.y));
 		
 		addChild(new Bitmap(currentStatus));
 		
@@ -62,15 +62,12 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 		
 		if ( bgTexture.frame != null ) {
 			frameWidth = Std.int(bgTexture.frame.width / total);
-			//frameHeight = Std.int(bgTexture.frame.height);
+			frameHeight = Std.int(bgTexture.frame.height);
 		}
 		
 		var i:Int;
-		var rectangle:Rectangle = new Rectangle();
-			rectangle.width = frameWidth + (bgTexture.frame!=null?bgTexture.frame.x:0);
-			rectangle.height = frameHeight;// + (bgTexture.frame != null?bgTexture.frame.y:0);
-			
-		var point:Point = new Point();
+		var regin:Rectangle;
+		var frame:Rectangle;
 		var curRow:Int;
 		var curCol:Int;
 		
@@ -78,10 +75,33 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 			curRow = Std.int(i % total);
 			curCol = Std.int(i / total);
 			
-			rectangle.x = curRow * frameWidth + bgTexture.regin.x;
-			rectangle.y = curCol * frameHeight + bgTexture.regin.y;
+			frame = new Rectangle();
+			regin = new Rectangle();
+			regin.width = frameWidth;
+			regin.height = frameHeight - (bgTexture.frame != null ? bgTexture.frame.height - bgTexture.regin.height + bgTexture.frame.y : 0);
 			
-			var bmpd:Sparrow = Sparrow.fromSparrow(bgTexture, rectangle.clone());
+			regin.x = curRow * frameWidth + bgTexture.regin.x + (bgTexture.frame != null ? bgTexture.frame.x : 0);
+			//regin.y = curCol * frameHeight + bgTexture.regin.y + (bgTexture.frame != null ? bgTexture.frame.y : 0);
+			
+			frame.y = bgTexture.frame != null ? -bgTexture.frame.y : 0;
+			
+			regin.y = curCol * frameHeight + bgTexture.regin.y;
+			
+			if ( i == 0 ) {
+				regin.width = frameWidth + (bgTexture.frame != null ? bgTexture.frame.x : 0);
+				//regin.height = frameHeight + (bgTexture.frame != null ? bgTexture.frame.y : 0);
+				
+				frame.x = bgTexture.frame != null ? -bgTexture.frame.x : 0;
+				//frame.y = bgTexture.frame != null ? -bgTexture.frame.y : 0;
+				
+				regin.x = curRow * frameWidth + bgTexture.regin.x;
+				//regin.y = curCol * frameHeight + bgTexture.regin.y;
+			}else if ( i == total - 1 ) {
+				regin.width = frameWidth - (bgTexture.frame != null ? bgTexture.frame.width - bgTexture.regin.width + bgTexture.frame.x : 0);
+				//regin.height = frameHeight - (bgTexture.frame != null ? bgTexture.frame.height - bgTexture.regin.height + bgTexture.frame.y : 0);
+			}
+			
+			var bmpd:Sparrow = Sparrow.fromSparrow(bgTexture, regin, frame);
 			
 			bgTextures[i] = bmpd;
 			
@@ -89,9 +109,6 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 		}
 		
 		setSize(frameWidth, frameHeight);
-		
-		rectangle = null;
-		point = null;
 	}
 	
 	override function addToStageHandler(evt:Event=null):Void
@@ -122,9 +139,8 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 	override public function draw():Void
 	{
 		if ( !isOnStage ) return;
-		if ( status < bgTextures.length ) {
-			currentStatus.copyPixels(bgTextures[status].bitmapdata, bgTextures[status].regin, new Point());
-		}
+		if ( status < bgTextures.length )
+			currentStatus.copyPixels(bgTextures[status].bitmapdata, bgTextures[status].regin, new Point(bgTextures[status].frame.x, bgTextures[status].frame.y));
 	}
 	
 	public function clone():UiNBmpdButton

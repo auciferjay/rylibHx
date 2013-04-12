@@ -57,9 +57,10 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 		bgColors = getDefaultBackgroundColors();
 		bgAlphas = getDefaultBackgroundAlphas();
 		
+		matrix = new Matrix();
+		
 		if (texture != null) {
 			bgTexture = texture;
-			matrix = new Matrix();
 			setSize(Std.int(bgTexture.regin.width), Std.int(bgTexture.regin.height));
 		}
 		
@@ -206,6 +207,8 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 		status = value?INTERACTIVE_STATUS_NORMAL:INTERACTIVE_STATUS_DISABLE;
 		mouseChildren = value;
 		mouseEnabled = value;
+		
+		draw();
 	}
 	
 	public function setTexture(texture:Dynamic, frames:Int = 1):Void

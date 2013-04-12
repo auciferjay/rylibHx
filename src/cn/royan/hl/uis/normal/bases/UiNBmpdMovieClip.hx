@@ -22,6 +22,8 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 	var timer:TimerBase;
 	var current:Int;
 	var total:Int;
+	var totalRow:Int;
+	var totalCol:Int;
 	var toFrame:Int;
 	var frameRate:Int;
 	var sequence:Bool;
@@ -33,6 +35,9 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 	public function new(texture:Dynamic, rate:Int = 10, auto:Bool = true, row:Int = 1, column:Int = 1, frames:Int = 1) 
 	{
 		super(Std.is( texture, Sparrow )?cast( texture, Sparrow ):null);
+		
+		totalRow = row;
+		totalCol = column;
 		
 		var bmpd:BitmapData;
 		var frameunit:UninteractiveUiN;
@@ -64,7 +69,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 		currentFrame = new BitmapData(containerWidth, containerHeight, true, 0x00000000);
 		
 		if( bgTextures[current-1] != null )
-			currentFrame.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point());
+			currentFrame.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point(bgTextures[current - 1].frame.x, bgTextures[current - 1].frame.y));
 		
 		addChild(new Bitmap(currentFrame));
 	}
@@ -76,26 +81,54 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 		
 		if ( bgTexture.frame != null ) {
 			frameWidth = Std.int(bgTexture.frame.width / total);
-			//frameHeight = Std.int(bgTexture.frame.height);
+			frameHeight = Std.int(bgTexture.frame.height);
 		}
 		
 		var i:Int;
-		var rectangle:Rectangle = new Rectangle();
-			rectangle.width = frameWidth + (bgTexture.frame!=null?bgTexture.frame.x:0);
-			rectangle.height = frameHeight;// + (bgTexture.frame != null?bgTexture.frame.y:0);
-			
-		var point:Point = new Point();
+		var regin:Rectangle;
+		var frame:Rectangle;
 		var curRow:Int;
 		var curCol:Int;
 		
 		for ( i in 0...total ) {
-			curRow = Std.int(i % total);
-			curCol = Std.int(i / total);
+			curRow = Std.int(i % totalRow);
+			curCol = Std.int(i / totalRow);
 			
-			rectangle.x = curRow * frameWidth + bgTexture.regin.x;
-			rectangle.y = curCol * frameHeight + bgTexture.regin.y;
+			frame = new Rectangle();
+			regin = new Rectangle();
+			regin.width = frameWidth;
+			regin.height = frameHeight - (bgTexture.frame != null ? bgTexture.frame.height - bgTexture.regin.height + bgTexture.frame.y : 0);
 			
-			var bmpd:Sparrow = Sparrow.fromSparrow(bgTexture, rectangle.clone());
+			regin.x = curRow * frameWidth + bgTexture.regin.x + (bgTexture.frame != null ? bgTexture.frame.x : 0);
+			regin.y = curCol * frameHeight + bgTexture.regin.y + (bgTexture.frame != null ? bgTexture.frame.y : 0);
+			
+			if ( curRow == 0 ) {
+				regin.width = frameWidth + (bgTexture.frame != null ? bgTexture.frame.x : 0);
+				//regin.height = frameHeight + (bgTexture.frame != null ? bgTexture.frame.y : 0);
+				
+				frame.x = bgTexture.frame != null ? -bgTexture.frame.x : 0;
+				//frame.y = bgTexture.frame != null ? -bgTexture.frame.y : 0;
+				
+				regin.x = curRow * frameWidth + bgTexture.regin.x;
+				//regin.y = curCol * frameHeight + bgTexture.regin.y;
+			}
+			if ( curRow == totalRow - 1 ) {
+				regin.width = frameWidth - (bgTexture.frame != null ? bgTexture.frame.width - bgTexture.regin.width + bgTexture.frame.x : 0);
+				//regin.height = frameHeight - (bgTexture.frame != null ? bgTexture.frame.height - bgTexture.regin.height + bgTexture.frame.y : 0);
+			}
+			
+			if ( curCol == 0 ) {
+				regin.height = frameHeight + (bgTexture.frame != null ? bgTexture.frame.y : 0);
+				
+				frame.y = bgTexture.frame != null ? -bgTexture.frame.y : 0;
+				
+				regin.y = curCol * frameHeight + bgTexture.regin.y;
+			}
+			if ( curCol == totalCol - 1 ) {
+				regin.height = frameHeight - (bgTexture.frame != null ? bgTexture.frame.height - bgTexture.regin.height + bgTexture.frame.y : 0);
+			}
+			
+			var bmpd:Sparrow = Sparrow.fromSparrow(bgTexture, regin, frame);
 			
 			bgTextures[i] = bmpd;
 			
@@ -103,9 +136,6 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 		}
 		
 		setSize(frameWidth, frameHeight);
-		
-		rectangle = null;
-		point = null;
 	}
 	
 	public function clone():UiNBmpdMovieClip
@@ -132,7 +162,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 	{
 		loop = false;
 		current = frame;
-		currentFrame.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point());
+		currentFrame.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point(bgTextures[current - 1].frame.x, bgTextures[current - 1].frame.y));
 	}
 
 	public function goFromTo(from:Int, to:Int):Void
@@ -144,7 +174,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 		current = from;
 		toFrame = to;
 		
-		currentFrame.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point());
+		currentFrame.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point(bgTextures[current - 1].frame.x, bgTextures[current - 1].frame.y));
 		
 		timer.start();
 	}
@@ -195,7 +225,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 			}
 		}
 		
-		currentFrame.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point());
+		currentFrame.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point(bgTextures[current - 1].frame.x, bgTextures[current - 1].frame.y));
 		
 		if( current == toFrame && !loop ){
 			if( callbacks != null && callbacks.done != null ) callbacks.done(this);
