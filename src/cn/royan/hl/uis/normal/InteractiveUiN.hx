@@ -7,6 +7,8 @@ import cn.royan.hl.bases.Dictionary;
 import cn.royan.hl.geom.Position;
 import cn.royan.hl.geom.Square;
 import cn.royan.hl.uis.sparrow.Sparrow;
+import cn.royan.hl.utils.SystemUtils;
+import flash.display.Bitmap;
 
 import flash.display.BitmapData;
 import flash.display.GradientType;
@@ -45,6 +47,8 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 	var evtListenerType:Array<String>;
 	var evtListenerDirectory:Array<Dynamic>;
 	
+	var background:Bitmap;
+	
 	//Constructor
 	public function new(texture:Sparrow = null)
 	{
@@ -57,10 +61,12 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 		bgColors = getDefaultBackgroundColors();
 		bgAlphas = getDefaultBackgroundAlphas();
 		
-		matrix = new Matrix();
+		background = new Bitmap();
+		addChild(background);
 		
 		if (texture != null) {
 			bgTexture = texture;
+			
 			setSize(Std.int(bgTexture.regin.width), Std.int(bgTexture.regin.height));
 		}
 		
@@ -72,16 +78,12 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 	//Public methods
 	public function draw():Void
 	{
-		if ( !isOnStage ) return;
+		if ( !isOnStage ) return; 
 		graphics.clear();
-
+		
 		if( containerWidth > 0 && containerHeight > 0 ){
 			if ( bgTexture != null ) {
-				matrix.tx = -bgTexture.regin.x;
-				matrix.ty = -bgTexture.regin.y;
-				graphics.beginBitmapFill(bgTexture.bitmapdata, matrix);
-				graphics.drawRect( 0, 0, containerWidth, containerHeight );
-				graphics.endFill();
+				background.bitmapData.copyPixels(bgTexture.bitmapdata, bgTexture.regin, new Point());
 			}else if( bgColors != null && bgColors.length > 1 ){
 				matrix.createGradientBox(containerWidth, containerHeight, Math.PI / 2, 0, 0);
 				graphics.beginGradientFill(GradientType.LINEAR, cast(bgColors), bgAlphas, [0,255], matrix);
@@ -176,6 +178,8 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 	{
 		containerWidth = w;
 		containerHeight = h;
+		
+		background.bitmapData = new BitmapData(w, h, true, 0xFFFFFF);
 
 		draw();
 	}
@@ -207,8 +211,6 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 		status = value?INTERACTIVE_STATUS_NORMAL:INTERACTIVE_STATUS_DISABLE;
 		mouseChildren = value;
 		mouseEnabled = value;
-		
-		draw();
 	}
 	
 	public function setTexture(texture:Dynamic, frames:Int = 1):Void

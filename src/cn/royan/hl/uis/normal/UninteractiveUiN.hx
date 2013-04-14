@@ -1,18 +1,25 @@
 package cn.royan.hl.uis.normal;
 
 import cn.royan.hl.interfaces.uis.IUiBase;
+import cn.royan.hl.interfaces.uis.IUiItemStateBase;
+import cn.royan.hl.events.DatasEvent;
+import cn.royan.hl.bases.Dictionary;
 import cn.royan.hl.geom.Position;
 import cn.royan.hl.geom.Square;
 import cn.royan.hl.uis.sparrow.Sparrow;
+import cn.royan.hl.utils.SystemUtils;
+import flash.display.Bitmap;
 
-import flash.errors.Error;
 import flash.display.BitmapData;
 import flash.display.GradientType;
-import flash.display.Shape;
+import flash.display.Sprite;
+import flash.events.Event;
+import flash.events.MouseEvent;
 import flash.events.EventDispatcher;
 import flash.geom.Matrix;
+import flash.geom.Point;
 
-class UninteractiveUiN extends Shape, implements IUiBase
+class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemStateBase
 {
 	//properties
 	var bgColors:Array<Dynamic>;
@@ -20,10 +27,18 @@ class UninteractiveUiN extends Shape, implements IUiBase
 	var bgTexture:Sparrow;
 	var containerWidth:Int;
 	var containerHeight:Int;
+	var callbacks:Dynamic;
 	var matrix:Matrix;
+	var selected:Bool;
+	var isOnStage:Bool;
+	
+	var excludes:Array<String>;
+	var includes:Array<String>;
+	
+	var background:Bitmap;
 	
 	//Constructor
-	public function new(texture:Sparrow = null) 
+	public function new(texture:Sparrow = null)
 	{
 		super();
 		
@@ -33,27 +48,30 @@ class UninteractiveUiN extends Shape, implements IUiBase
 		bgColors = getDefaultBackgroundColors();
 		bgAlphas = getDefaultBackgroundAlphas();
 		
+		background = new Bitmap();
+		addChild(background);
+		
 		if (texture != null) {
 			bgTexture = texture;
-			matrix = new Matrix();
+			
 			setSize(Std.int(bgTexture.regin.width), Std.int(bgTexture.regin.height));
 		}
 		
-		draw();
+		mouseEnabled = false;
+		mouseChildren = false;
+		isOnStage = false;
 	}
 	
 	//Public methods
 	public function draw():Void
 	{
+		if ( !isOnStage ) return; 
 		graphics.clear();
+		
 		if( containerWidth > 0 && containerHeight > 0 ){
 			if ( bgTexture != null ) {
-				matrix.tx = -bgTexture.regin.x;
-				matrix.ty = -bgTexture.regin.y;
-				graphics.beginBitmapFill(bgTexture.bitmapdata, matrix);
-				graphics.drawRect( 0, 0, containerWidth, containerHeight );
-				graphics.endFill();
-			}else if ( bgColors != null && bgColors.length > 1 ) {
+				background.bitmapData.copyPixels(bgTexture.bitmapdata, bgTexture.regin, new Point());
+			}else if( bgColors != null && bgColors.length > 1 ){
 				matrix.createGradientBox(containerWidth, containerHeight, Math.PI / 2, 0, 0);
 				graphics.beginGradientFill(GradientType.LINEAR, cast(bgColors), bgAlphas, [0,255], matrix);
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
@@ -63,21 +81,21 @@ class UninteractiveUiN extends Shape, implements IUiBase
 				graphics.drawRect( 0, 0, containerWidth, containerHeight );
 				graphics.endFill();
 			}else{
-				graphics.beginFill( 0xFFFFFF, 0 );
-				graphics.drawRect( 0, 0, containerWidth, containerHeight );
-				graphics.endFill();
+				//graphics.beginFill( 0xFFFFFF, 0 );
+				//graphics.drawRect( 0, 0, containerWidth, containerHeight );
+				//graphics.endFill();
 			}
 		}
 	}
 	
 	public function getDefaultBackgroundColors():Array<Dynamic>
 	{
-		return [0xFF0000];
+		return [[0xFFFFFF]];
 	}
 	
 	public function getDefaultBackgroundAlphas():Array<Dynamic>
 	{
-		return [1.0];
+		return [[0.0]];
 	}
 	
 	public function setBackgroundColors(value:Array<Dynamic>):Void
@@ -134,28 +152,30 @@ class UninteractiveUiN extends Shape, implements IUiBase
 	
 	public function setCallbacks(value:Dynamic):Void
 	{
-		throw new Error("uninteractivebase");
+		callbacks = value;
 	}
 	
-	public function setSize(cWidth:Int, cHeight:Int):Void
+	public function setSize(w:Int, h:Int):Void
 	{
-		containerWidth = cWidth;
-		containerHeight = cHeight;
+		containerWidth = w;
+		containerHeight = h;
+		
+		background.bitmapData = new BitmapData(w, h, true, 0xFFFFFF);
 
 		draw();
 	}
-	
+
 	public function getSize():Square
 	{
 		return { width:containerWidth, height:containerHeight };
 	}
-	
-	public function setPosition(cX:Int, cY:Int):Void
+
+	public function setPosition(cx:Int, cy:Int):Void
 	{
-		x = cX;
-		y = cY;
+		x = cx;
+		y = cy;
 	}
-	
+
 	public function getPosition():Position
 	{
 		return { x:Std.int(x), y:Std.int(y) };
@@ -183,13 +203,43 @@ class UninteractiveUiN extends Shape, implements IUiBase
 		return bgTexture;
 	}
 	
-	inline public function getDispatcher():EventDispatcher
+	public function getDispatcher():EventDispatcher
 	{
-		return null;
+		return this;
+	}
+	
+	public function setExclude(args:Array<String>):Void
+	{
+		excludes = args;
+	}
+	
+	public function getExclude():Array<String>
+	{
+		return excludes;
+	}
+	
+	public function setInclude(args:Array<String>):Void
+	{
+		includes = args;
+	}
+	
+	public function getInclude():Array<String>
+	{
+		return includes;
+	}
+
+	override public function addEventListener(type:String, listener:Dynamic->Void, useCapture:Bool=false, priority:Int=0, useWeakReference:Bool=false):Void
+	{
+		
+	}
+
+	override public function removeEventListener(type:String, listener:Dynamic->Void, useCapture:Bool=false):Void
+	{
+		
 	}
 	
 	public function dispose():Void
 	{
-		bgTexture.dispose();
+		background.bitmapData.dispose();
 	}
 }

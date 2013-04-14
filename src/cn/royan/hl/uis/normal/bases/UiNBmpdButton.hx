@@ -17,7 +17,6 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 {
 	var bgTextures:Array<Sparrow>;
 	var currentStatus:BitmapData;
-	var total:Int;
 	var isInGroup:Bool;
 	
 	public function new(texture:Dynamic, frames:Int=5 )
@@ -25,29 +24,28 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 		super(Std.is( texture, Sparrow )?cast( texture, Sparrow ):null);
 		
 		bgTextures = [];
+		
+		setMouseRender(true);
+		buttonMode = true;
+		
 		if( Std.is( texture, Sparrow ) ){
-			total = frames;
+			statusLen = frames;
 			
 			drawTextures();
 		}else if( Std.is( texture, Array ) ){
-		 	total = cast( texture ).length;
+		 	statusLen = cast( texture ).length;
 			bgTextures = cast(texture);
 			
 		 	setSize(Std.int(bgTextures[0].regin.width), Std.int(bgTextures[0].regin.height));
 		}else{
-			throw new Error("texture is wrong type(Sparrow or Vector.<Sparrow>)");
+			//throw new Error("texture is wrong type(Sparrow or Vector.<Sparrow>)");
+			return;
 		}
 		
 		currentStatus = new BitmapData(containerWidth, containerHeight, true, 0x00000000);
-		
 		if( bgTextures[status] != null )
 			currentStatus.copyPixels(bgTextures[status].bitmapdata, bgTextures[status].regin, new Point(bgTextures[status].frame.x, bgTextures[status].frame.y));
-		
-		addChild(new Bitmap(currentStatus));
-		
-		setMouseRender(true);
-		
-		buttonMode = true;
+		addChildAt(new Bitmap(currentStatus), 0);
 	}
 	
 	public function setInGroup(value:Bool):Void
@@ -57,11 +55,11 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 	
 	function drawTextures():Void
 	{
-		var frameWidth:Int = Std.int(bgTexture.regin.width / total);
+		var frameWidth:Int = Std.int(bgTexture.regin.width / statusLen);
 		var frameHeight:Int = Std.int(bgTexture.regin.height);
 		
 		if ( bgTexture.frame != null ) {
-			frameWidth = Std.int(bgTexture.frame.width / total);
+			frameWidth = Std.int(bgTexture.frame.width / statusLen);
 			frameHeight = Std.int(bgTexture.frame.height);
 		}
 		
@@ -71,9 +69,9 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 		var curRow:Int;
 		var curCol:Int;
 		
-		for ( i in 0...total ) {
-			curRow = Std.int(i % total);
-			curCol = Std.int(i / total);
+		for ( i in 0...statusLen ) {
+			curRow = Std.int(i % statusLen);
+			curCol = Std.int(i / statusLen);
 			
 			frame = new Rectangle();
 			regin = new Rectangle();
@@ -96,7 +94,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 				
 				regin.x = curRow * frameWidth + bgTexture.regin.x;
 				//regin.y = curCol * frameHeight + bgTexture.regin.y;
-			}else if ( i == total - 1 ) {
+			}else if ( i == statusLen - 1 ) {
 				regin.width = frameWidth - (bgTexture.frame != null ? bgTexture.frame.width - bgTexture.regin.width + bgTexture.frame.x : 0);
 				//regin.height = frameHeight - (bgTexture.frame != null ? bgTexture.frame.height - bgTexture.regin.height + bgTexture.frame.y : 0);
 			}
@@ -139,7 +137,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 	override public function draw():Void
 	{
 		if ( !isOnStage ) return;
-		if ( status < bgTextures.length )
+		if ( status < bgTextures.length && currentStatus != null )
 			currentStatus.copyPixels(bgTextures[status].bitmapdata, bgTextures[status].regin, new Point(bgTextures[status].frame.x, bgTextures[status].frame.y));
 	}
 	
@@ -175,10 +173,17 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 		if( value != null ){
 			statusLen = frames;
 		}
-		
 		bgTexture = value;
 		
 		drawTextures();
+		
+		if ( currentStatus == null ) {
+			currentStatus = new BitmapData(containerWidth, containerHeight, true, 0x00000000);
+			if( bgTextures[status] != null )
+				currentStatus.copyPixels(bgTextures[status].bitmapdata, bgTextures[status].regin, new Point(bgTextures[status].frame.x, bgTextures[status].frame.y));
+			addChildAt(new Bitmap(currentStatus), 0);
+		}
+		
 		draw();
 	}
 	
