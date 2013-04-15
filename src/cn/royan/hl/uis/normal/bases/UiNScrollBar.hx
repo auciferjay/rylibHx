@@ -20,7 +20,7 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 	var min:UiNLabelButton;
 	var max:UiNLabelButton;
 	var thumb:UiNLabelButton;
-	var background:InteractiveUiN;
+	var bar:InteractiveUiN;
 	
 	var rect:Rectangle;
 	
@@ -34,11 +34,11 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 		min.addEventListener(MouseEvent.MOUSE_DOWN, minMouseDownHandler);
 		addItem(min);
 		
-		background = new InteractiveUiN();
-		background.addEventListener(MouseEvent.CLICK, backgroundClickHandler);
-		background.setBackgroundColors([0xCCCCCC]);
-		background.setBackgroundAlphas([1]);
-		addItem(background);
+		bar = new InteractiveUiN();
+		bar.addEventListener(MouseEvent.CLICK, backgroundClickHandler);
+		bar.setBackgroundColors([0xCCCCCC]);
+		bar.setBackgroundAlphas([1]);
+		addItem(bar);
 		
 		max = new UiNLabelButton();
 		max.addEventListener(MouseEvent.MOUSE_DOWN, maxMouseDownHandler);
@@ -58,7 +58,7 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 		super.addToStageHandler(evt);
 		
 		#if flash
-		background.addEventListener(MouseEvent.CLICK, backgroundClickHandler);
+		bar.addEventListener(MouseEvent.CLICK, backgroundClickHandler);
 		thumb.addEventListener(MouseEvent.MOUSE_DOWN, thumbMouseDownHandler);
 		max.addEventListener(MouseEvent.MOUSE_DOWN, maxMouseDownHandler);
 		min.addEventListener(MouseEvent.MOUSE_DOWN, minMouseDownHandler);
@@ -183,7 +183,7 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 			case SCROLLBAR_TYPE_HORIZONTAL:
 				min.setSize(h, h);
 				max.setSize(h, h);
-				background.setSize(w - 2 * h, h);
+				bar.setSize(w - 2 * h, h);
 				thumb.setSize(3 * h, h);
 				
 				rect.width 	= w - 2 * h - thumb.getSize().width;
@@ -195,7 +195,7 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 			case SCROLLBAR_TYPE_VERICAL:
 				min.setSize(w, w);
 				max.setSize(w, w);
-				background.setSize(w, h - 2 * w);
+				bar.setSize(w, h - 2 * w);
 				thumb.setSize(w, 3 * w);
 				
 				rect.width 	= 0;
@@ -259,6 +259,6 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 	
 	public function setBackgroundTextrue(texture:Dynamic):Void
 	{
-		background.setTexture(texture);
+		bar.setTexture(texture);
 	}
 }
