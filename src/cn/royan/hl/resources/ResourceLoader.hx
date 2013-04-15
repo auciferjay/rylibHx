@@ -151,7 +151,7 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 		function configFileOnProgressHandler(data: { var loaded:Int; var total:Int; } ):Void
 		{
 			SystemUtils.print("[Class ResourceLoader]:Config File onProgress");
-			if ( callbacks != null && callbacks.doing != null ) callbacks.doing(data);
+			//if ( callbacks != null && callbacks.doing != null ) callbacks.doing(data);
 		}
 		
 		function configFileOnCompleteHandler(data:Dynamic):Void

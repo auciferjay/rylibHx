@@ -7,6 +7,9 @@ import cn.royan.hl.utils.BytesUtils;
 import cn.royan.hl.events.DatasEvent;
 
 import flash.net.URLLoader;
+#if flash
+import flash.net.URLStream;
+#end
 import flash.net.URLRequest;
 import flash.net.URLVariables;
 import flash.net.URLRequestMethod;
@@ -20,7 +23,11 @@ import flash.display.Loader;
 
 class TakeService extends DispatcherBase, implements IServiceBase 
 {
+	#if flash
+	var urlstream:URLStream;
+	#else
 	var urlstream:URLLoader;
+	#end
 	var urlrequest:URLRequest;
 	var urlvariable:URLVariables;
 	var serviceData:ByteArray;
@@ -74,11 +81,17 @@ class TakeService extends DispatcherBase, implements IServiceBase
 		
 		#if !flash
 		if ( uri == "http://" || uri == "https:/" ) {
-		#end
 			urlstream = new URLLoader();
+		#else
+			urlstream = new URLStream();
+		#end
+			
 			urlstream.addEventListener(Event.COMPLETE, onComplete);
 			urlstream.addEventListener(ProgressEvent.PROGRESS, onProgress);
 			urlstream.addEventListener(IOErrorEvent.IO_ERROR, onError);
+			urlstream.addEventListener(IOErrorEvent.NETWORK_ERROR, onError);
+			urlstream.addEventListener(IOErrorEvent.DISK_ERROR, onError);
+			urlstream.addEventListener(IOErrorEvent.VERIFY_ERROR, onError);
 			urlstream.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
 			urlstream.load(urlrequest);
 		#if !flash
@@ -151,7 +164,11 @@ class TakeService extends DispatcherBase, implements IServiceBase
 		
 		isLoading = false;
 		
+		#if flash
+		urlstream.readBytes( serviceData, 0, urlstream.bytesAvailable );
+		#else
 		serviceData = urlstream.data;
+		#end
 		
 		analyze();
 	}
@@ -162,6 +179,7 @@ class TakeService extends DispatcherBase, implements IServiceBase
 			case "SWF":
 				swfLoader = new Loader();
 				swfLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, loaderOnComplete);
+				swfLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError);
 				swfLoader.loadBytes(BytesUtils.simpleDecode(serviceData, "gameuzgame")#if flash, SystemUtils.getLoaderContext() #end);
 			/*case "XML":
 			case "PNG":
@@ -192,7 +210,7 @@ class TakeService extends DispatcherBase, implements IServiceBase
 	
 	function onError(evt:IOErrorEvent):Void
 	{
-		SystemUtils.print("[Class TakeService]:onError:"+evt.type);
+		SystemUtils.print("[Class TakeService]:onError:"+evt.type+"->"+urlrequest.url);
 		if( callbacks != null && callbacks.error != null ) callbacks.error(evt.type);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_ERROR, evt.type));
 		close();
@@ -200,7 +218,7 @@ class TakeService extends DispatcherBase, implements IServiceBase
 	
 	function onSecurityError(evt:SecurityErrorEvent):Void
 	{
-		SystemUtils.print("[Class TakeService]:onSecurityError:"+evt.type);
+		SystemUtils.print("[Class TakeService]:onSecurityError:"+evt.type+"->"+urlrequest.url);
 		if( callbacks != null && callbacks.error != null ) callbacks.error(evt.type);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_ERROR, evt.type));
 		close();
