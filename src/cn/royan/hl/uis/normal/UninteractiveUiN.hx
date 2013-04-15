@@ -30,7 +30,6 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 	var callbacks:Dynamic;
 	var matrix:Matrix;
 	var selected:Bool;
-	var isOnStage:Bool;
 	
 	var excludes:Array<String>;
 	var includes:Array<String>;
@@ -59,13 +58,11 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 		
 		mouseEnabled = false;
 		mouseChildren = false;
-		isOnStage = false;
 	}
 	
 	//Public methods
 	public function draw():Void
 	{
-		if ( !isOnStage ) return; 
 		graphics.clear();
 		
 		if( containerWidth > 0 && containerHeight > 0 ){

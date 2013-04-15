@@ -4,6 +4,7 @@ import cn.royan.hl.geom.Position;
 import cn.royan.hl.interfaces.uis.IUiTextBase;
 import cn.royan.hl.uis.normal.InteractiveUiN;
 
+import flash.text.TextFieldType;
 import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
@@ -19,6 +20,9 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 	static public inline var TEXT_AUTOSIZE_LEFT:Int = 1;
 	static public inline var TEXT_AUTOSIZE_CENTER:Int = 2;
 	static public inline var TEXT_AUTOSIZE_RIGHT:Int = 3;
+	
+	static public inline var TEXT_TYPE_INPUT:Int = 0;
+	static public inline var TEXT_TYPE_PASSWORD:Int = 1;
 	
 	var inputText:TextField;
 	
@@ -38,6 +42,17 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 		super.setSize(w, h);
 		inputText.width = w;
 		inputText.height = h;
+	}
+	
+	public function setType(type:Int):Void
+	{
+		switch( type ) {
+			case TEXT_TYPE_INPUT:
+				inputText.type = TextFieldType.INPUT;
+			case TEXT_TYPE_PASSWORD:
+				inputText.type = TextFieldType.INPUT;
+				inputText.displayAsPassword = true;
+		}
 	}
 	
 	public function autoSize(value:Int):Void

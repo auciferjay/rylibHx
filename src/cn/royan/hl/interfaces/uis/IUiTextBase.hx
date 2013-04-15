@@ -13,6 +13,8 @@ interface IUiTextBase implements IUiBase
 {
 	function autoSize(value:Int):Void;
 	
+	function setType(type:Int):Void;
+	
 	function setText(value:String):Void;
 	function appendText(value:String):Void;
 	function getText():String;
