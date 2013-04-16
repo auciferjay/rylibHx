@@ -68,6 +68,11 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 		btnLabelText.autoSize(value);
 	}
 	
+	public function setType(type:Int):Void
+	{
+		
+	}
+	
 	public function setTextColors(value:Array<Dynamic>):Void
 	{
 		textColors = value.concat([]);

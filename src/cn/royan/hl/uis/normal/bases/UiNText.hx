@@ -53,6 +53,9 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 				inputText.type = TextFieldType.INPUT;
 				inputText.displayAsPassword = true;
 		}
+		
+		inputText.mouseEnabled 	= true;
+		inputText.selectable	= true;
 	}
 	
 	public function autoSize(value:Int):Void

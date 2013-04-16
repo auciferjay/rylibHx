@@ -22,12 +22,12 @@ class SystemUtils
 	static public function print(v:Dynamic, ?info:PosInfos):Void
 	{
 		if ( showDebug ) {
+			#if !swc
 			if ( info != null )
 				Log.trace(Timer.stamp() + "|[" + info.className + "][" + info.methodName + "]:" + v);
-			#if flash
 			else
-				Lib.trace(Timer.stamp() + "|" + v);
 			#end
+				Lib.trace(Timer.stamp() + "|" + v);
 		}
 	}
 	

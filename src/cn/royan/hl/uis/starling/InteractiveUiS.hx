@@ -4,6 +4,7 @@ import cn.royan.hl.geom.Position;
 import cn.royan.hl.geom.Square;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiItemStateBase;
+import flash.geom.Rectangle;
 
 import flash.display.BitmapData;
 import flash.events.EventDispatcher;
@@ -47,6 +48,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	var evtListenerDirectory:Array<Dynamic>;
 	
 	public var graphics:Image;
+	public var backgroundRect:Rectangle;
 	
 	//Constructor
 	public function new(texture:Texture = null)
@@ -168,7 +170,10 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	{
 		containerWidth = w;
 		containerHeight = h;
-
+		
+		backgroundRect.width = w;
+		backgroundRect.height = h;
+		
 		draw();
 	}
 
@@ -192,6 +197,17 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	{
 		x = point.x;
 		y = point.y;
+	}
+	
+	public function setPositionRange(value:Rectangle):Void
+	{
+		setSize(cast(value.width), cast(value.height));
+		setPosition(cast(value.x), cast(value.y));
+	}
+	
+	public function getRange():Rectangle
+	{
+		return backgroundRect;
 	}
 	
 	public function setTexture(texture:Dynamic, frames:Int = 1):Void

@@ -87,16 +87,21 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 			
 			if ( i == 0 ) {
 				regin.width = frameWidth + (bgTexture.frame != null ? bgTexture.frame.x : 0);
-				//regin.height = frameHeight + (bgTexture.frame != null ? bgTexture.frame.y : 0);
+				regin.height = frameHeight + (bgTexture.frame != null ? bgTexture.frame.y : 0);
 				
 				frame.x = bgTexture.frame != null ? -bgTexture.frame.x : 0;
-				//frame.y = bgTexture.frame != null ? -bgTexture.frame.y : 0;
+				frame.y = bgTexture.frame != null ? -bgTexture.frame.y : 0;
 				
 				regin.x = curRow * frameWidth + bgTexture.regin.x;
-				//regin.y = curCol * frameHeight + bgTexture.regin.y;
+				regin.y = curCol * frameHeight + bgTexture.regin.y;
 			}else if ( i == statusLen - 1 ) {
 				regin.width = frameWidth - (bgTexture.frame != null ? bgTexture.frame.width - bgTexture.regin.width + bgTexture.frame.x : 0);
-				//regin.height = frameHeight - (bgTexture.frame != null ? bgTexture.frame.height - bgTexture.regin.height + bgTexture.frame.y : 0);
+				regin.height = frameHeight - (bgTexture.frame != null ? bgTexture.frame.height - bgTexture.regin.height + bgTexture.frame.y : 0);
+			}
+			
+			if ( i == 0 && i == statusLen - 1 ) {
+				regin.width = bgTexture.regin.width;
+				regin.height = bgTexture.regin.height;
 			}
 			
 			var bmpd:Sparrow = Sparrow.fromSparrow(bgTexture, regin, frame);
@@ -104,6 +109,10 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 			bgTextures[i] = bmpd;
 			
 			//addChild(new Bitmap(bgTextures[i])).visible = false;//确保显示
+		}
+		
+		while ( bgTextures.length < 5 ) {
+			bgTextures[bgTextures.length] = bgTextures[bgTextures.length - 1];
 		}
 		
 		setSize(frameWidth, frameHeight);
@@ -137,8 +146,10 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 	override public function draw():Void
 	{
 		if ( !isOnStage ) return;
-		if ( status < bgTextures.length && currentStatus != null )
+		if ( status < bgTextures.length && currentStatus != null ) {
+			currentStatus.fillRect(getRange(), 0x00000000);
 			currentStatus.copyPixels(bgTextures[status].bitmapdata, bgTextures[status].regin, new Point(bgTextures[status].frame.x, bgTextures[status].frame.y));
+		}
 	}
 	
 	public function clone():UiNBmpdButton

@@ -162,6 +162,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 	{
 		loop = false;
 		current = frame;
+		currentFrame.fillRect(getRange(), 0x00000000);
 		currentFrame.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point(bgTextures[current - 1].frame.x, bgTextures[current - 1].frame.y));
 	}
 
@@ -174,6 +175,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 		current = from;
 		toFrame = to;
 		
+		currentFrame.fillRect(getRange(), 0x00000000);
 		currentFrame.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point(bgTextures[current - 1].frame.x, bgTextures[current - 1].frame.y));
 		
 		timer.start();
@@ -225,6 +227,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 			}
 		}
 		
+		currentFrame.fillRect(getRange(), 0x00000000);
 		currentFrame.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point(bgTextures[current - 1].frame.x, bgTextures[current - 1].frame.y));
 		
 		if( current == toFrame && !loop ){

@@ -4,6 +4,7 @@ import cn.royan.hl.interfaces.IDisposeBase;
 import cn.royan.hl.geom.Position;
 import cn.royan.hl.geom.Square;
 import cn.royan.hl.uis.sparrow.Sparrow;
+import flash.geom.Rectangle;
 
 import flash.events.EventDispatcher;
 
@@ -27,6 +28,8 @@ interface IUiBase implements IDisposeBase
 	function setPosition(cX:Int, cY:Int):Void;
 	function getPosition():Position;
 	function setPositionPoint(point:Position):Void;
+	function setPositionRange(value:Rectangle):Void;
+	function getRange():Rectangle;
 	function setTexture(texture:Dynamic, frames:Int=1):Void;
 	function getTexture():Dynamic;
 	function getDispatcher():EventDispatcher;

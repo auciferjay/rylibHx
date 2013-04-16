@@ -9,6 +9,7 @@ import cn.royan.hl.geom.Square;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.utils.SystemUtils;
 import flash.display.Bitmap;
+import flash.geom.Rectangle;
 
 import flash.display.BitmapData;
 import flash.display.GradientType;
@@ -35,6 +36,7 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 	var includes:Array<String>;
 	
 	var background:Bitmap;
+	var backgroundRect:Rectangle;
 	
 	//Constructor
 	public function new(texture:Sparrow = null)
@@ -46,6 +48,8 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 		
 		bgColors = getDefaultBackgroundColors();
 		bgAlphas = getDefaultBackgroundAlphas();
+		
+		backgroundRect = new Rectangle();
 		
 		background = new Bitmap();
 		addChild(background);
@@ -158,7 +162,10 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 		containerHeight = h;
 		
 		background.bitmapData = new BitmapData(w, h, true, 0xFFFFFF);
-
+		
+		backgroundRect.width 	= w;
+		backgroundRect.height 	= h;
+		
 		draw();
 	}
 
@@ -182,6 +189,17 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 	{
 		x = point.x;
 		y = point.y;
+	}
+	
+	public function setPositionRange(value:Rectangle):Void
+	{
+		setSize(cast(value.width), cast(value.height));
+		setPosition(cast(value.x), cast(value.y));
+	}
+	
+	public function getRange():Rectangle
+	{
+		return backgroundRect;
 	}
 	
 	public function setTexture(texture:Dynamic, frames:Int = 1):Void
