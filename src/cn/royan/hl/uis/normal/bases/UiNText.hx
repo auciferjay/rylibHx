@@ -44,6 +44,11 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 		inputText.height = h;
 	}
 	
+	public function setRestrict(value:String):Void
+	{
+		inputText.restrict = value;
+	}
+	
 	public function setType(type:Int):Void
 	{
 		switch( type ) {
