@@ -42,9 +42,8 @@ class SystemUtils
 	
 	static public function replace(orgin:String, args:Array<Dynamic>):String
 	{
-		var i:Int;
-		for( i in 1...args.length ){
-			orgin = StringTools.replace(orgin, "{"+i+"}", args[i - 1]);
+		for( i in 0...args.length ){
+			orgin = StringTools.replace(orgin, "{" + (i+1) + "}", args[i]);
 		}
 		return orgin;
 	}

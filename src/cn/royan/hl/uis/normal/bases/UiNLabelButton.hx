@@ -68,6 +68,11 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 		btnLabelText.autoSize(value);
 	}
 	
+	public function setTextSpace(r:Int, c:Int):Void
+	{
+		btnLabelText.setTextSpace(r, c);
+	}
+	
 	public function setType(type:Int):Void
 	{
 		

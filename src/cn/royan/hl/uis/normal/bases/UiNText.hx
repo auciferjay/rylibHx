@@ -49,6 +49,15 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 		inputText.restrict = value;
 	}
 	
+	public function setTextSpace(r:Int, c:Int):Void
+	{
+		var format:TextFormat = inputText.getTextFormat();
+			format.kerning = true;
+			format.leading = c;
+			format.letterSpacing = r;
+		inputText.defaultTextFormat = format;
+	}
+	
 	public function setType(type:Int):Void
 	{
 		switch( type ) {
