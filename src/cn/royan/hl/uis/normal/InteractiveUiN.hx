@@ -232,6 +232,11 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 		draw();
 	}
 	
+	public function getEnabled():Bool
+	{
+		return status != INTERACTIVE_STATUS_DISABLE;
+	}
+	
 	public function setTexture(texture:Dynamic, frames:Int = 1):Void
 	{
 		if ( !Std.is(texture, Sparrow) ) {
