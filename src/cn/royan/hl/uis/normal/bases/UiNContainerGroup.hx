@@ -155,11 +155,11 @@ class UiNContainerGroup extends UiNContainerAlign, implements IUiContainerGroupB
 	
 	function getValue(key:Dynamic):IUiItemGroupBase
 	{
-		for ( item in keys )
+		for ( i in 0...keys.length )
 		{
-			if( keys[item] == key )
+			if( keys[i] == key )
 			{
-				return item;
+				return cast items[i];
 			}
 		}
 		return null;
