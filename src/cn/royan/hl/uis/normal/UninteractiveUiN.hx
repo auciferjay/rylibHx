@@ -52,6 +52,7 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 		backgroundRect = new Rectangle();
 		
 		background = new Bitmap();
+		background.smoothing = true;
 		addChild(background);
 		
 		if (texture != null) {

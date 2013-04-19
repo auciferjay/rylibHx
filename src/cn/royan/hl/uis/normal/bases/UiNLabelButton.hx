@@ -19,9 +19,9 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 	var textColors:Array<Dynamic>;
 	
 	//Contructor
-	public function new(label:String='', texture:Sparrow=null) 
+	public function new(label:String='', texture:Dynamic=null, frames:Int=5) 
 	{
-		super(texture);
+		super(texture, frames);
 		
 		bgTextures = [];
 		
@@ -43,6 +43,7 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 	//Public methods
 	override public function draw():Void
 	{
+		if ( !isOnStage ) return;
 		super.draw();
 		btnLabelText.setTextColor(textColors[status]);
 	}
@@ -75,7 +76,7 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 	
 	public function setType(type:Int):Void
 	{
-		
+		throw "";
 	}
 	
 	public function setTextColors(value:Array<Dynamic>):Void

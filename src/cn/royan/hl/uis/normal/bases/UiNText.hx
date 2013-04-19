@@ -188,5 +188,11 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 	public function setMultiLine(value:Bool):Void
 	{
 		inputText.multiline = value;
+		inputText.wordWrap = value;
+	}
+	
+	public function setMaxChars(value:Int):Void
+	{
+		inputText.maxChars = value;
 	}
 }
