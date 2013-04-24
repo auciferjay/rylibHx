@@ -47,6 +47,8 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 	{
 		items.push(item);
 		
+		item.setOriginalDPI(originalDPI);
+		
 		addChild(cast( item, DisplayObject ));
 		
 		draw();
@@ -63,6 +65,8 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 		prev.push(item);
 		
 		items = prev.concat(next);
+		
+		item.setOriginalDPI(originalDPI);
 		
 		addChildAt(cast( item, DisplayObject ), index);
 		

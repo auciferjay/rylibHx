@@ -28,6 +28,8 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	static public inline var INTERACTIVE_STATUS_DISABLE:Int 	= 4;
 	
 	//properties
+	var originalDPI:Int;
+	
 	var bgColors:Array<Dynamic>;
 	var bgAlphas:Array<Dynamic>;
 	var bgTexture:Texture;
@@ -225,6 +227,16 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	public function getTexture():Dynamic
 	{
 		return bgTexture;
+	}
+	
+	public function setOriginalDPI(value:Int):Void
+	{
+		originalDPI = value;
+	}
+	
+	public function getOriginalDPI():Int
+	{
+		return originalDPI;
 	}
 	
 	public function getDispatcher():EventDispatcher

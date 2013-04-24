@@ -12,6 +12,7 @@ import cn.royan.hl.uis.normal.bases.UiNContainer;
 import cn.royan.hl.uis.normal.bases.UiNContainerAlign;
 import cn.royan.hl.uis.normal.bases.UiNContainerGroup;
 import cn.royan.hl.uis.normal.bases.UiNLabelButton;
+import cn.royan.hl.uis.normal.bases.UiNScreen;
 import cn.royan.hl.uis.normal.bases.UiNScrollBar;
 import cn.royan.hl.uis.normal.bases.UiNScrollPane;
 import cn.royan.hl.uis.normal.bases.UiNText;

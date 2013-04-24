@@ -23,6 +23,8 @@ import flash.geom.Point;
 class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemStateBase
 {
 	//properties
+	var originalDPI:Int;
+	
 	var bgColors:Array<Dynamic>;
 	var bgAlphas:Array<Dynamic>;
 	var bgTexture:Sparrow;
@@ -217,6 +219,16 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 	public function getTexture():Dynamic
 	{
 		return bgTexture;
+	}
+	
+	public function setOriginalDPI(value:Int):Void
+	{
+		originalDPI = value;
+	}
+	
+	public function getOriginalDPI():Int
+	{
+		return originalDPI;
 	}
 	
 	public function getDispatcher():EventDispatcher

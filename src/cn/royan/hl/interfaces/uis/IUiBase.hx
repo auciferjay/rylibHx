@@ -32,5 +32,7 @@ interface IUiBase implements IDisposeBase
 	function getRange():Rectangle;
 	function setTexture(texture:Dynamic, frames:Int=1):Void;
 	function getTexture():Dynamic;
+	function setOriginalDPI(value:Int):Void;
+	function getOriginalDPI():Int;
 	function getDispatcher():EventDispatcher;
 }
