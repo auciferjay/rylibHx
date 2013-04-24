@@ -150,13 +150,13 @@ class UiNContainerAlign extends UiNContainer
 		var rowW:Float	= 0;
 		var rowH:Float	= 0;
 		
-		var marginT:Float = (margins!=null?margins.top:0) * getScale();
-		var marginB:Float = (margins!=null?margins.bottom:0) * getScale();
-		var marginL:Float = (margins != null?margins.left:0) * getScale();
-		var marginR:Float = (margins!=null?margins.right:0) * getScale();
+		var marginT:Float = margins!=null?margins.top:0;
+		var marginB:Float = margins!=null?margins.bottom:0;
+		var marginL:Float = margins != null?margins.left:0;
+		var marginR:Float = margins!=null?margins.right:0;
 		
-		var gapX:Float = (gaps!=null?gaps.x:0) * getScale();
-		var gapY:Float = (gaps!=null?gaps.y:0) * getScale();
+		var gapX:Float = gaps!=null?gaps.x:0;
+		var gapY:Float = gaps!=null?gaps.y:0;
 		
 		var offsetX:Float;
 		var offsetY:Float;
