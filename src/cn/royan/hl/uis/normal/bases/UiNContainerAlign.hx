@@ -28,8 +28,8 @@ typedef ContainerMargin = {
 }
 
 private typedef ContainerRowConfig = {
-	var width:Int;
-	var height:Int;
+	var width:Float;
+	var height:Float;
 	var length:Int;
 }
 
@@ -49,8 +49,8 @@ class UiNContainerAlign extends UiNContainer
 	var rows:Array<ContainerRowConfig>;
 	var gaps:ContainerGap;
 	var margins:ContainerMargin;
-	var itemsWidth:Int;
-	var itemsHeight:Int;
+	var itemsWidth:Float;
+	var itemsHeight:Float;
 	
 	public function new(texture:Sparrow = null) 
 	{
@@ -100,14 +100,14 @@ class UiNContainerAlign extends UiNContainer
 	
 	function fillRow():Void
 	{
-		var rowW:Int	= 0;
-		var rowH:Int	= 0;
+		var rowW:Float	= 0;
+		var rowH:Float	= 0;
 		
-		var marginL:Int = margins != null?margins.left:0;
-		var marginR:Int = margins!=null?margins.right:0;
+		var marginL:Float = margins != null?margins.left:0;
+		var marginR:Float = margins!=null?margins.right:0;
 		
-		var gapX:Int = gaps!=null?gaps.x:0;
-		var gapY:Int = gaps!=null?gaps.y:0;
+		var gapX:Float = gaps!=null?gaps.x:0;
+		var gapY:Float = gaps!=null?gaps.y:0;
 		
 		itemsWidth = 0;
 		itemsHeight = 0;
@@ -135,7 +135,7 @@ class UiNContainerAlign extends UiNContainer
 				itemNumber = 1;
 			}else {
 				rowW += ( (i > 0 ? 1:0) * gapX + item.getSize().width);
-				rowH = Std.int( Math.max( rowH, item.getSize().height ) );
+				rowH = Math.max( rowH, item.getSize().height );
 				itemNumber++;
 			}
 		}
@@ -147,19 +147,19 @@ class UiNContainerAlign extends UiNContainer
 	
 	function drawRow():Void
 	{
-		var rowW:Int	= 0;
-		var rowH:Int	= 0;
+		var rowW:Float	= 0;
+		var rowH:Float	= 0;
 		
-		var marginT:Int = margins!=null?margins.top:0;
-		var marginB:Int = margins!=null?margins.bottom:0;
-		var marginL:Int = margins != null?margins.left:0;
-		var marginR:Int = margins!=null?margins.right:0;
+		var marginT:Float = (margins!=null?margins.top:0) * getScale();
+		var marginB:Float = (margins!=null?margins.bottom:0) * getScale();
+		var marginL:Float = (margins != null?margins.left:0) * getScale();
+		var marginR:Float = (margins!=null?margins.right:0) * getScale();
 		
-		var gapX:Int = gaps!=null?gaps.x:0;
-		var gapY:Int = gaps!=null?gaps.y:0;
+		var gapX:Float = (gaps!=null?gaps.x:0) * getScale();
+		var gapY:Float = (gaps!=null?gaps.y:0) * getScale();
 		
-		var offsetX:Int;
-		var offsetY:Int;
+		var offsetX:Float;
+		var offsetY:Float;
 		
 		switch( verticalAlign ) {
 			case CONTAINER_VERTICAL_BOTTOM:
@@ -176,7 +176,7 @@ class UiNContainerAlign extends UiNContainer
 				case CONTAINER_HORIZONTAL_RIGHT:
 					offsetX = containerWidth - marginR - rows[i].width;
 				case CONTAINER_HORIZONTAL_CENTER:
-					offsetX = Std.int( (containerWidth - rows[i].width) / 2 );
+					offsetX = (containerWidth - rows[i].width) / 2;
 				default:
 					offsetX = marginL;
 			}

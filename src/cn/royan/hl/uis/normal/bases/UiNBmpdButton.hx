@@ -19,7 +19,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 	var currentStatus:BitmapData;
 	var isInGroup:Bool;
 	
-	public function new(texture:Dynamic, frames:Int=5 )
+	public function new(texture:Dynamic, frames:Int=5)
 	{
 		super(Std.is( texture, Sparrow )?cast( texture, Sparrow ):null);
 		
@@ -42,7 +42,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 			return;
 		}
 		
-		currentStatus = new BitmapData(containerWidth, containerHeight, true, 0x00000000);
+		currentStatus = new BitmapData(Std.int(containerWidth), Std.int(containerHeight), true, 0x00000000);
 		if( bgTextures[status] != null )
 			currentStatus.copyPixels(bgTextures[status].bitmapdata, bgTextures[status].regin, new Point(bgTextures[status].frame.x, bgTextures[status].frame.y));
 		addChildAt(new Bitmap(currentStatus), 0);
@@ -189,7 +189,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 		drawTextures();
 		
 		if ( currentStatus == null ) {
-			currentStatus = new BitmapData(containerWidth, containerHeight, true, 0x00000000);
+			currentStatus = new BitmapData(Std.int(containerWidth), Std.int(containerHeight), true, 0x00000000);
 			if( bgTextures[status] != null )
 				currentStatus.copyPixels(bgTextures[status].bitmapdata, bgTextures[status].regin, new Point(bgTextures[status].frame.x, bgTextures[status].frame.y));
 			addChildAt(new Bitmap(currentStatus), 0);

@@ -1,6 +1,6 @@
 package cn.royan.hl.geom;
 
 typedef Position = {
-	var x:Int;
-	var y:Int;
+	var x:Float;
+	var y:Float;
 }

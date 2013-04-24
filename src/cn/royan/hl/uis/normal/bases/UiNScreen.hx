@@ -14,8 +14,6 @@ class UiNScreen extends UiNContainer
 	public function new() 
 	{
 		super();
-		
-		originalDPI = DeviceCapabilities.dpi;
 	}
 	
 	public function setScreenID(value:String):Void

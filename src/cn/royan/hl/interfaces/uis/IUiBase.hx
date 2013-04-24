@@ -23,9 +23,9 @@ interface IUiBase implements IDisposeBase
 	function getBackgroundColors():Array<Dynamic>;
 	function setBackgroundAlphas(value:Array<Dynamic>):Void;
 	function getBackgroundAlphas():Array<Dynamic>;
-	function setSize(cWidth:Int, cHeight:Int):Void;
+	function setSize(cWidth:Float, cHeight:Float):Void;
 	function getSize():Square;
-	function setPosition(cX:Int, cY:Int):Void;
+	function setPosition(cX:Float, cY:Float):Void;
 	function getPosition():Position;
 	function setPositionPoint(point:Position):Void;
 	function setPositionRange(value:Rectangle):Void;
@@ -34,5 +34,7 @@ interface IUiBase implements IDisposeBase
 	function getTexture():Dynamic;
 	function setOriginalDPI(value:Int):Void;
 	function getOriginalDPI():Int;
+	function setScale(value:Float):Void;
+	function getScale():Float;
 	function getDispatcher():EventDispatcher;
 }

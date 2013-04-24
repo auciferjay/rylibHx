@@ -175,7 +175,7 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
 	}
 	
-	override public function setSize(w:Int, h:Int):Void 
+	override public function setSize(w:Float, h:Float):Void 
 	{
 		super.setSize(w, h);
 		

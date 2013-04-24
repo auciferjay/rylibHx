@@ -85,9 +85,16 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 		draw();
 	}
 	
-	override public function setSize(cWidth:Int, cHeight:Int):Void
+	override public function setSize(cWidth:Float, cHeight:Float):Void
 	{
 		super.setSize(cWidth, cHeight);
+		btnLabelText.setSize(cWidth, cHeight);
+	}
+	
+	override public function setOriginalDPI(value:Int):Void 
+	{
+		super.setOriginalDPI(value);
+		btnLabelText.setOriginalDPI(value);
 	}
 	
 	public function setTextMargin(t:Int, r:Int, b:Int, l:Int ):Void

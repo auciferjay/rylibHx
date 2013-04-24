@@ -62,7 +62,7 @@ class UiNExtCombobox extends InteractiveUiN
 		removeChild(listView);
 	}
 	
-	override public function setSize(w:Int, h:Int):Void 
+	override public function setSize(w:Float, h:Float):Void 
 	{
 		super.setSize(w, h);
 		

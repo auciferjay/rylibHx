@@ -6,6 +6,7 @@ import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.bases.Dictionary;
 import cn.royan.hl.geom.Position;
 import cn.royan.hl.geom.Square;
+import cn.royan.hl.systems.DeviceCapabilities;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.utils.SystemUtils;
 import flash.display.Bitmap;
@@ -24,15 +25,19 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 {
 	//properties
 	var originalDPI:Int;
+	var scale:Float;
 	
 	var bgColors:Array<Dynamic>;
 	var bgAlphas:Array<Dynamic>;
 	var bgTexture:Sparrow;
-	var containerWidth:Int;
-	var containerHeight:Int;
 	var callbacks:Dynamic;
 	var matrix:Matrix;
 	var selected:Bool;
+	
+	var containerWidth:Float;
+	var containerHeight:Float;
+	var positionX:Float;
+	var positionY:Float;
 	
 	var excludes:Array<String>;
 	var includes:Array<String>;
@@ -45,8 +50,15 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 	{
 		super();
 		
+		scale = 1;
+		
+		originalDPI = DeviceCapabilities.dpi;
+		
 		containerHeight = 0;
 		containerWidth = 0;
+		
+		positionX = 0;
+		positionY = 0;
 		
 		bgColors = getDefaultBackgroundColors();
 		bgAlphas = getDefaultBackgroundAlphas();
@@ -75,14 +87,15 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 		if( containerWidth > 0 && containerHeight > 0 ){
 			if ( bgTexture != null ) {
 				background.bitmapData.copyPixels(bgTexture.bitmapdata, bgTexture.regin, new Point());
+				background.scaleX = background.scaleY = getScale();
 			}else if( bgColors != null && bgColors.length > 1 ){
 				matrix.createGradientBox(containerWidth, containerHeight, Math.PI / 2, 0, 0);
 				graphics.beginGradientFill(GradientType.LINEAR, cast(bgColors), bgAlphas, [0,255], matrix);
-				graphics.drawRect( 0, 0, containerWidth, containerHeight );
+				graphics.drawRect( 0, 0, getSize().width, getSize().height );
 				graphics.endFill();
 			}else if(  bgColors != null && bgColors.length > 0 && cast(bgAlphas[0]) > 0 ){
 				graphics.beginFill( cast(bgColors[0]), bgAlphas[0] );
-				graphics.drawRect( 0, 0, containerWidth, containerHeight );
+				graphics.drawRect( 0, 0, getSize().width, getSize().height );
 				graphics.endFill();
 			}else{
 				//graphics.beginFill( 0xFFFFFF, 0 );
@@ -159,12 +172,12 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 		callbacks = value;
 	}
 	
-	public function setSize(w:Int, h:Int):Void
+	public function setSize(w:Float, h:Float):Void
 	{
 		containerWidth = w;
 		containerHeight = h;
 		
-		background.bitmapData = new BitmapData(w, h, true, 0xFFFFFF);
+		background.bitmapData = new BitmapData(Std.int(w), Std.int(h), true, 0xFFFFFF);
 		
 		backgroundRect.width 	= w;
 		backgroundRect.height 	= h;
@@ -177,21 +190,27 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 		return { width:containerWidth, height:containerHeight };
 	}
 
-	public function setPosition(cx:Int, cy:Int):Void
+	public function setPosition(cx:Float, cy:Float):Void
 	{
-		x = cx;
-		y = cy;
+		positionX = cx;
+		positionY = cy;
+		
+		x = positionX * getScale();
+		y = positionY * getScale();
 	}
 
 	public function getPosition():Position
 	{
-		return { x:Std.int(x), y:Std.int(y) };
+		return { x:positionX, y:positionY };
 	}
 	
 	public function setPositionPoint(point:Position):Void
 	{
-		x = point.x;
-		y = point.y;
+		positionX = point.x;
+		positionY = point.y;
+		
+		x = positionX * getScale();
+		y = positionY * getScale();
 	}
 	
 	public function setPositionRange(value:Rectangle):Void
@@ -224,11 +243,28 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 	public function setOriginalDPI(value:Int):Void
 	{
 		originalDPI = value;
+		
+		setScale( 72 / originalDPI );
+		
+		draw();
 	}
 	
 	public function getOriginalDPI():Int
 	{
 		return originalDPI;
+	}
+	
+	public function setScale(value:Float):Void
+	{
+		scale = value;
+		
+		x = positionX * getScale();
+		y = positionY * getScale();
+	}
+	
+	public function getScale():Float
+	{
+		return scale;
 	}
 	
 	public function getDispatcher():EventDispatcher

@@ -25,10 +25,13 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 	static public inline var TEXT_TYPE_PASSWORD:Int = 1;
 	
 	var inputText:TextField;
+	var defaultSize:Float;
 	
 	public function new(label:String="") 
 	{
 		super();
+		
+		defaultSize = 12;
 		
 		inputText = new TextField();
 		inputText.text = label;
@@ -37,11 +40,25 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 		addChild( inputText );
 	}
 	
-	override public function setSize(w:Int, h:Int):Void 
+	override public function setSize(w:Float, h:Float):Void 
 	{
 		super.setSize(w, h);
-		inputText.width = w;
-		inputText.height = h;
+		
+		inputText.width = containerWidth * getScale();
+		inputText.height = containerHeight * getScale();
+	}
+	
+	override public function setOriginalDPI(value:Int):Void 
+	{
+		super.setOriginalDPI(value);
+		
+		var format:TextFormat = inputText.getTextFormat();
+			format.size = defaultSize * getScale();
+		inputText.defaultTextFormat = format;
+		inputText.setTextFormat(format);
+		
+		inputText.width = containerWidth * getScale();
+		inputText.height = containerHeight * getScale();
 	}
 	
 	public function setRestrict(value:String):Void
@@ -139,6 +156,8 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 	
 	public function setTextSize(value:Int):Void
 	{
+		defaultSize = value;
+		
 		var format:TextFormat = getFormat();
 			format.size = value;
 		inputText.defaultTextFormat = format;

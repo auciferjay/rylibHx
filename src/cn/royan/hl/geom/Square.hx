@@ -1,6 +1,6 @@
 package cn.royan.hl.geom;
 
 typedef Square = {
-	var width:Int;
-	var height:Int;
+	var width:Float;
+	var height:Float;
 }

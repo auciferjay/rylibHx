@@ -7,7 +7,8 @@ import starling.display.Quad;
  */
 class UninteractiveUiS extends Quad, implements IUiBase
 {
-
+	var originalDPI:Int;
+	
 	public function new() 
 	{
 		

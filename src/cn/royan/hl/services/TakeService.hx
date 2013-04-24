@@ -89,9 +89,6 @@ class TakeService extends DispatcherBase, implements IServiceBase
 			urlstream.addEventListener(Event.COMPLETE, onComplete);
 			urlstream.addEventListener(ProgressEvent.PROGRESS, onProgress);
 			urlstream.addEventListener(IOErrorEvent.IO_ERROR, onError);
-			urlstream.addEventListener(IOErrorEvent.NETWORK_ERROR, onError);
-			urlstream.addEventListener(IOErrorEvent.DISK_ERROR, onError);
-			urlstream.addEventListener(IOErrorEvent.VERIFY_ERROR, onError);
 			urlstream.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
 			urlstream.load(urlrequest);
 		#if !flash

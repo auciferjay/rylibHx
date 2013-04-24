@@ -29,12 +29,11 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	
 	//properties
 	var originalDPI:Int;
+	var scale:Float;
 	
 	var bgColors:Array<Dynamic>;
 	var bgAlphas:Array<Dynamic>;
 	var bgTexture:Texture;
-	var containerWidth:Int;
-	var containerHeight:Int;
 	var callbacks:Dynamic;
 	var isMouseRender:Bool;
 	var status:Int;
@@ -42,6 +41,11 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	var matrix:Matrix;
 	var selected:Bool;
 	var isOnStage:Bool;
+	
+	var containerWidth:Float;
+	var containerHeight:Float;
+	var positionX:Float;
+	var positionY:Float;
 	
 	var excludes:Array<String>;
 	var includes:Array<String>;
@@ -59,6 +63,9 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		
 		containerHeight = 0;
 		containerWidth = 0;
+		
+		positionX = 0;
+		positionY = 0;
 		
 		status = INTERACTIVE_STATUS_NORMAL;
 		bgColors = getDefaultBackgroundColors();
@@ -168,7 +175,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		callbacks = value;
 	}
 	
-	public function setSize(w:Int, h:Int):Void
+	public function setSize(w:Float, h:Float):Void
 	{
 		containerWidth = w;
 		containerHeight = h;
@@ -181,24 +188,30 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 
 	public function getSize():Square
 	{
-		return { width:containerWidth, height:containerHeight };
+		return { width:containerWidth * getScale(), height:containerHeight * getScale() };
 	}
 
-	public function setPosition(cx:Int, cy:Int):Void
+	public function setPosition(cx:Float, cy:Float):Void
 	{
-		x = cx;
-		y = cy;
+		positionX = cx;
+		positionY = cy;
+		
+		x = cx * getScale();
+		y = cy * getScale();
 	}
 
 	public function getPosition():Position
 	{
-		return { x:Std.int(x), y:Std.int(y) };
+		return { x:positionX, y:positionY };
 	}
 	
 	public function setPositionPoint(point:Position):Void
 	{
-		x = point.x;
-		y = point.y;
+		positionX = point.x;
+		positionY = point.y;
+		
+		x = point.x * getScale();
+		y = point.y * getScale();
 	}
 	
 	public function setPositionRange(value:Rectangle):Void
@@ -232,11 +245,25 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	public function setOriginalDPI(value:Int):Void
 	{
 		originalDPI = value;
+		
+		setScale( 72 / originalDPI );
+		
+		draw();
 	}
 	
 	public function getOriginalDPI():Int
 	{
 		return originalDPI;
+	}
+	
+	public function setScale(value:Float):Void
+	{
+		scale = value;
+	}
+	
+	public function getScale():Float
+	{
+		return scale;
 	}
 	
 	public function getDispatcher():EventDispatcher

@@ -83,7 +83,7 @@ class UiNScrollPane extends InteractiveUiN
 		}
 	}
 	
-	override public function setSize(cWidth:Int, cHeight:Int):Void
+	override public function setSize(cWidth:Float, cHeight:Float):Void
 	{
 		super.setSize(cWidth, cHeight);
 		#if flash
