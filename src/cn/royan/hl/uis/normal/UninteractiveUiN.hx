@@ -3,11 +3,10 @@ package cn.royan.hl.uis.normal;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiItemStateBase;
 import cn.royan.hl.events.DatasEvent;
-import cn.royan.hl.bases.Dictionary;
-import cn.royan.hl.geom.Position;
-import cn.royan.hl.geom.Square;
+import cn.royan.hl.geom.Range;
 import cn.royan.hl.systems.DeviceCapabilities;
 import cn.royan.hl.uis.sparrow.Sparrow;
+import cn.royan.hl.utils.BitmapDataUtils;
 import cn.royan.hl.utils.SystemUtils;
 import flash.display.Bitmap;
 import flash.geom.Rectangle;
@@ -18,7 +17,6 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.EventDispatcher;
-import flash.geom.Matrix;
 import flash.geom.Point;
 
 class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemStateBase
@@ -29,9 +27,10 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 	
 	var bgColors:Array<Dynamic>;
 	var bgAlphas:Array<Dynamic>;
+	var defaultTexture:Sparrow;
 	var bgTexture:Sparrow;
+	
 	var callbacks:Dynamic;
-	var matrix:Matrix;
 	var selected:Bool;
 	
 	var containerWidth:Float;
@@ -43,7 +42,6 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 	var includes:Array<String>;
 	
 	var background:Bitmap;
-	var backgroundRect:Rectangle;
 	
 	//Constructor
 	public function new(texture:Sparrow = null)
@@ -59,11 +57,6 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 		
 		positionX = 0;
 		positionY = 0;
-		
-		bgColors = getDefaultBackgroundColors();
-		bgAlphas = getDefaultBackgroundAlphas();
-		
-		backgroundRect = new Rectangle();
 		
 		background = new Bitmap();
 		background.smoothing = true;
@@ -85,84 +78,51 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 		graphics.clear();
 		
 		if( containerWidth > 0 && containerHeight > 0 ){
-			if ( bgTexture != null ) {
+			if ( bgTexture != null )
 				background.bitmapData.copyPixels(bgTexture.bitmapdata, bgTexture.regin, new Point());
-				background.scaleX = background.scaleY = getScale();
-			}else if( bgColors != null && bgColors.length > 1 ){
-				matrix.createGradientBox(containerWidth, containerHeight, Math.PI / 2, 0, 0);
-				graphics.beginGradientFill(GradientType.LINEAR, cast(bgColors), bgAlphas, [0,255], matrix);
-				graphics.drawRect( 0, 0, getSize().width, getSize().height );
-				graphics.endFill();
-			}else if(  bgColors != null && bgColors.length > 0 && cast(bgAlphas[0]) > 0 ){
-				graphics.beginFill( cast(bgColors[0]), bgAlphas[0] );
-				graphics.drawRect( 0, 0, getSize().width, getSize().height );
-				graphics.endFill();
-			}else{
-				//graphics.beginFill( 0xFFFFFF, 0 );
-				//graphics.drawRect( 0, 0, containerWidth, containerHeight );
-				//graphics.endFill();
-			}
+			else if( defaultTexture != null )
+				background.bitmapData.copyPixels(defaultTexture.bitmapdata, defaultTexture.regin, new Point());
+			background.scaleX = background.scaleY = getScale();
 		}
 	}
 	
-	public function getDefaultBackgroundColors():Array<Dynamic>
+	public function getDefaultTexture():Sparrow
 	{
-		return [[0xFFFFFF]];
+		return Sparrow.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), bgColors, bgAlphas));
 	}
 	
-	public function getDefaultBackgroundAlphas():Array<Dynamic>
+	public function setColorsAndAplhas(color:Array<Dynamic>, alpha:Array<Dynamic>):Void
 	{
-		return [[0.0]];
-	}
-	
-	public function setBackgroundColors(value:Array<Dynamic>):Void
-	{
-		bgColors = value;
+		bgColors = color;
+		bgAlphas = alpha;
 		
-		if( bgColors.length > 1 ){
-			if( matrix == null )
-				matrix = new Matrix();
-			
+		if( bgColors.length > 0 ){
 			if ( bgAlphas == null ) bgAlphas = [];
 			while ( bgAlphas.length < bgColors.length ) {
-				bgAlphas.push(1);
+				var temp:Array<Float> = [];
+				for ( i in 0...bgColors[bgAlphas.length].length ) {
+					temp.push(1);
+				}
+				bgAlphas.push(temp);
 			}
 			
 			while ( bgAlphas.length > bgColors.length ) {
 				bgAlphas.pop();
 			}
+			
+			if( containerWidth > 0 && containerHeight > 0 )
+				defaultTexture = getDefaultTexture();
 		}
 		
 		draw();
 	}
 	
-	public function getBackgroundColors():Array<Dynamic>
+	public function getColors():Array<Dynamic>
 	{
 		return bgColors;
 	}
 	
-	public function setBackgroundAlphas(value:Array<Dynamic>):Void
-	{
-		bgAlphas = value;
-		
-		if( bgColors.length > 1 ){
-			if( matrix == null )
-				matrix = new Matrix();
-			
-			if ( bgAlphas == null ) bgAlphas = [];
-			while ( bgAlphas.length < bgColors.length ) {
-				bgAlphas.push(1);
-			}
-			
-			while ( bgAlphas.length > bgColors.length ) {
-				bgAlphas.pop();
-			}
-		}
-		
-		draw();
-	}
-	
-	public function getBackgroundAlphas():Array<Dynamic>
+	public function getAlphas():Array<Dynamic>
 	{
 		return bgAlphas;
 	}
@@ -179,15 +139,10 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 		
 		background.bitmapData = new BitmapData(Std.int(w), Std.int(h), true, 0xFFFFFF);
 		
-		backgroundRect.width 	= w;
-		backgroundRect.height 	= h;
-		
+		if( bgTexture == null && bgColors != null && bgAlphas != null )
+			defaultTexture = getDefaultTexture();
+			
 		draw();
-	}
-
-	public function getSize():Square
-	{
-		return { width:containerWidth, height:containerHeight };
 	}
 
 	public function setPosition(cx:Float, cy:Float):Void
@@ -198,30 +153,16 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 		x = positionX * getScale();
 		y = positionY * getScale();
 	}
-
-	public function getPosition():Position
-	{
-		return { x:positionX, y:positionY };
-	}
 	
-	public function setPositionPoint(point:Position):Void
-	{
-		positionX = point.x;
-		positionY = point.y;
-		
-		x = positionX * getScale();
-		y = positionY * getScale();
-	}
-	
-	public function setPositionRange(value:Rectangle):Void
+	public function setRange(value:Range):Void
 	{
 		setSize(cast(value.width), cast(value.height));
 		setPosition(cast(value.x), cast(value.y));
 	}
 	
-	public function getRange():Rectangle
+	public function getRange():Range
 	{
-		return backgroundRect;
+		return { x:positionX, y:positionY, width:containerWidth, height:containerHeight };
 	}
 	
 	public function setTexture(texture:Dynamic, frames:Int = 1):Void
@@ -240,26 +181,14 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 		return bgTexture;
 	}
 	
-	public function setOriginalDPI(value:Int):Void
-	{
-		originalDPI = value;
-		
-		setScale( 72 / originalDPI );
-		
-		draw();
-	}
-	
-	public function getOriginalDPI():Int
-	{
-		return originalDPI;
-	}
-	
 	public function setScale(value:Float):Void
 	{
 		scale = value;
 		
 		x = positionX * getScale();
 		y = positionY * getScale();
+		
+		draw();
 	}
 	
 	public function getScale():Float

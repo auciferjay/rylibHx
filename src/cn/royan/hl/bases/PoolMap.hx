@@ -6,7 +6,7 @@ class PoolMap
 	public static var maxValue:Int = 10;
 	
 	private static var __weakMap:WeakMap = WeakMap.getInstance();
-	private static var pools:Dictionary = new Dictionary();
+	private static var pools:Dictionary = #if flash new Dictionary(); #else {}; #end
 	
 	private static function getPool( type:Class<Dynamic> ):Array<Dynamic>
 	{

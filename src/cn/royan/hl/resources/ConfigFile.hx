@@ -1,5 +1,5 @@
 package cn.royan.hl.resources;
-import cn.royan.hl.bases.Dictionary;
+
 import cn.royan.hl.interfaces.IDisposeBase;
 import cn.royan.hl.utils.SystemUtils;
 import haxe.Json;

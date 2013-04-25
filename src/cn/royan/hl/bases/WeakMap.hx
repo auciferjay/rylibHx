@@ -21,7 +21,7 @@ class WeakMap
 	
 	function new()
 	{
-		map = new Dictionary(true);
+		map = #if flash new Dictionary(true); #else {}; #end
 		keys = [];
 		length = 0;
 	}

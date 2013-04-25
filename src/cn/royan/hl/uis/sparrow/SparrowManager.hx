@@ -9,10 +9,10 @@ import flash.display.Bitmap;
  */
 class SparrowManager
 {
-	static var gameBitmaps:Dictionary = new Dictionary();
-	static var gameXMLs:Dictionary = new Dictionary();
-	static var gameSparrows:Dictionary = new Dictionary();
-	static var gameSparrowAtlases:Dictionary = new Dictionary();
+	static var gameBitmaps:Dictionary = #if flash new Dictionary(); #else {}; #end
+	static var gameXMLs:Dictionary = #if flash new Dictionary(); #else {}; #end
+	static var gameSparrows:Dictionary = #if flash new Dictionary(); #else {}; #end
+	static var gameSparrowAtlases:Dictionary = #if flash new Dictionary(); #else {}; #end
 	
 	static public inline function setAtlas(type:String, bitmap:Bitmap, xml:Xml):Void
 	{

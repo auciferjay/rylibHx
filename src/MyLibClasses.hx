@@ -33,6 +33,7 @@ import cn.royan.hl.bases.WeakMap;
 
 import cn.royan.hl.utils.SystemUtils;
 import cn.royan.hl.utils.BytesUtils;
+import cn.royan.hl.utils.BitmapDataUtils;
 
 import cn.royan.hl.services.MQTTService;
 import cn.royan.hl.services.PushService;

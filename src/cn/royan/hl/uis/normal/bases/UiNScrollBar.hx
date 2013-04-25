@@ -36,8 +36,7 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 		
 		bar = new InteractiveUiN();
 		bar.addEventListener(MouseEvent.CLICK, backgroundClickHandler);
-		bar.setBackgroundColors([0xCCCCCC]);
-		bar.setBackgroundAlphas([1]);
+		bar.setColorsAndAplhas([0xCCCCCC], [1]);
 		addItem(bar);
 		
 		max = new UiNLabelButton();
@@ -77,12 +76,12 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 	{
 		switch( scrollerType ) {
 			case SCROLLBAR_TYPE_HORIZONTAL:
-				if ( thumb.getPosition().x > rect.x ) {
-					thumb.setPosition(thumb.getPosition().x - 1, thumb.getPosition().y);
+				if ( thumb.getRange().x > rect.x ) {
+					thumb.setPosition(thumb.getRange().x - 1, thumb.getRange().y);
 				}
 			case SCROLLBAR_TYPE_VERICAL:
-				if ( thumb.getPosition().y > rect.y ) {
-					thumb.setPosition(thumb.getPosition().x, thumb.getPosition().y - 1);
+				if ( thumb.getRange().y > rect.y ) {
+					thumb.setPosition(thumb.getRange().x, thumb.getRange().y - 1);
 				}
 		}
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
@@ -109,12 +108,12 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 	{
 		switch( scrollerType ) {
 			case SCROLLBAR_TYPE_HORIZONTAL:
-				if ( thumb.getPosition().x < rect.width + rect.x ) {
-					thumb.setPosition(thumb.getPosition().x + 1, thumb.getPosition().y);
+				if ( thumb.getRange().x < rect.width + rect.x ) {
+					thumb.setPosition(thumb.getRange().x + 1, thumb.getRange().y);
 				}
 			case SCROLLBAR_TYPE_VERICAL:
-				if ( thumb.getPosition().y < rect.height + rect.y ) {
-					thumb.setPosition(thumb.getPosition().x, thumb.getPosition().y + 1);
+				if ( thumb.getRange().y < rect.height + rect.y ) {
+					thumb.setPosition(thumb.getRange().x, thumb.getRange().y + 1);
 				}
 		}
 		
@@ -135,15 +134,15 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 		switch( scrollerType ) {
 			case SCROLLBAR_TYPE_HORIZONTAL:
 				if ( evt.localX > rect.width ) {
-					thumb.setPosition(Std.int(rect.x + rect.width), thumb.getPosition().y);
+					thumb.setPosition(Std.int(rect.x + rect.width), thumb.getRange().y);
 				}else {
-					thumb.setPosition(Std.int(evt.localX + rect.x), thumb.getPosition().y);
+					thumb.setPosition(Std.int(evt.localX + rect.x), thumb.getRange().y);
 				}
 			case SCROLLBAR_TYPE_VERICAL:
 				if ( evt.localY > rect.height ) {
-					thumb.setPosition(thumb.getPosition().x, Std.int(rect.y + rect.height));
+					thumb.setPosition(thumb.getRange().x, Std.int(rect.y + rect.height));
 				}else {
-					thumb.setPosition(thumb.getPosition().x, Std.int(evt.localY + rect.y));
+					thumb.setPosition(thumb.getRange().x, Std.int(evt.localY + rect.y));
 				}
 		}
 		
@@ -186,7 +185,7 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 				bar.setSize(w - 2 * h, h);
 				thumb.setSize(3 * h, h);
 				
-				rect.width 	= w - 2 * h - thumb.getSize().width;
+				rect.width 	= w - 2 * h - thumb.getRange().width;
 				rect.height = 0;
 				rect.x = h;
 				rect.y = 0;
@@ -199,7 +198,7 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 				thumb.setSize(w, 3 * w);
 				
 				rect.width 	= 0;
-				rect.height = h - 2 * w - thumb.getSize().height;
+				rect.height = h - 2 * w - thumb.getRange().height;
 				rect.x = 0;
 				rect.y = w;
 				

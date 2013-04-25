@@ -29,7 +29,8 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 	var sequence:Bool;
 	var loop:Bool;
 	var autoPlay:Bool;
-	var currentFrame:BitmapData;
+	var currentFrame:Bitmap;
+	var freshRect:Rectangle;
 	
 	//Constructor
 	public function new(texture:Dynamic, rate:Int = 10, auto:Bool = true, row:Int = 1, column:Int = 1, frames:Int = 1) 
@@ -42,6 +43,8 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 		var bmpd:BitmapData;
 		var frameunit:UninteractiveUiN;
 		bgTextures = [];
+		
+		freshRect = new Rectangle();
 		
 		if( Std.is( texture, Sparrow ) ){
 			total = frames;
@@ -66,12 +69,12 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 		
 		timer = new TimerBase( Std.int( 1000 / frameRate ), timerHandler );
 		
-		currentFrame = new BitmapData(Std.int(containerWidth), Std.int(containerHeight), true, 0x00000000);
+		currentFrame = new Bitmap(new BitmapData(Std.int(containerWidth), Std.int(containerHeight), true, 0x00000000));
 		
 		if( bgTextures[current-1] != null )
-			currentFrame.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point(bgTextures[current - 1].frame.x, bgTextures[current - 1].frame.y));
+			currentFrame.bitmapData.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point(bgTextures[current - 1].frame.x, bgTextures[current - 1].frame.y));
 		
-		addChild(new Bitmap(currentFrame));
+		addChild(currentFrame);
 	}
 	
 	function drawTextures():Void
@@ -162,8 +165,14 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 	{
 		loop = false;
 		current = frame;
-		currentFrame.fillRect(getRange(), 0x00000000);
-		currentFrame.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point(bgTextures[current - 1].frame.x, bgTextures[current - 1].frame.y));
+		
+		freshRect.x = getRange().x;
+		freshRect.y = getRange().y;
+		freshRect.width 	= getRange().width;
+		freshRect.height 	= getRange().height;
+		currentFrame.bitmapData.fillRect(freshRect, 0x00000000);
+		currentFrame.bitmapData.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point(bgTextures[current - 1].frame.x, bgTextures[current - 1].frame.y));
+		currentFrame.scaleX = currentFrame.scaleY = getScale();
 	}
 
 	public function goFromTo(from:Int, to:Int):Void
@@ -175,8 +184,13 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 		current = from;
 		toFrame = to;
 		
-		currentFrame.fillRect(getRange(), 0x00000000);
-		currentFrame.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point(bgTextures[current - 1].frame.x, bgTextures[current - 1].frame.y));
+		freshRect.x = getRange().x;
+		freshRect.y = getRange().y;
+		freshRect.width 	= getRange().width;
+		freshRect.height 	= getRange().height;
+		currentFrame.bitmapData.fillRect(freshRect, 0x00000000);
+		currentFrame.bitmapData.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point(bgTextures[current - 1].frame.x, bgTextures[current - 1].frame.y));
+		currentFrame.scaleX = currentFrame.scaleY = getScale();
 		
 		timer.start();
 	}
@@ -227,8 +241,13 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 			}
 		}
 		
-		currentFrame.fillRect(getRange(), 0x00000000);
-		currentFrame.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point(bgTextures[current - 1].frame.x, bgTextures[current - 1].frame.y));
+		freshRect.x = getRange().x;
+		freshRect.y = getRange().y;
+		freshRect.width 	= getRange().width;
+		freshRect.height 	= getRange().height;
+		currentFrame.bitmapData.fillRect(freshRect, 0x00000000);
+		currentFrame.bitmapData.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point(bgTextures[current - 1].frame.x, bgTextures[current - 1].frame.y));
+		currentFrame.scaleX = currentFrame.scaleY = getScale();
 		
 		if( current == toFrame && !loop ){
 			if( callbacks != null && callbacks.done != null ) callbacks.done(this);

@@ -15,7 +15,7 @@ class KeyBoardUtils
 	static public function init(display:DisplayObject):Void
 	{
 		if ( keyObj == null ) {
-			keys = new Dictionary();
+			keys = #if flash new Dictionary(); #else {}; #end
 			
 			display.stage.addEventListener( KeyboardEvent.KEY_DOWN, KeyBoardUtils.keyDownHandler, false, 99, true );
 			display.stage.addEventListener( KeyboardEvent.KEY_UP, KeyBoardUtils.keyUpHandler, false, 99, true );

@@ -122,20 +122,20 @@ class UiNContainerAlign extends UiNContainer
 				item.setPosition(0, 0);
 			if ( !cast(item,DisplayObject).visible ) continue;
 			
-			if ( rowW + ( (i > 0 ? 1:0) * gapX + item.getSize().width ) > containerWidth - marginL - marginR ) {
+			if ( rowW + ( (i > 0 ? 1:0) * gapX + item.getRange().width ) > containerWidth - marginL - marginR ) {
 				//prev row end
 				rows.push( { width: rowW, height: rowH, length:itemNumber } );
 				itemsWidth = Std.int( Math.max( itemsWidth, rowW ) );
 				itemsHeight += (rowNumber > 0 ? 1:0) * gapY + rowH;
 				rowNumber++;
 				//next row start
-				rowW = item.getSize().width;
-				rowH = item.getSize().height;
+				rowW = item.getRange().width;
+				rowH = item.getRange().height;
 				
 				itemNumber = 1;
 			}else {
-				rowW += ( (i > 0 ? 1:0) * gapX + item.getSize().width);
-				rowH = Math.max( rowH, item.getSize().height );
+				rowW += ( (i > 0 ? 1:0) * gapX + item.getRange().width);
+				rowH = Math.max( rowH, item.getRange().height );
 				itemNumber++;
 			}
 		}
@@ -188,7 +188,7 @@ class UiNContainerAlign extends UiNContainer
 				}
 				
 				items[z].setPosition( offsetX, offsetY );
-				offsetX += items[z].getSize().width + gapX;
+				offsetX += items[z].getRange().width + gapX;
 				z++;
 			}
 			offsetY += rows[i].height + gapY;

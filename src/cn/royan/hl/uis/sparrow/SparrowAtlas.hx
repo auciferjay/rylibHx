@@ -21,8 +21,8 @@ class SparrowAtlas implements IDisposeBase
 	{
 		mSparrowAtlas = texture;
 		
-		mSparrowRegions = new Dictionary();
-		mSparrowFrames	= new Dictionary();
+		mSparrowRegions = #if flash new Dictionary(); #else {}; #end
+		mSparrowFrames	= #if flash new Dictionary(); #else {}; #end
 		
 		sNames = [];
 		

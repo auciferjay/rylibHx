@@ -1,11 +1,12 @@
 package cn.royan.hl.uis.normal.bases;
 
-import cn.royan.hl.geom.Position;
+import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.interfaces.uis.IUiTextBase;
 import cn.royan.hl.uis.normal.InteractiveUiN;
 import cn.royan.hl.uis.normal.UninteractiveUiN;
 import cn.royan.hl.uis.sparrow.Sparrow;
+import flash.display.BitmapData;
 
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
@@ -24,9 +25,6 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 		super(texture, frames);
 		
 		bgTextures = [];
-		
-		bgColors = getDefaultBackgroundColors();
-		bgAlphas = getDefaultBackgroundAlphas();
 		
 		btnLabel = label;
 		textColors = getDefaultTextColor();
@@ -91,10 +89,10 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 		btnLabelText.setSize(cWidth, cHeight);
 	}
 	
-	override public function setOriginalDPI(value:Int):Void 
+	override public function setScale(value:Float):Void 
 	{
-		super.setOriginalDPI(value);
-		btnLabelText.setOriginalDPI(value);
+		super.setScale(value);
+		btnLabelText.setScale(value);
 	}
 	
 	public function setTextMargin(t:Int, r:Int, b:Int, l:Int ):Void
@@ -177,12 +175,12 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 		btnLabelText.setScroll(sx, sy);
 	}
 	
-	public function getScroll():Position
+	public function getScroll():Range
 	{
 		return btnLabelText.getScroll();
 	}
 	
-	public function getMaxScroll():Position
+	public function getMaxScroll():Range
 	{
 		return btnLabelText.getMaxScroll();
 	}

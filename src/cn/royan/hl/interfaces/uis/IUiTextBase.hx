@@ -1,6 +1,6 @@
 package cn.royan.hl.interfaces.uis;
 
-import cn.royan.hl.geom.Position;
+import cn.royan.hl.geom.Range;
 import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
 
@@ -36,8 +36,8 @@ interface IUiTextBase implements IUiBase
 	function getDefaultFormat():TextFormat;
 	#if flash
 	function setScroll(sx:Int=0, sy:Int=0):Void;
-	function getScroll():Position;
-	function getMaxScroll():Position;
+	function getScroll():Range;
+	function getMaxScroll():Range;
 	#end
 	function setMultiLine(value:Bool):Void;
 }

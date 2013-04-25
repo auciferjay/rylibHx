@@ -16,7 +16,7 @@ class DispatcherBase extends EventDispatcher
 			evtListenerDirectory = [];
 			evtListenerType = [];
 		}
-		var dic:Dictionary = new Dictionary();
+		var dic:Dictionary = #if flash new Dictionary(); #else {}; #end
 		Reflect.setField(dic, type, listener);
 		evtListenerDirectory.push( dic );
 		evtListenerType.push( type );

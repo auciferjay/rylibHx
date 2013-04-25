@@ -153,12 +153,12 @@ class UiNScrollPane extends InteractiveUiN
 	
 	function hChangeHandler(evt:DatasEvent):Void
 	{
-		container.setPosition(-Std.int(hScrollBar.getValue() / 100 * (container.width - getSize().width)), container.getPosition().y);
+		container.setPosition(-Std.int(hScrollBar.getValue() / 100 * (container.width - getRange().width)), container.getRange().y);
 	}
 	
 	function vChangeHandler(evt:DatasEvent):Void
 	{
-		container.setPosition(container.getPosition().x, -Std.int(vScrollBar.getValue() / 100 * (container.height - getSize().height)));
+		container.setPosition(container.getRange().x, -Std.int(vScrollBar.getValue() / 100 * (container.height - getRange().height)));
 	}
 	
 	public function setThumbTexture(texture:Dynamic):Void

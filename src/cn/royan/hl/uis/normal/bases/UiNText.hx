@@ -1,6 +1,6 @@
 package cn.royan.hl.uis.normal.bases;
 
-import cn.royan.hl.geom.Position;
+import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.uis.IUiTextBase;
 import cn.royan.hl.uis.normal.InteractiveUiN;
 
@@ -37,6 +37,8 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 		inputText.text = label;
 		inputText.mouseEnabled 	= false;
 		inputText.selectable	= false;
+		inputText.height		= 20;
+		inputText.width			= 100;
 		addChild( inputText );
 	}
 	
@@ -48,17 +50,17 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 		inputText.height = containerHeight * getScale();
 	}
 	
-	override public function setOriginalDPI(value:Int):Void 
+	override public function setScale(value:Float):Void 
 	{
-		super.setOriginalDPI(value);
+		super.setScale(value);
 		
-		var format:TextFormat = inputText.getTextFormat();
-			format.size = defaultSize * getScale();
+		var format:TextFormat = inputText.defaultTextFormat;
+			format.size = defaultSize * scale;
 		inputText.defaultTextFormat = format;
 		inputText.setTextFormat(format);
 		
-		inputText.width = containerWidth * getScale();
-		inputText.height = containerHeight * getScale();
+		inputText.width 	= containerWidth * scale;
+		inputText.height 	= containerHeight * scale;
 	}
 	
 	public function setRestrict(value:String):Void
@@ -68,7 +70,7 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 	
 	public function setTextSpace(r:Int, c:Int):Void
 	{
-		var format:TextFormat = inputText.getTextFormat();
+		var format:TextFormat = inputText.defaultTextFormat;
 			format.kerning = true;
 			format.leading = c;
 			format.letterSpacing = r;
@@ -137,7 +139,7 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 	
 	public function setTextAlign(value:Int):Void
 	{
-		var format:TextFormat = inputText.getTextFormat();
+		var format:TextFormat = inputText.defaultTextFormat;
 			format.align = switch(value) {
 				case TEXT_ALIGN_CENTER:
 					TextFormatAlign.CENTER;
@@ -175,7 +177,11 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 	
 	public function getFormat(begin:Int=-1, end:Int=-1):TextFormat
 	{
-		return inputText.getTextFormat(begin, end);
+		#if ( flash || js )
+			return inputText.getTextFormat(begin, end);
+		#else
+			return null;
+		#end
 	}
 	
 	public function setDefaultFormat(value:TextFormat):Void
@@ -194,12 +200,12 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 		inputText.scrollV = sy;
 	}
 	
-	public function getScroll():Position
+	public function getScroll():Range
 	{
 		return { x:inputText.scrollH, y:inputText.scrollV };
 	}
 	
-	public function getMaxScroll():Position
+	public function getMaxScroll():Range
 	{
 		return { x:inputText.maxScrollH, y:inputText.maxScrollV };
 	}

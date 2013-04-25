@@ -32,7 +32,7 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 		
 		states = [];
 		
-		setBackgroundAlphas([0]);
+		//setBackgroundAlphas([0]);
 	}
 	
 	override private function addToStageHandler(evt:Event = null):Void 
@@ -47,7 +47,7 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 	{
 		items.push(item);
 		
-		item.setOriginalDPI(originalDPI);
+		setScale(getScale());
 		
 		addChild(cast( item, DisplayObject ));
 		
@@ -66,7 +66,7 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 		
 		items = prev.concat(next);
 		
-		item.setOriginalDPI(originalDPI);
+		setScale(getScale());
 		
 		addChildAt(cast( item, DisplayObject ), index);
 		

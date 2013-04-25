@@ -1,14 +1,14 @@
 package cn.royan.hl.uis.starling;
+
 import cn.royan.hl.bases.Dictionary;
-import cn.royan.hl.geom.Position;
-import cn.royan.hl.geom.Square;
+import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiItemStateBase;
+import cn.royan.hl.utils.BitmapDataUtils;
 import flash.geom.Rectangle;
 
 import flash.display.BitmapData;
 import flash.events.EventDispatcher;
-import flash.geom.Matrix;
 
 import starling.display.Image;
 import starling.display.Sprite;
@@ -33,12 +33,12 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	
 	var bgColors:Array<Dynamic>;
 	var bgAlphas:Array<Dynamic>;
+	var defaultTexture:Texture;
 	var bgTexture:Texture;
 	var callbacks:Dynamic;
 	var isMouseRender:Bool;
 	var status:Int;
 	var statusLen:Int;
-	var matrix:Matrix;
 	var selected:Bool;
 	var isOnStage:Bool;
 	
@@ -68,8 +68,6 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		positionY = 0;
 		
 		status = INTERACTIVE_STATUS_NORMAL;
-		bgColors = getDefaultBackgroundColors();
-		bgAlphas = getDefaultBackgroundAlphas();
 		
 		if (texture != null) {
 			bgTexture = texture;
@@ -90,82 +88,53 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		if ( !isOnStage ) return;
 		
 		if( containerWidth > 0 && containerHeight > 0 ){
-			if( bgTexture != null ){
+			if( bgTexture != null )
 				graphics.texture = bgTexture;
-			}else if( bgColors != null && bgColors.length > 1 ){
-				
-			}else if(  bgColors != null && bgColors.length > 0 && cast(bgAlphas[0]) > 0 ){
-				
-			}else{
-				
-			}
+			else if( defaultTexture != null )
+				graphics.texture = defaultTexture;
 		}
 	}
 	
-	public function getDefaultBackgroundColors():Array<Dynamic>
+	public function getDefaultTexture():Dynamic
 	{
-		return [[0xFFFFFF]];
+		return Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), bgColors, bgAlphas));
 	}
 	
-	public function getDefaultBackgroundAlphas():Array<Dynamic>
+	public function setColorsAndAplhas(color:Array<Dynamic>, alpha:Array<Dynamic>):Void
 	{
-		return [[0.0]];
-	}
-	
-	public function setBackgroundColors(value:Array<Dynamic>):Void
-	{
-		bgColors = value;
+		bgColors = color;
+		bgAlphas = alpha;
 		
-		if( bgColors != null && bgTexture == null )
+		if( bgTexture == null )
 			statusLen = Std.int(Math.min(bgColors.length, 5));
 		
-		if( bgColors.length > 1 ){
-			if( matrix == null )
-				matrix = new Matrix();
-			
+		if( bgColors.length > 0 ){
 			if ( bgAlphas == null ) bgAlphas = [];
 			while ( bgAlphas.length < bgColors.length ) {
-				bgAlphas.push(1);
+				var temp:Array<Float> = [];
+				for ( i in 0...bgColors[bgAlphas.length].length ) {
+					temp.push(1);
+				}
+				bgAlphas.push(temp);
 			}
 			
 			while ( bgAlphas.length > bgColors.length ) {
 				bgAlphas.pop();
 			}
+			
+			if( containerWidth > 0 && containerHeight > 0 )
+				defaultTexture = getDefaultTexture();
 		}
 		
 		draw();
 	}
 	
-	public function getBackgroundColors():Array<Dynamic>
+	public function getColors():Array<Dynamic>
 	{
 		return bgColors;
 	}
 	
-	public function setBackgroundAlphas(value:Array<Dynamic>):Void
-	{
-		bgAlphas = value;
-		
-		if( bgColors != null && bgTexture == null )
-			statusLen = Std.int(Math.min(bgColors.length, 5));
-			
-		if( bgColors.length > 1 ){
-			if( matrix == null )
-				matrix = new Matrix();
-			
-			if ( bgAlphas == null ) bgAlphas = [];
-			while ( bgAlphas.length < bgColors.length ) {
-				bgAlphas.push(1);
-			}
-			
-			while ( bgAlphas.length > bgColors.length ) {
-				bgAlphas.pop();
-			}
-		}
-		
-		draw();
-	}
-	
-	public function getBackgroundAlphas():Array<Dynamic>
+	public function getAlphas():Array<Dynamic>
 	{
 		return bgAlphas;
 	}
@@ -183,12 +152,10 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		backgroundRect.width = w;
 		backgroundRect.height = h;
 		
+		if( bgTexture == null && bgColors != null && bgAlphas != null )
+			defaultTexture = getDefaultTexture();
+			
 		draw();
-	}
-
-	public function getSize():Square
-	{
-		return { width:containerWidth * getScale(), height:containerHeight * getScale() };
 	}
 
 	public function setPosition(cx:Float, cy:Float):Void
@@ -199,30 +166,16 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		x = cx * getScale();
 		y = cy * getScale();
 	}
-
-	public function getPosition():Position
-	{
-		return { x:positionX, y:positionY };
-	}
 	
-	public function setPositionPoint(point:Position):Void
-	{
-		positionX = point.x;
-		positionY = point.y;
-		
-		x = point.x * getScale();
-		y = point.y * getScale();
-	}
-	
-	public function setPositionRange(value:Rectangle):Void
+	public function setRange(value:Range):Void
 	{
 		setSize(cast(value.width), cast(value.height));
 		setPosition(cast(value.x), cast(value.y));
 	}
 	
-	public function getRange():Rectangle
+	public function getRange():Range
 	{
-		return backgroundRect;
+		return { x:positionX, y:positionY, width:containerWidth, height:containerHeight };
 	}
 	
 	public function setTexture(texture:Dynamic, frames:Int = 1):Void
@@ -242,23 +195,14 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		return bgTexture;
 	}
 	
-	public function setOriginalDPI(value:Int):Void
-	{
-		originalDPI = value;
-		
-		setScale( 72 / originalDPI );
-		
-		draw();
-	}
-	
-	public function getOriginalDPI():Int
-	{
-		return originalDPI;
-	}
-	
 	public function setScale(value:Float):Void
 	{
 		scale = value;
+		
+		x = positionX * getScale();
+		y = positionY * getScale();
+		
+		draw();
 	}
 	
 	public function getScale():Float

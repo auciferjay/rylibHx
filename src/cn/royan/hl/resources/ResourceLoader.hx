@@ -19,7 +19,7 @@ import haxe.Timer;
 
 class ResourceLoader extends DispatcherBase, implements IDisposeBase
 {
-		static var __loaderMap:Dictionary = new Dictionary();
+		static var __loaderMap:Dictionary = #if flash new Dictionary(); #else {}; #end
 		static var __weakMap:WeakMap = WeakMap.getInstance();
 		
 		var uid:String;

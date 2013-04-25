@@ -75,7 +75,7 @@ class UiNExtCombobox extends InteractiveUiN
 	public function addItem(item:ItemType):Void
 	{
 		var instance:UiNLabelButton = new UiNLabelButton(item.label);
-			instance.setSize(getSize().width, 20);
+			instance.setSize(getRange().width, 20);
 		items.push(item);
 		
 		group.addGroupItem(instance, item.value);
