@@ -4,12 +4,20 @@ import cn.royan.hl.interfaces.IDisposeBase;
 import cn.royan.hl.utils.SystemUtils;
 
 import haxe.Timer;
+#if cpp
+import cpp.vm.Thread;
+#elseif neko
+import neko.vm.Thread;
+#end
 
 class TimerBase implements IDisposeBase
 {
 	static private inline var TIMERBASE_DELAY:Int = 10;
-	
+	#if ( flash || js )
 	static private var timer:Timer;
+	#elseif ( cpp || neko)
+	static private var timer:Thread;
+	#end
 	static private var timerNumber:Int;
 	static private var timerlists:Array<TimerBase> = [];
 	
@@ -31,8 +39,12 @@ class TimerBase implements IDisposeBase
 	{
 		if ( timer == null ) {
 			timerNumber = 0;
+			#if ( flash || js )
 			timer = new Timer(10);
 			timer.run = timerHandler;
+			#else
+			timer = Thread.create(threadHandler);
+			#end
 		}
 		
 		if( !isStart ) timerNumber++;
@@ -74,8 +86,10 @@ class TimerBase implements IDisposeBase
 			isStart = false;
 			timerNumber--;
 		}
+		#if ( flash || js ) 
 		if ( timerNumber <= 0 )
-			timer.stop();
+			timer.stop(); 
+		#end
 	}
 	
 	private static function timerHandler():Void
@@ -87,4 +101,17 @@ class TimerBase implements IDisposeBase
 			}
 		}
 	}
+	#if ( cpp || neko )
+	private static function threadHandler():Void
+	{
+		while(true){
+			try{
+				Sys.sleep(.01);
+				timerHandler();
+			}catch(e:Dynamic){
+				SystemUtils.print(e);
+			}
+		}
+	}
+	#end
 }

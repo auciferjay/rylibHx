@@ -43,6 +43,8 @@ class UiNContainerGroup extends UiNContainerAlign, implements IUiContainerGroupB
 		
 		item.getDispatcher().addEventListener(MouseEvent.CLICK, itemSelectHandler);
 		
+		setScale(getScale());
+
 		addChild(cast( item, DisplayObject ));
 		
 		draw();
@@ -68,7 +70,9 @@ class UiNContainerGroup extends UiNContainerAlign, implements IUiContainerGroupB
 		keys = pkey.concat(nkey);
 		
 		item.getDispatcher().addEventListener(MouseEvent.CLICK, itemSelectHandler);
-		
+
+		setScale(getScale());
+
 		addChild(cast( item, DisplayObject ));
 		
 		draw();

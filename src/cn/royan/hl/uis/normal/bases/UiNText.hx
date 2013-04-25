@@ -62,11 +62,12 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 		inputText.width 	= containerWidth * scale;
 		inputText.height 	= containerHeight * scale;
 	}
-	
+	#if (flash || js)
 	public function setRestrict(value:String):Void
 	{
 		inputText.restrict = value;
 	}
+	#end
 	
 	public function setTextSpace(r:Int, c:Int):Void
 	{

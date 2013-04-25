@@ -29,7 +29,7 @@ class DeviceCapabilities
 		 * example, if one wishes to demo a mobile app in the desktop browser,
 		 * a custom DPI will override the real DPI of the desktop screen. 
 		 */
-		public static var dpi:Int = Std.int( Capabilities.screenDPI );
+		public static var dpi:Int = #if flash Std.int( Capabilities.screenDPI ) #else 0 #end;
 
 		/**
 		 * Determines if this device is probably a tablet, based on the physical
@@ -38,8 +38,8 @@ class DeviceCapabilities
 		 */
 		public static function isTablet(stage:Stage):Bool
 		{
-			var screenWidth:Float = Math.isFinite(screenPixelWidth) ? stage.fullScreenWidth : screenPixelWidth;
-			var screenHeight:Float = Math.isFinite(screenPixelHeight) ? stage.fullScreenHeight : screenPixelHeight;
+			var screenWidth:Float = Math.isFinite(screenPixelWidth) ? #if flash stage.fullScreenWidth #else stage.stageWidth #end : screenPixelWidth;
+			var screenHeight:Float = Math.isFinite(screenPixelHeight) ? #if flash stage.fullScreenHeight #else stage.stageHeight #end: screenPixelHeight;
 			return (Math.max(screenWidth, screenHeight) / dpi) >= tabletScreenMinimumInches;
 		}
 
@@ -59,7 +59,7 @@ class DeviceCapabilities
 		 */
 		public static function screenInchesX(stage:Stage):Float
 		{
-			var screenWidth:Float = Math.isFinite(screenPixelWidth) ? stage.fullScreenWidth : screenPixelWidth;
+			var screenWidth:Float = Math.isFinite(screenPixelWidth) ? #if flash stage.fullScreenWidth #else stage.stageWidth #end : screenPixelWidth;
 			return screenWidth / dpi;
 		}
 
@@ -69,7 +69,7 @@ class DeviceCapabilities
 		 */
 		public static function screenInchesY(stage:Stage):Float
 		{
-			var screenHeight:Float = Math.isFinite(screenPixelHeight) ? stage.fullScreenHeight : screenPixelHeight;
+			var screenHeight:Float = Math.isFinite(screenPixelHeight) ? #if flash stage.fullScreenHeight #else stage.stageHeight #end : screenPixelHeight;
 			return screenHeight / dpi;
 		}
 	

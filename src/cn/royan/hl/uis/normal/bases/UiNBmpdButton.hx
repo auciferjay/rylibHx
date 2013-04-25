@@ -110,12 +110,11 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 			var bmpd:Sparrow = Sparrow.fromSparrow(texture, regin, frame);
 			
 			bgTextures[i] = bmpd;
-			
 			//addChild(new Bitmap(bgTextures[i])).visible = false;//确保显示
 		}
 		
 		while ( bgTextures.length < 5 ) {
-			bgTextures[bgTextures.length] = bgTextures[bgTextures.length - 1];
+			bgTextures.push(bgTextures[bgTextures.length - 1]);
 		}
 		
 		setSize(frameWidth, frameHeight);
@@ -135,6 +134,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 	
 	override function mouseClickHandler(evt:MouseEvent):Void
 	{
+		SystemUtils.print("btn click");
 		if( isInGroup ){
 			selected = !selected;
 			status = selected?InteractiveUiN.INTERACTIVE_STATUS_SELECTED:status;
