@@ -6,6 +6,8 @@ import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiItemStateBase;
 import cn.royan.hl.utils.BitmapDataUtils;
 import flash.geom.Rectangle;
+import starling.events.Touch;
+import starling.events.TouchPhase;
 
 import flash.display.BitmapData;
 import flash.events.EventDispatcher;
@@ -47,6 +49,8 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	var positionX:Float;
 	var positionY:Float;
 	
+	var mouseEnabled:Bool;
+	
 	var excludes:Array<String>;
 	var includes:Array<String>;
 
@@ -73,9 +77,12 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		if (texture != null) {
 			bgTexture = texture;
 			
-			graphics = new Image( bgTexture );
-			addChild( graphics );
 			setSize(Std.int(bgTexture.width), Std.int(bgTexture.height));
+		}
+		
+		if ( containerHeight > 0 && containerWidth > 0 ) {
+			graphics = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), [0x000000], [0x00])));
+			addChild( graphics );
 		}
 		
 		isOnStage = false;
@@ -185,6 +192,11 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 			bgTexture = texture;
 			
 			setSize(Std.int(bgTexture.width), Std.int(bgTexture.height));
+			
+			if ( containerHeight > 0 && containerWidth > 0 && graphics == null ) {
+				graphics = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), [0x000000], [0x00])));
+				addChild( graphics );
+			}
 		}
 	}
 	
@@ -252,33 +264,47 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	//Protected methods
 	function mouseOverHandler(evt:TouchEvent):Void
 	{
-		//if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
-		if( isMouseRender ) draw();
-		if ( callbacks != null && callbacks.over != null ) callbacks.over(this);
+		var touch:Touch = evt.getTouch(this);
+        if (!mouseEnabled || touch == null) return;
+		
+		switch( touch.phase ) {
+			case TouchPhase.BEGAN:
+				mouseDownHandler();
+			case TouchPhase.ENDED:
+				mouseUpHandler();
+				mouseClickHandler();
+			case TouchPhase.HOVER:
+				if ( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
+				if ( isMouseRender ) draw();
+				if ( callbacks != null && callbacks.over != null ) callbacks.over(this);
+			case TouchPhase.MOVED:
+				mouseOutHandler();
+			case TouchPhase.STATIONARY:
+		}
 	}
 	
-	function mouseOutHandler(evt:TouchEvent):Void
+	function mouseOutHandler():Void
 	{
-		//if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_NORMAL;
+		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_NORMAL;
 		if( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.out != null ) callbacks.out(this);
 	}
 	
-	function mouseDownHandler(evt:TouchEvent):Void
+	function mouseDownHandler():Void
 	{
-		//if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_DOWN;
+		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_DOWN;
 		if( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.down != null ) callbacks.down(this);
 	}
 	
-	function mouseUpHandler(evt:TouchEvent):Void
+	function mouseUpHandler():Void
 	{
-		//if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
+		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
 		if( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.up != null ) callbacks.up(this);
 	}
 	
-	function mouseClickHandler(evt:TouchEvent):Void
+	function mouseClickHandler():Void
 	{
 		if( callbacks != null && callbacks.click != null ) callbacks.click(this);
 	}

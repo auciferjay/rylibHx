@@ -19,6 +19,7 @@ import cn.royan.hl.uis.normal.bases.UiNText;
 import cn.royan.hl.uis.normal.exts.UiNExtBmpNumberText;
 import cn.royan.hl.uis.normal.exts.UiNExtCombobox;
 
+import cn.royan.hl.uis.starling.bases.UiSBmpdButton;
 import cn.royan.hl.uis.starling.bases.UiSContainer;
 import cn.royan.hl.uis.starling.bases.UiSContainerAlign;
 import cn.royan.hl.uis.starling.bases.UiSContainerGroup;
