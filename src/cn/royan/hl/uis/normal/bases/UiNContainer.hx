@@ -47,7 +47,7 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 	{
 		items.push(item);
 		
-		setScale(getScale());
+		item.setScale(getScale());
 		
 		addChild(cast( item, DisplayObject ));
 		
@@ -66,7 +66,7 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 		
 		items = prev.concat(next);
 		
-		setScale(getScale());
+		item.setScale(getScale());
 		
 		addChildAt(cast( item, DisplayObject ), index);
 		
@@ -128,6 +128,15 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 	public function getItems():Array<IUiBase>
 	{
 		return items;
+	}
+
+	override public function setScale(value:Float):Void
+	{
+		super.setScale(value);
+
+		for ( item in items ) {
+			item.setScale(getScale());
+		}
 	}
 	
 	public function setState(value:String):Void

@@ -40,6 +40,9 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 		inputText.height		= 20;
 		inputText.width			= 100;
 		addChild( inputText );
+
+		containerWidth			= 100;
+		containerHeight			= 20;
 	}
 	
 	override public function setSize(w:Float, h:Float):Void 
@@ -55,12 +58,14 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 		super.setScale(value);
 		
 		var format:TextFormat = inputText.defaultTextFormat;
-			format.size = defaultSize * scale;
+			format.size = Std.int(defaultSize * getScale());
+			format.color = inputText.textColor;
+
 		inputText.defaultTextFormat = format;
 		inputText.setTextFormat(format);
 		
-		inputText.width 	= containerWidth * scale;
-		inputText.height 	= containerHeight * scale;
+		inputText.width 	= containerWidth * getScale();
+		inputText.height 	= containerHeight * getScale();
 	}
 	#if (flash || js)
 	public function setRestrict(value:String):Void
@@ -75,6 +80,7 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 			format.kerning = true;
 			format.leading = c;
 			format.letterSpacing = r;
+			format.color = inputText.textColor;
 		inputText.defaultTextFormat = format;
 	}
 	
@@ -161,7 +167,7 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 	{
 		defaultSize = value;
 		
-		var format:TextFormat = getFormat();
+		var format:TextFormat = inputText.defaultTextFormat;
 			format.size = value;
 		inputText.defaultTextFormat = format;
 	}

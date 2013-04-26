@@ -43,7 +43,7 @@ class TimerBase implements IDisposeBase
 			timer = new Timer(10);
 			timer.run = timerHandler;
 			#else
-			timer = Thread.create(threadHandler);
+			//timer = Thread.create(threadHandler);
 			#end
 		}
 		

@@ -168,8 +168,8 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		positionX = cx;
 		positionY = cy;
 		
-		x = cx * getScale();
-		y = cy * getScale();
+		x = positionX * (Std.is(parent, IUiBase)?getScale():1);
+		y = positionY * (Std.is(parent, IUiBase)?getScale():1);
 	}
 	
 	public function setRange(value:Range):Void
