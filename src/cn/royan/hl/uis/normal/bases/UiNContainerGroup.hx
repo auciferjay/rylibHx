@@ -11,6 +11,11 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.display.DisplayObject;
 
+/**
+ * ...
+ * @author RoYan
+ */
+
 class UiNContainerGroup extends UiNContainerAlign, implements IUiContainerGroupBase
 {
 	var isMulti:Bool;
@@ -195,7 +200,7 @@ class UiNContainerGroup extends UiNContainerAlign, implements IUiContainerGroupB
 	
 	function itemSelectHandler(evt:MouseEvent):Void
 	{
-		var key:Dynamic = getKey(evt.currentTarget);
+		var key:Dynamic = getKey(cast( evt.currentTarget ) );
 		var giveUpKey:Dynamic = null;
 		var index:Int = SystemUtils.arrayIndexOf(values, key);
 		var giveUpIndex:Int = -1;

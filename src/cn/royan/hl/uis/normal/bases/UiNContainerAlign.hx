@@ -1,6 +1,7 @@
 package cn.royan.hl.uis.normal.bases;
 
 import cn.royan.hl.interfaces.uis.IUiBase;
+import cn.royan.hl.interfaces.uis.IUiContainerAlignBase;
 import cn.royan.hl.interfaces.uis.IUiItemStateBase;
 import cn.royan.hl.interfaces.uis.IUiContainerBase;
 import cn.royan.hl.interfaces.uis.IUiContainerScrolBase;
@@ -33,7 +34,7 @@ private typedef ContainerRowConfig = {
 	var length:Int;
 }
 
-class UiNContainerAlign extends UiNContainer
+class UiNContainerAlign extends UiNContainer, implements IUiContainerAlignBase
 {
 	static public inline var CONTAINER_HORIZONTAL_LEFT:Int 		= 0;
 	static public inline var CONTAINER_HORIZONTAL_CENTER:Int 	= 1;
@@ -43,8 +44,13 @@ class UiNContainerAlign extends UiNContainer
 	static public inline var CONTAINER_VERTICAL_MIDDLE:Int 		= 1;
 	static public inline var CONTAINER_VERTICAL_BOTTOM:Int 		= 2;
 	
+	static public inline var CONTAINER_CONTENT_ALIGN_TOP:Int	= 0;
+	static public inline var CONTAINER_CONTENT_ALIGN_MIDDLE:Int	= 1;
+	static public inline var CONTAINER_CONTENT_ALIGN_BOTTOM:Int	= 2;
+	
 	var horizontalAlign:Int;
 	var verticalAlign:Int;
+	var contentAlign:Int;
 	
 	var rows:Array<ContainerRowConfig>;
 	var gaps:ContainerGap;
@@ -86,6 +92,11 @@ class UiNContainerAlign extends UiNContainer
 	public function setVerticalAlign(value:Int):Void
 	{
 		verticalAlign = value;
+	}
+	
+	public function setContentAlign(value:Int):Void
+	{
+		contentAlign = value;
 	}
 	
 	public function setGaps(gapX:Int, gapY:Int):Void
@@ -187,7 +198,15 @@ class UiNContainerAlign extends UiNContainer
 					continue;
 				}
 				
-				items[z].setPosition( offsetX, offsetY );
+				switch( contentAlign ) {
+					case CONTAINER_CONTENT_ALIGN_TOP:
+						items[z].setPosition( offsetX, offsetY );
+					case CONTAINER_CONTENT_ALIGN_MIDDLE:
+						items[z].setPosition( offsetX, offsetY + (rows[i].height - items[z].getRange().height)/2 );
+					case CONTAINER_CONTENT_ALIGN_BOTTOM:
+						items[z].setPosition( offsetX, offsetY + rows[i].height - items[z].getRange().height );
+				}
+				
 				offsetX += items[z].getRange().width + gapX;
 				z++;
 			}

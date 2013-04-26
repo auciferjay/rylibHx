@@ -92,10 +92,10 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 		var prev:Array<IUiBase> = items.slice(0, index);
 		var next:Array<IUiBase> = items.slice(index);
 		
-		removeItem(prev.pop());
+		removeItem(next.shift());
 		
-		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
-		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
+		//if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
+		//else dispatchEvent(new Event(DatasEvent.DATA_CHANGE));
 		
 		items = prev.concat(next);
 	}

@@ -54,12 +54,13 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	var evtListenerDirectory:Array<Dynamic>;
 	
 	public var graphics:Image;
-	public var backgroundRect:Rectangle;
 	
 	//Constructor
 	public function new(texture:Texture = null)
 	{
 		super();
+		
+		scale = 1;
 		
 		containerHeight = 0;
 		containerWidth = 0;
@@ -148,9 +149,6 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	{
 		containerWidth = w;
 		containerHeight = h;
-		
-		backgroundRect.width = w;
-		backgroundRect.height = h;
 		
 		if( bgTexture == null && bgColors != null && bgAlphas != null )
 			defaultTexture = getDefaultTexture();
