@@ -23,9 +23,9 @@ class TimerBase implements IDisposeBase
 	
 	var delay:Int;
 	var callFun:Void->Void;
-	var isStart:Bool;
 	var last:Int;
 	var current:Int;
+	public var isStart(default, null):Bool;
 	
 	public function new(time:Int, f:Void->Void) 
 	{
