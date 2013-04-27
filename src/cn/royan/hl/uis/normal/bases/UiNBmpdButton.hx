@@ -33,17 +33,18 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 		freshRect = new Rectangle();
 		
 		if( Std.is( texture, Sparrow ) ){
-			statusLen = frames;
-			
-			drawTextures(texture);
+			drawTextures(texture, frames);
 		}else if( Std.is( texture, Array ) ){
-		 	statusLen = cast( texture ).length;
 			bgTextures = cast(texture);
 			
 		 	setSize(Std.int(bgTextures[0].regin.width), Std.int(bgTextures[0].regin.height));
 		}else{
 			//throw "texture is wrong type(Sparrow or Vector.<Sparrow>)";
 			return;
+		}
+		
+		while ( bgTextures.length < InteractiveUiN.STATUS_LEN ) {
+			bgTextures.push(bgTextures[bgTextures.length - 1]);
 		}
 		
 		currentStatus = new Bitmap(new BitmapData(Std.int(containerWidth), Std.int(containerHeight), true, 0x00000000));
@@ -57,7 +58,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 		isInGroup = value;
 	}
 	
-	function drawTextures(texture:Sparrow):Void
+	function drawTextures(texture:Sparrow, statusLen:Int):Void
 	{
 		var frameWidth:Int = Std.int(texture.regin.width / statusLen);
 		var frameHeight:Int = Std.int(texture.regin.height);
@@ -113,10 +114,6 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 			//addChild(new Bitmap(bgTextures[i])).visible = false;//确保显示
 		}
 		
-		while ( bgTextures.length < 5 ) {
-			bgTextures.push(bgTextures[bgTextures.length - 1]);
-		}
-		
 		setSize(frameWidth, frameHeight);
 	}
 	
@@ -165,34 +162,24 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 		bgColors = color;
 		bgAlphas = alpha;
 		
-		if( bgTexture == null )
-			statusLen = Std.int(Math.min(bgColors.length, 5));
+		while ( bgColors.length < InteractiveUiN.STATUS_LEN ) {
+			bgColors.push( bgColors[bgColors.length - 1] );
+		}
 		
-		if( bgColors.length > 0 ){
-			if ( bgAlphas == null ) bgAlphas = [];
-			while ( bgAlphas.length < bgColors.length ) {
-				var temp:Array<Float> = [];
-				for ( i in 0...bgColors[bgAlphas.length].length ) {
-					temp.push(1);
-				}
-				bgAlphas.push(temp);
-			}
+		while ( bgAlphas.length < InteractiveUiN.STATUS_LEN ) {
+			bgAlphas.push( bgAlphas[bgAlphas.length - 1] );
+		}
+		
+		if ( containerWidth > 0 && containerHeight > 0 ) {
+			defaultTexture = Sparrow.fromBitmapData(BitmapDataUtils.fromColors(Std.int(InteractiveUiN.STATUS_LEN * containerWidth), Std.int(containerHeight), bgColors, bgAlphas));
 			
-			while ( bgAlphas.length > bgColors.length ) {
-				bgAlphas.pop();
-			}
+			drawTextures(defaultTexture, InteractiveUiN.STATUS_LEN);
 			
-			if ( containerWidth > 0 && containerHeight > 0 ) {
-				defaultTexture = Sparrow.fromBitmapData(BitmapDataUtils.fromColors(Std.int(statusLen * containerWidth), Std.int(containerHeight), bgColors, bgAlphas));
-				
-				drawTextures(defaultTexture);
-				
-				if ( currentStatus == null ) {
-					currentStatus = new Bitmap(new BitmapData(Std.int(containerWidth), Std.int(containerHeight), true, 0x00000000));
-					if( bgTextures[status] != null )
-						currentStatus.bitmapData.copyPixels(bgTextures[status].bitmapdata, bgTextures[status].regin, new Point(bgTextures[status].frame.x, bgTextures[status].frame.y));
-					addChildAt(currentStatus, 0);
-				}
+			if ( currentStatus == null ) {
+				currentStatus = new Bitmap(new BitmapData(Std.int(containerWidth), Std.int(containerHeight), true, 0x00000000));
+				if( bgTextures[status] != null )
+					currentStatus.bitmapData.copyPixels(bgTextures[status].bitmapdata, bgTextures[status].regin, new Point(bgTextures[status].frame.x, bgTextures[status].frame.y));
+				addChildAt(currentStatus, 0);
 			}
 		}
 		
@@ -218,12 +205,13 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 	
 	override public function setTexture(value:Sparrow, frames:Int=5):Void
 	{
-		if( value != null ){
-			statusLen = frames;
-		}
 		bgTexture = value;
 		
-		drawTextures(bgTexture);
+		drawTextures(bgTexture, frames);
+		
+		while ( bgTextures.length < InteractiveUiN.STATUS_LEN ) {
+			bgTextures.push(bgTextures[bgTextures.length - 1]);
+		}
 		
 		if ( currentStatus == null ) {
 			currentStatus = new Bitmap(new BitmapData(Std.int(containerWidth), Std.int(containerHeight), true, 0x00000000));

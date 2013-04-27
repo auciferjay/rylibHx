@@ -185,8 +185,8 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 	{
 		scale = value;
 		
-		x = positionX * getScale();
-		y = positionY * getScale();
+		x = positionX * (Std.is(parent, IUiBase)?getScale():1);
+		y = positionY * (Std.is(parent, IUiBase)?getScale():1);
 		
 		draw();
 	}

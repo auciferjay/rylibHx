@@ -29,6 +29,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	static public inline var INTERACTIVE_STATUS_SELECTED:Int 	= 3;
 	static public inline var INTERACTIVE_STATUS_DISABLE:Int 	= 4;
 	
+	static public inline var STATUS_LEN:Int = 5;
 	//properties
 	var originalDPI:Int;
 	var scale:Float;
@@ -40,7 +41,6 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	var callbacks:Dynamic;
 	var isMouseRender:Bool;
 	var status:Int;
-	var statusLen:Int;
 	var selected:Bool;
 	var isOnStage:Bool;
 	
@@ -113,26 +113,16 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		bgColors = color;
 		bgAlphas = alpha;
 		
-		if( bgTexture == null )
-			statusLen = Std.int(Math.min(bgColors.length, 5));
-		
-		if( bgColors.length > 0 ){
-			if ( bgAlphas == null ) bgAlphas = [];
-			while ( bgAlphas.length < bgColors.length ) {
-				var temp:Array<Float> = [];
-				for ( i in 0...bgColors[bgAlphas.length].length ) {
-					temp.push(1);
-				}
-				bgAlphas.push(temp);
-			}
-			
-			while ( bgAlphas.length > bgColors.length ) {
-				bgAlphas.pop();
-			}
-			
-			if( containerWidth > 0 && containerHeight > 0 )
-				defaultTexture = getDefaultTexture();
+		while ( bgColors.length < STATUS_LEN ) {
+			bgColors.push( bgColors[bgColors.length - 1] );
 		}
+		
+		while ( bgAlphas.length < STATUS_LEN ) {
+			bgAlphas.push( bgAlphas[bgAlphas.length - 1] );
+		}
+		
+		if( containerWidth > 0 && containerHeight > 0 )
+			defaultTexture = getDefaultTexture();
 		
 		draw();
 	}
@@ -209,8 +199,8 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	{
 		scale = value;
 		
-		x = positionX * getScale();
-		y = positionY * getScale();
+		x = positionX * (Std.is(parent, IUiBase)?getScale():1);
+		y = positionY * (Std.is(parent, IUiBase)?getScale():1);
 		
 		draw();
 	}
@@ -228,6 +218,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	public function setMouseRender(value:Bool):Void
 	{
 		isMouseRender = value;
+		mouseEnabled = value;
 	}
 	
 	public function setExclude(args:Array<String>):Void
@@ -285,22 +276,22 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	
 	function mouseOutHandler():Void
 	{
-		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_NORMAL;
-		if( isMouseRender ) draw();
+		if ( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_NORMAL;
+		if ( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.out != null ) callbacks.out(this);
 	}
 	
 	function mouseDownHandler():Void
 	{
-		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_DOWN;
-		if( isMouseRender ) draw();
+		if ( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_DOWN;
+		if ( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.down != null ) callbacks.down(this);
 	}
 	
 	function mouseUpHandler():Void
 	{
-		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
-		if( isMouseRender ) draw();
+		if ( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
+		if ( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.up != null ) callbacks.up(this);
 	}
 	
