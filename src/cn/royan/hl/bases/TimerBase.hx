@@ -21,10 +21,12 @@ class TimerBase implements IDisposeBase
 	static private var timerNumber:Int;
 	static private var timerlists:Array<TimerBase> = [];
 	
-	var delay:Int;
 	var callFun:Void->Void;
+	var delay:Int;
 	var last:Int;
-	var current:Int;
+	var begin:Int;
+	var jumped:Int;
+	
 	public var isStart(default, null):Bool;
 	
 	public function new(time:Int, f:Void->Void) 
@@ -50,7 +52,7 @@ class TimerBase implements IDisposeBase
 		if( !isStart ) timerNumber++;
 		isStart = true;
 		last = Std.int( Timer.stamp() * 1000 );
-		current = delay;
+		begin = last;
 	}
 	
 	public function stop():Void
@@ -59,24 +61,21 @@ class TimerBase implements IDisposeBase
 		isStart = false;
 	}
 	
-	public function remain():Int
+	public function excute():Void
 	{
-		return current;
+		jumped++;
+		callFun();
 	}
 	
-	public function callMethod():Void->Void
+	public function needRender():Int
 	{
-		return callFun;
-	}
-	
-	public function needRender():Bool
-	{
-		if( !isStart ) return false;
-		current -= Std.int( Timer.stamp() * 1000 - last );
+		if ( !isStart ) return 0;
+		
 		last = Std.int( Timer.stamp() * 1000 );
-		var isInit:Bool = current < TIMERBASE_DELAY;
-		if( isInit ) current = delay;
-		return isStart && isInit;
+			
+		var total:Int = Std.int( (last - begin) / delay );
+			
+		return total - jumped;
 	}
 	
 	public function dispose():Void
@@ -96,8 +95,9 @@ class TimerBase implements IDisposeBase
 	{
 		if ( timerNumber <= 0 ) return;
 		for ( time in timerlists ) {
-			if ( time.needRender() ) {
-				time.callMethod()();
+			var len:Int = time.needRender();
+			for ( i in 0...len ) {
+				time.excute();
 			}
 		}
 	}
