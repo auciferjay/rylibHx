@@ -131,7 +131,6 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 	
 	override function mouseClickHandler(evt:MouseEvent):Void
 	{
-		SystemUtils.print("btn click");
 		if( isInGroup ){
 			selected = !selected;
 			status = selected?InteractiveUiN.INTERACTIVE_STATUS_SELECTED:status;
@@ -171,7 +170,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 		}
 		
 		if ( containerWidth > 0 && containerHeight > 0 ) {
-			defaultTexture = Sparrow.fromBitmapData(BitmapDataUtils.fromColors(Std.int(InteractiveUiN.STATUS_LEN * containerWidth), Std.int(containerHeight), bgColors, bgAlphas));
+			defaultTexture = Sparrow.fromBitmapData(BitmapDataUtils.fromColors(Std.int(InteractiveUiN.STATUS_LEN * containerWidth), Std.int(containerHeight), bgColors, bgAlphas, InteractiveUiN.STATUS_LEN));
 			
 			drawTextures(defaultTexture, InteractiveUiN.STATUS_LEN);
 			

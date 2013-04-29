@@ -4,10 +4,9 @@ import cn.royan.hl.interfaces.IDisposeBase;
 import cn.royan.hl.utils.SystemUtils;
 
 import haxe.Timer;
-#if cpp
-import cpp.vm.Thread;
-#elseif neko
-import neko.vm.Thread;
+#if ( cpp || neko )
+import nme.Lib;
+import nme.events.Event;
 #end
 
 class TimerBase implements IDisposeBase
@@ -15,16 +14,17 @@ class TimerBase implements IDisposeBase
 	static private inline var TIMERBASE_DELAY:Int = 10;
 	#if ( flash || js )
 	static private var timer:Timer;
-	#elseif ( cpp || neko)
-	static private var timer:Thread;
+	#else
+	static private var timer:Timer;
 	#end
-	static private var timerNumber:Int;
+	static private var timerNumber:Int = 0;
 	static private var timerlists:Array<TimerBase> = [];
 	
 	var callFun:Void->Void;
 	var delay:Int;
 	var last:Int;
 	var begin:Int;
+	var current:Int;
 	var jumped:Int;
 	
 	public var isStart(default, null):Bool;
@@ -45,11 +45,11 @@ class TimerBase implements IDisposeBase
 			timer = new Timer(10);
 			timer.run = timerHandler;
 			#else
-			//timer = Thread.create(threadHandler);
+			Lib.current.addEventListener(Event.ENTER_FRAME, timerHandler);
 			#end
 		}
 		
-		if( !isStart ) timerNumber++;
+		//if( !isStart ) timerNumber++;
 		isStart = true;
 		last = Std.int( Timer.stamp() * 1000 );
 		begin = last;
@@ -57,13 +57,20 @@ class TimerBase implements IDisposeBase
 	
 	public function stop():Void
 	{
-		if( isStart ) timerNumber--;
+		//if( isStart ) timerNumber--;
 		isStart = false;
+	}
+
+	public function remain():Int
+	{
+		return current;
 	}
 	
 	public function excute():Void
 	{
 		jumped++;
+
+		current = delay;
 		callFun();
 	}
 	
@@ -71,29 +78,31 @@ class TimerBase implements IDisposeBase
 	{
 		if ( !isStart ) return 0;
 		
+		current -= Std.int(Timer.stamp() * 1000 - last);
+
 		last = Std.int( Timer.stamp() * 1000 );
-			
 		var total:Int = Std.int( (last - begin) / delay );
-			
 		return total - jumped;
 	}
 	
 	public function dispose():Void
 	{
 		timerlists.remove(this);
-		if ( isStart ) {
-			isStart = false;
-			timerNumber--;
-		}
+		//if ( isStart ) {
+		//	isStart = false;
+		//	timerNumber--;
+		//}
 		#if ( flash || js ) 
 		if ( timerNumber <= 0 )
 			timer.stop(); 
+		#else
+			Lib.current.removeEventListener(Event.ENTER_FRAME, timerHandler);
 		#end
 	}
 	
-	private static function timerHandler():Void
+	private static function timerHandler(#if(cpp || neko) evt:Event #end):Void
 	{
-		if ( timerNumber <= 0 ) return;
+		//if ( timerNumber <= 0 ) return;
 		for ( time in timerlists ) {
 			var len:Int = time.needRender();
 			for ( i in 0...len ) {
@@ -101,17 +110,4 @@ class TimerBase implements IDisposeBase
 			}
 		}
 	}
-	#if ( cpp || neko )
-	private static function threadHandler():Void
-	{
-		while(true){
-			try{
-				Sys.sleep(.01);
-				timerHandler();
-			}catch(e:Dynamic){
-				SystemUtils.print(e);
-			}
-		}
-	}
-	#end
 }

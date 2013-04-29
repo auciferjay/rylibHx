@@ -11,16 +11,16 @@ import flash.geom.Matrix;
  */
 class BitmapDataUtils
 {
-	static public function fromColors(width:Int, height:Int, colors:Array<Dynamic>, alphas:Array<Dynamic>):BitmapData
+	static public function fromColors(width:Int, height:Int, colors:Array<Dynamic>, alphas:Array<Dynamic>, length:Int=1):BitmapData
 	{
 		var bitmapdata:BitmapData = new BitmapData(width, height, true, 0x00000000);
 		var shape:Shape = new Shape();
 		var matrix:Matrix = new Matrix();
 		
-		if( colors.length == 1 ){
+		if( length == 1 ){
 			matrix.createGradientBox(width, height, Math.PI/2, 0, 0);
-			if ( Std.is( colors[0], Array ) ) {
-				shape.graphics.beginGradientFill(GradientType.LINEAR, cast(colors[0]), cast(alphas[0]), [0,255], matrix);
+			if ( Std.is( colors, Array ) ) {
+				shape.graphics.beginGradientFill(GradientType.LINEAR, cast(colors), cast(alphas), [0,255], matrix);
 			}else{
 				shape.graphics.beginFill(colors[0], alphas[0]);
 			}
@@ -28,8 +28,8 @@ class BitmapDataUtils
 			shape.graphics.drawRect( 0, 0, width, height );
 			shape.graphics.endFill();
 		}else {
-			for ( i in 0...colors.length ) {
-				matrix.createGradientBox(width / colors.length, height, Math.PI / 2, 0, 0);
+			for ( i in 0...length ) {
+				matrix.createGradientBox(width / length, height, Math.PI / 2, 0, 0);
 				if ( Std.is( colors[i], Array ) ) {
 					shape.graphics.beginGradientFill(GradientType.LINEAR, cast(colors[i]), cast(alphas[i]), [0,255], matrix);
 				}else {
