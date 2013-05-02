@@ -17,11 +17,11 @@ class SystemUtils
 	static inline var ukey:Array<String> = ["A", "B", "C", "D", "E", "F", "G", "H"];
 	static inline var UID_CHARS:String = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	
-	static public var showDebug:Bool = false;
+	static public var showDebug:Int = -1;
 	
-	static public function print(v:Dynamic, ?info:PosInfos):Void
+	static public function print(v:Dynamic, level:Int=0,?info:PosInfos):Void
 	{
-		if ( showDebug ) {
+		if ( showDebug == level || showDebug == 0 ) {
 			#if !swc
 			if ( info != null )
 				Log.trace(Timer.stamp() + "|[" + info.className + "][" + info.methodName + "]:" + v);
