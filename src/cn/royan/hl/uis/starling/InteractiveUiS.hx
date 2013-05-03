@@ -252,26 +252,32 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		removeEventListeners();
 	}
 	
-	//Protected methods
-	function mouseOverHandler(evt:TouchEvent):Void
+	function mouseTouchHandler(evt:TouchEvent):Void
 	{
-		var touch:Touch = evt.getTouch(this);
-        if (!mouseEnabled || touch == null) return;
+        if ( !mouseEnabled ) return;
 		
-		switch( touch.phase ) {
-			case TouchPhase.BEGAN:
-				mouseDownHandler();
-			case TouchPhase.ENDED:
-				mouseUpHandler();
-				mouseClickHandler();
-			case TouchPhase.HOVER:
-				if ( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
-				if ( isMouseRender ) draw();
-				if ( callbacks != null && callbacks.over != null ) callbacks.over(this);
-			case TouchPhase.MOVED:
-				mouseOutHandler();
-			case TouchPhase.STATIONARY:
+		if (evt.getTouch(this, TouchPhase.HOVER) != null) {
+			mouseOverHandler();
+        } else {
+			mouseOutHandler();
+        }
+		
+		if (evt.getTouch(this, TouchPhase.BEGAN) != null) {
+			mouseDownHandler();
 		}
+		
+		if (evt.getTouch(this, TouchPhase.ENDED) != null) {
+			mouseUpHandler();
+			mouseClickHandler();
+        }
+	}
+	
+	//Protected methods
+	function mouseOverHandler():Void
+	{
+		if ( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
+		if ( isMouseRender ) draw();
+		if ( callbacks != null && callbacks.over != null ) callbacks.over(this);
 	}
 	
 	function mouseOutHandler():Void
@@ -305,7 +311,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		if ( hasEventListener(Event.ADDED_TO_STAGE) )
 			removeEventListener(Event.ADDED_TO_STAGE, addToStageHandler);
 			
-		addEventListener(TouchEvent.TOUCH, mouseOverHandler );
+		addEventListener(TouchEvent.TOUCH, mouseTouchHandler );
 		
 		addEventListener(Event.REMOVED_FROM_STAGE, removeFromStageHandler);
 		

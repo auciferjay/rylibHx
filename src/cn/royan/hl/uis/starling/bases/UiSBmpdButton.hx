@@ -62,10 +62,10 @@ class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 		super.addToStageHandler(evt);
 	}
 	
-	override private function mouseOverHandler(evt:TouchEvent):Void 
+	override private function mouseOverHandler():Void 
 	{
-		super.mouseOverHandler(evt);
-		Mouse.cursor = evt.interactsWith(this)?MouseCursor.BUTTON:MouseCursor.AUTO;
+		super.mouseOverHandler();
+		Mouse.cursor = MouseCursor.BUTTON;
 	}
 	
 	override private function mouseOutHandler():Void 
