@@ -53,6 +53,7 @@ class TimerBase implements IDisposeBase
 		isStart = true;
 		last = Std.int( Timer.stamp() * 1000 );
 		begin = last;
+		jumped = 0;
 	}
 	
 	public function stop():Void
