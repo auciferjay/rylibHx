@@ -199,12 +199,12 @@ class UiNContainerAlign extends UiNContainer, implements IUiContainerAlignBase
 				}
 				
 				switch( contentAlign ) {
-					case CONTAINER_CONTENT_ALIGN_TOP:
-						items[z].setPosition( offsetX, offsetY );
 					case CONTAINER_CONTENT_ALIGN_MIDDLE:
 						items[z].setPosition( offsetX, offsetY + (rows[i].height - items[z].getRange().height)/2 );
 					case CONTAINER_CONTENT_ALIGN_BOTTOM:
 						items[z].setPosition( offsetX, offsetY + rows[i].height - items[z].getRange().height );
+					default:
+						items[z].setPosition( offsetX, offsetY );
 				}
 				
 				offsetX += items[z].getRange().width + gapX;
