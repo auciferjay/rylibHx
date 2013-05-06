@@ -12,6 +12,11 @@ import flash.geom.Rectangle;
 import flash.text.TextFormat;
 import flash.events.MouseEvent;
 
+/**
+ * ...
+ * @author RoYan
+ */
+
 class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements IUiItemGroupBase
 {
 	//properties

@@ -11,16 +11,27 @@ import flash.geom.Matrix;
  */
 class BitmapDataUtils
 {
-	static public function fromColors(width:Int, height:Int, colors:Array<Dynamic>, alphas:Array<Dynamic>, length:Int=1):BitmapData
+	static public function fromColors(width:Int, height:Int, colors:Array<Dynamic>, alphas:Array<Dynamic>, length:Int = 1):BitmapData
 	{
-		var bitmapdata:BitmapData = new BitmapData(width, height, true, 0x00000000);
+		var bitmapdata:BitmapData = new BitmapData(width * length, height, true, 0x00000000);
 		var shape:Shape = new Shape();
 		var matrix:Matrix = new Matrix();
+		var ratios:Array<Dynamic> = [];
+		var len:Float = 0;
+		var colorLen:Int = 0;
 		
-		if( length == 1 ){
-			matrix.createGradientBox(width, height, Math.PI/2, 0, 0);
+		if ( length == 1 ) {
 			if ( Std.is( colors, Array ) ) {
-				shape.graphics.beginGradientFill(GradientType.LINEAR, cast(colors), cast(alphas), [0,255], matrix);
+				matrix.createGradientBox(width, height, Math.PI / 2, 0, 0);
+				ratios = [];
+				colorLen = Std.int(colors.length - 1);
+				len = 255 / colorLen;
+				for ( i in 0...colorLen ) {
+					ratios.push(i * len);
+				}
+				ratios.push(255);
+				
+				shape.graphics.beginGradientFill(GradientType.LINEAR, cast(colors), cast(alphas), ratios, matrix);
 			}else{
 				shape.graphics.beginFill(colors[0], alphas[0]);
 			}
@@ -29,14 +40,22 @@ class BitmapDataUtils
 			shape.graphics.endFill();
 		}else {
 			for ( i in 0...length ) {
-				matrix.createGradientBox(width / length, height, Math.PI / 2, 0, 0);
 				if ( Std.is( colors[i], Array ) ) {
-					shape.graphics.beginGradientFill(GradientType.LINEAR, cast(colors[i]), cast(alphas[i]), [0,255], matrix);
+					matrix.createGradientBox(width, height, Math.PI / 2, 0, 0);
+					ratios = [];
+					colorLen = Std.int(colors[i].length - 1);
+					len = 255 / colorLen;
+					for ( i in 0...colorLen ) {
+						ratios.push(i * len);
+					}
+					ratios.push(255);
+					
+					shape.graphics.beginGradientFill(GradientType.LINEAR, cast(colors[i]), cast(alphas[i]), ratios, matrix);
 				}else {
 					shape.graphics.beginFill(colors[i], alphas[i]);
 				}
 				
-				shape.graphics.drawRect( width / colors.length * i, 0, width / colors.length, height );
+				shape.graphics.drawRect( width * i, 0, width, height );
 				shape.graphics.endFill();
 			}
 		}

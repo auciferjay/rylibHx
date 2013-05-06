@@ -30,9 +30,6 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 	var defaultTexture:Sparrow;
 	var bgTexture:Sparrow;
 	
-	var callbacks:Dynamic;
-	var selected:Bool;
-	
 	var containerWidth:Float;
 	var containerHeight:Float;
 	var positionX:Float;
@@ -96,23 +93,16 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 		bgColors = color;
 		bgAlphas = alpha;
 		
-		if( bgColors.length > 0 ){
-			if ( bgAlphas == null ) bgAlphas = [];
-			while ( bgAlphas.length < bgColors.length ) {
-				var temp:Array<Float> = [];
-				for ( i in 0...bgColors[bgAlphas.length].length ) {
-					temp.push(1);
-				}
-				bgAlphas.push(temp);
-			}
-			
-			while ( bgAlphas.length > bgColors.length ) {
-				bgAlphas.pop();
-			}
-			
-			if( containerWidth > 0 && containerHeight > 0 )
-				defaultTexture = getDefaultTexture();
+		while ( bgAlphas.length < bgColors.length ) {
+			bgAlphas.push(bgAlphas[bgAlphas.length - 1]);
 		}
+		
+		while ( bgColors.length < bgAlphas.length ) {
+			bgColors.push(bgColors[bgColors.length - 1]);
+		}
+		
+		if( containerWidth > 0 && containerHeight > 0 )
+			defaultTexture = getDefaultTexture();
 		
 		draw();
 	}
@@ -129,7 +119,7 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 	
 	public function setCallbacks(value:Dynamic):Void
 	{
-		callbacks = value;
+		
 	}
 	
 	public function setSize(w:Float, h:Float):Void

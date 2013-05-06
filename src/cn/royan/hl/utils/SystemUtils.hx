@@ -1,7 +1,6 @@
 package cn.royan.hl.utils;
 
 import cn.royan.hl.bases.PoolMap;
-import flash.Vector;
 import haxe.Log;
 import haxe.PosInfos;
 import haxe.Timer;
@@ -10,7 +9,6 @@ import haxe.Timer;
 import flash.system.ApplicationDomain;
 import flash.system.LoaderContext;
 import flash.errors.Error;
-import starling.textures.Texture;
 #end
 import flash.Lib;
 
@@ -106,15 +104,6 @@ class SystemUtils
 	public static function copyToClipboard(value:String):Void
 	{
 		flash.system.System.setClipboard(value);
-	}
-	
-	public static function toArray(vector:Vector<Texture>):Array<Dynamic>
-	{
-		var result:Array<Dynamic> = [];
-		for ( item in vector ) {
-			result.push(item);
-		}
-		return result;
 	}
 	
 	public static function gc():Void

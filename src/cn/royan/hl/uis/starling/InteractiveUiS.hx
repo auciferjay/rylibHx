@@ -5,10 +5,8 @@ import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiItemStateBase;
 import cn.royan.hl.utils.BitmapDataUtils;
-import flash.geom.Rectangle;
-import starling.events.Touch;
-import starling.events.TouchPhase;
 
+import flash.geom.Rectangle;
 import flash.display.BitmapData;
 import flash.events.EventDispatcher;
 
@@ -16,6 +14,8 @@ import starling.display.Image;
 import starling.display.Sprite;
 import starling.textures.Texture;
 import starling.events.Event;
+import starling.events.Touch;
+import starling.events.TouchPhase;
 import starling.events.TouchEvent;
 /**
  * ...
@@ -113,12 +113,12 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		bgColors = color;
 		bgAlphas = alpha;
 		
-		while ( bgColors.length < STATUS_LEN ) {
-			bgColors.push( bgColors[bgColors.length - 1] );
+		while ( bgAlphas.length < bgColors.length ) {
+			bgAlphas.push(bgAlphas[bgAlphas.length - 1]);
 		}
 		
-		while ( bgAlphas.length < STATUS_LEN ) {
-			bgAlphas.push( bgAlphas[bgAlphas.length - 1] );
+		while ( bgColors.length < bgAlphas.length ) {
+			bgColors.push(bgColors[bgColors.length - 1]);
 		}
 		
 		if( containerWidth > 0 && containerHeight > 0 )
@@ -257,27 +257,31 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
         if ( !mouseEnabled ) return;
 		
 		if (evt.getTouch(this, TouchPhase.HOVER) != null) {
-			mouseOverHandler();
+			mouseOverHandler(evt.getTouch(this, TouchPhase.HOVER));
         } else {
 			mouseOutHandler();
         }
 		
 		if (evt.getTouch(this, TouchPhase.BEGAN) != null) {
-			mouseDownHandler();
+			mouseDownHandler(evt.getTouch(this, TouchPhase.BEGAN));
 		}
 		
 		if (evt.getTouch(this, TouchPhase.ENDED) != null) {
-			mouseUpHandler();
-			mouseClickHandler();
+			mouseUpHandler(evt.getTouch(this, TouchPhase.ENDED));
+			mouseClickHandler(evt.getTouch(this, TouchPhase.ENDED));
         }
+		
+		if (evt.getTouch(this, TouchPhase.MOVED) != null) {
+			mouseMoveHandler(evt.getTouch(this, TouchPhase.MOVED));
+		}
 	}
 	
 	//Protected methods
-	function mouseOverHandler():Void
+	function mouseOverHandler(touch:Touch):Void
 	{
 		if ( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
 		if ( isMouseRender ) draw();
-		if ( callbacks != null && callbacks.over != null ) callbacks.over(this);
+		if ( callbacks != null && callbacks.over != null ) callbacks.over(this, touch);
 	}
 	
 	function mouseOutHandler():Void
@@ -287,23 +291,28 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		if ( callbacks != null && callbacks.out != null ) callbacks.out(this);
 	}
 	
-	function mouseDownHandler():Void
+	function mouseDownHandler(touch:Touch):Void
 	{
 		if ( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_DOWN;
 		if ( isMouseRender ) draw();
-		if ( callbacks != null && callbacks.down != null ) callbacks.down(this);
+		if ( callbacks != null && callbacks.down != null ) callbacks.down(this, touch);
 	}
 	
-	function mouseUpHandler():Void
+	function mouseUpHandler(touch:Touch):Void
 	{
 		if ( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
 		if ( isMouseRender ) draw();
-		if ( callbacks != null && callbacks.up != null ) callbacks.up(this);
+		if ( callbacks != null && callbacks.up != null ) callbacks.up(this, touch);
 	}
 	
-	function mouseClickHandler():Void
+	function mouseMoveHandler(touch:Touch):Void
 	{
-		if( callbacks != null && callbacks.click != null ) callbacks.click(this);
+		if ( callbacks != null && callbacks.move != null ) callbacks.move(this, touch);
+	}
+	
+	function mouseClickHandler(touch:Touch):Void
+	{
+		if( callbacks != null && callbacks.click != null ) callbacks.click(this, touch);
 	}
 	
 	function addToStageHandler(evt:Event = null):Void

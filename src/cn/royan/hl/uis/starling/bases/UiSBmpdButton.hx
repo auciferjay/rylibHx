@@ -9,6 +9,7 @@ import flash.ui.Mouse;
 import flash.ui.MouseCursor;
 import starling.display.Image;
 import starling.events.Event;
+import starling.events.Touch;
 import starling.events.TouchEvent;
 import starling.textures.Texture;
 
@@ -62,9 +63,9 @@ class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 		super.addToStageHandler(evt);
 	}
 	
-	override private function mouseOverHandler():Void 
+	override private function mouseOverHandler(touch:Touch):Void 
 	{
-		super.mouseOverHandler();
+		super.mouseOverHandler(touch);
 		Mouse.cursor = MouseCursor.BUTTON;
 	}
 	
@@ -74,7 +75,7 @@ class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 		Mouse.cursor = MouseCursor.AUTO;
 	}
 	
-	override function mouseClickHandler():Void
+	override function mouseClickHandler(touch:Touch):Void
 	{
 		if( isInGroup ){
 			selected = !selected;
@@ -83,7 +84,7 @@ class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 			draw();
 		}
 		
-		super.mouseClickHandler();
+		super.mouseClickHandler(touch);
 	}
 	
 	//Public methods

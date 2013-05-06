@@ -9,9 +9,9 @@ import cn.royan.hl.systems.DeviceCapabilities;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.utils.BitmapDataUtils;
 import cn.royan.hl.utils.SystemUtils;
+
 import flash.display.Bitmap;
 import flash.geom.Rectangle;
-
 import flash.display.BitmapData;
 import flash.display.GradientType;
 import flash.display.Sprite;
@@ -103,7 +103,7 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 		}
 	}
 	
-	public function getDefaultTexture():Sparrow
+	public function getDefaultTexture():Dynamic
 	{
 		return Sparrow.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), bgColors, bgAlphas));
 	}
@@ -113,12 +113,12 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 		bgColors = color;
 		bgAlphas = alpha;
 		
-		while ( bgColors.length < STATUS_LEN ) {
-			bgColors.push( bgColors[bgColors.length - 1] );
+		while ( bgAlphas.length < bgColors.length ) {
+			bgAlphas.push(bgAlphas[bgAlphas.length - 1]);
 		}
 		
-		while ( bgAlphas.length < STATUS_LEN ) {
-			bgAlphas.push( bgAlphas[bgAlphas.length - 1] );
+		while ( bgColors.length < bgAlphas.length ) {
+			bgColors.push(bgColors[bgColors.length - 1]);
 		}
 		
 		if( containerWidth > 0 && containerHeight > 0 )
