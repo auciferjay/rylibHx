@@ -21,16 +21,16 @@ class TimerBase implements IDisposeBase
 	static private var timerlists:Array<TimerBase> = [];
 	
 	var callFun:Void->Void;
-	var delay:Int;
+	var delay:Float;
 	var last:Int;
 	var begin:Int;
-	var current:Int;
+	var current:Float;
 	var jumped:Int;
 	var loopLimit:Int;
 	
 	public var isStart(default, null):Bool;
 	
-	public function new(time:Int, f:Void->Void, loop:Int=0) 
+	public function new(time:Float, f:Void->Void, loop:Int=0) 
 	{
 		delay = time;
 		callFun = f;
@@ -64,7 +64,7 @@ class TimerBase implements IDisposeBase
 		timerlists.remove(this);
 	}
 
-	public function remain():Int
+	public function remain():Float
 	{
 		return current;
 	}
