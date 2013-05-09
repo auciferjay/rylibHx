@@ -39,6 +39,8 @@ class UninteractiveUiS extends Sprite, implements IUiBase, implements IUiItemSta
 
 	public var graphics:Image;
 	
+	var isInit:Bool;
+	
 	//Constructor
 	public function new(texture:Texture = null)
 	{
@@ -62,12 +64,17 @@ class UninteractiveUiS extends Sprite, implements IUiBase, implements IUiItemSta
 			graphics = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), [0x000000], [0x00])));
 			addChild( graphics );
 		}
+		
+		isInit = true;
+		
+		draw();
 	}
 	
 	//Public methods
 	public function draw():Void
 	{
-		if( containerWidth > 0 && containerHeight > 0 ){
+		if ( !isInit ) return;
+		if ( containerWidth > 0 && containerHeight > 0 ) {
 			if( bgTexture != null )
 				graphics.texture = bgTexture;
 			else if( defaultTexture != null )

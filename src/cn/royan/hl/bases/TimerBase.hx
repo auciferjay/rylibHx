@@ -26,13 +26,15 @@ class TimerBase implements IDisposeBase
 	var begin:Int;
 	var current:Int;
 	var jumped:Int;
+	var loopLimit:Int;
 	
 	public var isStart(default, null):Bool;
 	
-	public function new(time:Int, f:Void->Void) 
+	public function new(time:Int, f:Void->Void, loop:Int=0) 
 	{
 		delay = time;
 		callFun = f;
+		loopLimit = loop;
 		
 		timerlists.push(this);
 	}
@@ -83,6 +85,9 @@ class TimerBase implements IDisposeBase
 
 		last = Std.int( Timer.stamp() * 1000 );
 		var total:Int = Std.int( (last - begin) / delay );
+		if ( loopLimit != 0 && total >= loopLimit ) {
+			stop();
+		}
 		return total - jumped;
 	}
 	

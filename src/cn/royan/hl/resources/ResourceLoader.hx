@@ -101,6 +101,11 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 			callbacks = value;
 		}
 		
+		public function extraComplete():Void
+		{
+			loader.loaderComplete();
+		}
+		
 		public function containerInitComplete():Void
 		{
 			if( root.contains(loader) ) root.removeChild(loader);

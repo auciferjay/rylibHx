@@ -45,7 +45,7 @@ class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupB
 		items.push(item);
 		untyped keys.push(key != null ? key : cast(item));
 		
-		item.getDispatcher().addEventListener(TouchEvent.TOUCH, itemSelectHandler);
+		item.setCallbacks({click:itemSelectHandler});
 		
 		setScale(getScale());
 
@@ -73,7 +73,7 @@ class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupB
 		items = prev.concat(next);
 		keys = pkey.concat(nkey);
 		
-		item.getDispatcher().addEventListener(TouchEvent.TOUCH, itemSelectHandler);
+		item.setCallbacks({click:itemSelectHandler});
 
 		setScale(getScale());
 
@@ -93,7 +93,6 @@ class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupB
 		}
 		items.remove(item);
 		
-		item.getDispatcher().removeEventListener(TouchEvent.TOUCH, itemSelectHandler);
 		removeChild(cast(item, DisplayObject));
 		
 		draw();
@@ -116,7 +115,6 @@ class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupB
 	{
 		while ( items.length > 0 ) {
 			var item:IUiBase = items.shift();
-				item.getDispatcher().removeEventListener(TouchEvent.TOUCH, itemSelectHandler);
 			removeItem(item);
 		}
 		
@@ -197,16 +195,13 @@ class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupB
 		}
 	}
 	
-	function itemSelectHandler(evt:TouchEvent):Void
+	function itemSelectHandler(obj:IUiItemGroupBase, touch:Touch):Void
 	{
-		var touch:Touch = evt.getTouch(stage); 
-		if ( touch == null || touch.phase != "began" ) return;
-		
-		var key:Dynamic = getKey(cast( evt.currentTarget ) );
+		var key:Dynamic = getKey(obj);
 		var giveUpKey:Dynamic = null;
 		var index:Int = SystemUtils.arrayIndexOf(values, key);
 		var giveUpIndex:Int = -1;
-		var current:IUiItemGroupBase = cast(items[SystemUtils.arrayIndexOf(items, evt.currentTarget)]);
+		var current:IUiItemGroupBase = cast(items[SystemUtils.arrayIndexOf(items, obj)]);
 		if ( index == -1 ) {
 			if ( isMulti ) {
 				if( maxLen <= values.length )
@@ -268,7 +263,7 @@ class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupB
 		super.addToStageHandler(evt);
 		
 		for ( item in items ) {
-			item.getDispatcher().addEventListener(TouchEvent.TOUCH, itemSelectHandler);
+			item.setCallbacks({click:itemSelectHandler});
 		}
 	}
 	
