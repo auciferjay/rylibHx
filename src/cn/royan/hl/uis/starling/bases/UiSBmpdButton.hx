@@ -75,17 +75,17 @@ class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 		Mouse.cursor = MouseCursor.AUTO;
 	}
 	
-	override function mouseClickHandler(touch:Touch):Void
-	{
-		if( isInGroup ){
-			selected = !selected;
-			status = selected?InteractiveUiS.INTERACTIVE_STATUS_SELECTED:status;
+	// override function mouseClickHandler(touch:Touch):Void
+	// {
+		// if( isInGroup ){
+		// 	selected = !selected;
+		// 	status = selected?InteractiveUiS.INTERACTIVE_STATUS_SELECTED:status;
 			
-			draw();
-		}
+		// 	draw();
+		// }
 		
-		super.mouseClickHandler(touch);
-	}
+		// super.mouseClickHandler(touch);
+	// }
 	
 	//Public methods
 	override public function draw():Void

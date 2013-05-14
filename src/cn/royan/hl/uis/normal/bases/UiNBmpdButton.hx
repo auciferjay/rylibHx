@@ -129,17 +129,17 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 		buttonMode = (currentStatus.bitmapData.getPixel32(Std.int(evt.localX), Std.int(evt.localY)) >> 24) != 0x00;
 	}
 	
-	override function mouseClickHandler(evt:MouseEvent):Void
-	{
-		if( isInGroup ){
-			selected = !selected;
-			status = selected?InteractiveUiN.INTERACTIVE_STATUS_SELECTED:status;
+	// override function mouseClickHandler(evt:MouseEvent):Void
+	// {
+		// if( isInGroup ){
+			// selected = !selected;
+			// status = selected?InteractiveUiN.INTERACTIVE_STATUS_SELECTED:status;
 			
-			draw();
-		}
+			// draw();
+		// }
 		
-		super.mouseClickHandler(evt);
-	}
+		// super.mouseClickHandler(evt);
+	// }
 	
 	//Public methods
 	override public function draw():Void
