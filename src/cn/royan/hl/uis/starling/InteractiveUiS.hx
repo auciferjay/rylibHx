@@ -215,6 +215,20 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 		return null;
 	}
 	
+	public function setEnabled(value:Bool):Void
+	{
+		status = value?INTERACTIVE_STATUS_NORMAL:INTERACTIVE_STATUS_DISABLE;
+		
+		setMouseRender(value);
+		
+		draw();
+	}
+	
+	public function getEnabled():Bool
+	{
+		return status != INTERACTIVE_STATUS_DISABLE;
+	}
+	
 	public function setMouseRender(value:Bool):Void
 	{
 		isMouseRender = value;
