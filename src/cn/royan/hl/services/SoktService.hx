@@ -1,20 +1,20 @@
 package cn.royan.hl.services;
 
-import cn.royan.hl.bases.DispatcherBase;
 import cn.royan.hl.bases.PoolMap;
+import cn.royan.hl.bases.DispatcherBase;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.services.IServiceBase;
 import cn.royan.hl.interfaces.services.IServiceMessageBase;
 import cn.royan.hl.utils.SystemUtils;
-import flash.events.Event;
-import flash.events.IOErrorEvent;
-import flash.events.ProgressEvent;
-import flash.events.SecurityErrorEvent;
-import flash.events.EventDispatcher;
+
 #if !flash && !js
 import sys.net.Socket;
 #elseif flash
 import flash.net.Socket;
+import flash.events.Event;
+import flash.events.IOErrorEvent;
+import flash.events.ProgressEvent;
+import flash.events.SecurityErrorEvent;
 #elseif js
 import js.XMLSocket;
 #end
@@ -47,7 +47,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 		this.port = port;
 	}
 
-	public function sendRequest(url:String='', extra:Dynamic=null) 
+	public function sendRequest(url:String='', extra:Dynamic=null):Void
 	{
 		if( getIsServicing() ){
 			socket.writeBytes( cast(extra) );
