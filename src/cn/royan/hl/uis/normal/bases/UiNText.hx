@@ -3,6 +3,7 @@ package cn.royan.hl.uis.normal.bases;
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.uis.IUiTextBase;
 import cn.royan.hl.uis.normal.InteractiveUiN;
+import flash.events.EventDispatcher;
 
 import flash.text.TextFieldType;
 import flash.text.TextField;
@@ -200,6 +201,12 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 	{
 		return inputText.defaultTextFormat;
 	}
+	
+	override public function getDispatcher():EventDispatcher
+	{
+		return inputText;
+	}
+	
 	#if flash
 	public function setScroll(sx:Int = 0, sy:Int = 0):Void
 	{
