@@ -69,7 +69,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 		
 		timer = new TimerBase( Std.int( 1000 / frameRate ), timerHandler );
 		
-		currentFrame = new Bitmap(new BitmapData(Std.int(containerWidth), Std.int(containerHeight), true, 0x00000000));
+		currentFrame = new Bitmap(new BitmapData(Std.int(containerWidth), Std.int(containerHeight), true, #if neko {rgb:0,a:0} #else 0x00000000 #end));
 		
 		if( bgTextures[current-1] != null )
 			currentFrame.bitmapData.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point(bgTextures[current - 1].frame.x, bgTextures[current - 1].frame.y));

@@ -47,7 +47,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 			bgTextures.push(bgTextures[bgTextures.length - 1]);
 		}
 		
-		currentStatus = new Bitmap(new BitmapData(Std.int(containerWidth), Std.int(containerHeight), true, 0x00000000));
+		currentStatus = new Bitmap(new BitmapData(Std.int(containerWidth), Std.int(containerHeight), true, #if neko {rgb:0,a:0} #else 0x00000000 #end));
 		if( bgTextures[status] != null )
 			currentStatus.bitmapData.copyPixels(bgTextures[status].bitmapdata, bgTextures[status].regin, new Point(bgTextures[status].frame.x, bgTextures[status].frame.y));
 		addChildAt(currentStatus, 0);
@@ -121,36 +121,34 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 	{
 		super.addToStageHandler(evt);
 		
-		//addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+		addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 	}
 	
 	function mouseMoveHandler(evt:MouseEvent):Void
 	{
+		#if neko
+		buttonMode = currentStatus.bitmapData.getPixel32(Std.int(evt.localX), Std.int(evt.localY)).a != 0x00;
+		#else
 		buttonMode = (currentStatus.bitmapData.getPixel32(Std.int(evt.localX), Std.int(evt.localY)) >> 24) != 0x00;
+		#end
 	}
-	
-	// override function mouseClickHandler(evt:MouseEvent):Void
-	// {
-		// if( isInGroup ){
-			// selected = !selected;
-			// status = selected?InteractiveUiN.INTERACTIVE_STATUS_SELECTED:status;
-			
-			// draw();
-		// }
-		
-		// super.mouseClickHandler(evt);
-	// }
 	
 	//Public methods
 	override public function draw():Void
 	{
 		if ( !isOnStage ) return;
 		if ( status < bgTextures.length && currentStatus != null ) {
+			SystemUtils.print(status+":"+bgTextures[status], 10);
+
 			freshRect.x = getRange().x;
 			freshRect.y = getRange().y;
 			freshRect.width 	= getRange().width;
 			freshRect.height 	= getRange().height;
+			#if neko
+			currentStatus.bitmapData.fillRect(freshRect, {rgb:0x000000, a:0x00});
+			#else
 			currentStatus.bitmapData.fillRect(freshRect, 0x00000000);
+			#end
 			currentStatus.bitmapData.copyPixels(bgTextures[status].bitmapdata, bgTextures[status].regin, new Point(bgTextures[status].frame.x, bgTextures[status].frame.y));
 			currentStatus.scaleX = currentStatus.scaleY = getScale();
 		}
@@ -158,6 +156,8 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 	
 	override public function setColorsAndAplhas(color:Array<Dynamic>, alpha:Array<Dynamic>):Void 
 	{
+		SystemUtils.print(color+":"+alpha, 10);
+
 		bgColors = color;
 		bgAlphas = alpha;
 		
@@ -175,7 +175,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 			drawTextures(defaultTexture, InteractiveUiN.STATUS_LEN);
 			
 			if ( currentStatus == null ) {
-				currentStatus = new Bitmap(new BitmapData(Std.int(containerWidth), Std.int(containerHeight), true, 0x00000000));
+				currentStatus = new Bitmap(new BitmapData(Std.int(containerWidth), Std.int(containerHeight), true, #if neko {rgb:0,a:0} #else 0x00000000 #end));
 				if( bgTextures[status] != null )
 					currentStatus.bitmapData.copyPixels(bgTextures[status].bitmapdata, bgTextures[status].regin, new Point(bgTextures[status].frame.x, bgTextures[status].frame.y));
 				addChildAt(currentStatus, 0);
@@ -204,6 +204,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 	
 	override public function setTexture(value:Sparrow, frames:Int=5):Void
 	{
+		SystemUtils.print(bgTexture, 10);
 		bgTexture = value;
 		
 		drawTextures(bgTexture, frames);
@@ -213,7 +214,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 		}
 		
 		if ( currentStatus == null ) {
-			currentStatus = new Bitmap(new BitmapData(Std.int(containerWidth), Std.int(containerHeight), true, 0x00000000));
+			currentStatus = new Bitmap(new BitmapData(Std.int(containerWidth), Std.int(containerHeight), true, #if neko {rgb:0,a:0} #else 0x00000000 #end));
 			if( bgTextures[status] != null )
 				currentStatus.bitmapData.copyPixels(bgTextures[status].bitmapdata, bgTextures[status].regin, new Point(bgTextures[status].frame.x, bgTextures[status].frame.y));
 			addChildAt(currentStatus, 0);

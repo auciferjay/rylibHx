@@ -133,8 +133,7 @@ class TakeService extends DispatcherBase, implements IServiceBase
 		}
 		
 		urlstream = null;
-		
-		serviceData.length = 0;
+
 		serviceData = null;
 		urlrequest = null;
 		urlvariable = null;

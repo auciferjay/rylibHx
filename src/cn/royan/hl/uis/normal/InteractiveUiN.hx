@@ -95,6 +95,7 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 		graphics.clear();
 		
 		if( containerWidth > 0 && containerHeight > 0 ){
+			SystemUtils.print(bgTexture +":"+ defaultTexture, 10);
 			if ( bgTexture != null )
 				background.bitmapData.copyPixels(bgTexture.bitmapdata, bgTexture.regin, new Point());
 			else if( defaultTexture != null )
@@ -110,6 +111,8 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 	
 	public function setColorsAndAplhas(color:Array<Dynamic>, alpha:Array<Dynamic>):Void
 	{
+		SystemUtils.print(color+":"+alpha, 10);
+
 		bgColors = color;
 		bgAlphas = alpha;
 		
@@ -144,10 +147,11 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 	
 	public function setSize(w:Float, h:Float):Void
 	{
+		SystemUtils.print(w+":"+h, 10);
 		containerWidth = w;
 		containerHeight = h;
 		
-		background.bitmapData = new BitmapData(Std.int(w), Std.int(h), true, 0xFFFFFF);
+		background.bitmapData = new BitmapData(Std.int(w), Std.int(h), true, #if neko {rgb:0,a:0} #else 0x00000000 #end) ;
 		
 		if( bgTexture == null && bgColors != null && bgAlphas != null )
 			defaultTexture = getDefaultTexture();
@@ -157,6 +161,7 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 
 	public function setPosition(cx:Float, cy:Float):Void
 	{
+		SystemUtils.print(cx+":"+cy, 10);
 		positionX = cx;
 		positionY = cy;
 		
@@ -319,6 +324,7 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 	//Protected methods
 	function mouseOverHandler(evt:MouseEvent):Void
 	{
+		SystemUtils.print(evt, 10);
 		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
 		if( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.over != null ) callbacks.over(this);
@@ -326,6 +332,7 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 	
 	function mouseOutHandler(evt:MouseEvent):Void
 	{
+		SystemUtils.print(evt, 10);
 		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_NORMAL;
 		if( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.out != null ) callbacks.out(this);
@@ -333,6 +340,7 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 	
 	function mouseDownHandler(evt:MouseEvent):Void
 	{
+		SystemUtils.print(evt, 10);
 		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_DOWN;
 		if( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.down != null ) callbacks.down(this);
@@ -340,6 +348,7 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 	
 	function mouseUpHandler(evt:MouseEvent):Void
 	{
+		SystemUtils.print(evt, 10);
 		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
 		if( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.up != null ) callbacks.up(this);
@@ -347,19 +356,22 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 	
 	function mouseClickHandler(evt:MouseEvent):Void
 	{
+		SystemUtils.print(evt, 10);
 		if( callbacks != null && callbacks.click != null ) callbacks.click(this);
 	}
 	
 	function addToStageHandler(evt:Event = null):Void
 	{
+		SystemUtils.print(evt, 10);
+
 		if ( hasEventListener(Event.ADDED_TO_STAGE) )
 			removeEventListener(Event.ADDED_TO_STAGE, addToStageHandler);
 			
-		addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler, 	false, 99, true );
-		addEventListener(MouseEvent.MOUSE_OUT, 	mouseOutHandler, 	false, 99, true );
-		addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler, 	false, 99, true );
-		addEventListener(MouseEvent.MOUSE_UP, 	mouseUpHandler, 	false, 99, true );
-		addEventListener(MouseEvent.CLICK, 		mouseClickHandler, 	false, 99, true );
+		addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler, 	false, 99, false );
+		addEventListener(MouseEvent.MOUSE_OUT, 	mouseOutHandler, 	false, 99, false );
+		addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler, 	false, 99, false );
+		addEventListener(MouseEvent.MOUSE_UP, 	mouseUpHandler, 	false, 99, false );
+		addEventListener(MouseEvent.CLICK, 		mouseClickHandler, 	false, 99, false );
 		
 		addEventListener(Event.REMOVED_FROM_STAGE, removeFromStageHandler);
 		

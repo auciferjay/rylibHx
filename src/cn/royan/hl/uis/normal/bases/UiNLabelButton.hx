@@ -64,7 +64,7 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 	
 	public function getDefaultTextColor():Array<Dynamic>
 	{
-		return [0x000000,0xFF00FF,0xFFFFFF,0xFFFFFF,0xCCCCCC];
+		return [0x000000,0x666666,0xFFFFFF,0xFFFFFF,0xCCCCCC];
 	}
 	
 	public function autoSize(value:Int):Void

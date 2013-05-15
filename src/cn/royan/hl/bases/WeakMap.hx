@@ -81,6 +81,7 @@ class WeakMap
 			Reflect.field(map,value).push(key);
 		} else {
 			//指向值的键
+			SystemUtils.print(map +":"+ value +":"+ [key], 11);
 			Reflect.setField(map,value,[key]);
 		}
 		length++;

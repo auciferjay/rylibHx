@@ -13,7 +13,7 @@ class BitmapDataUtils
 {
 	static public function fromColors(width:Int, height:Int, colors:Array<Dynamic>, alphas:Array<Dynamic>, length:Int = 1):BitmapData
 	{
-		var bitmapdata:BitmapData = new BitmapData(width * length, height, true, 0x00000000);
+		var bitmapdata:BitmapData = new BitmapData(width * length, height, true, #if neko {rgb:0,a:0} #else 0x00000000 #end);
 		var shape:Shape = new Shape();
 		var matrix:Matrix = new Matrix();
 		var ratios:Array<Dynamic> = [];
@@ -66,7 +66,7 @@ class BitmapDataUtils
 	
 	static public function fromDisplayObject(displayObject:DisplayObject):BitmapData
 	{
-		var bitmapdata:BitmapData = new BitmapData(Std.int(displayObject.width), Std.int(displayObject.height), true, 0x00000000);
+		var bitmapdata:BitmapData = new BitmapData(Std.int(displayObject.width), Std.int(displayObject.height), true, #if neko {rgb:0,a:0} #else 0x00000000 #end);
 		bitmapdata.draw(displayObject);
 		
 		return bitmapdata;

@@ -75,6 +75,8 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 		graphics.clear();
 		
 		if( containerWidth > 0 && containerHeight > 0 ){
+			SystemUtils.print(bgTexture+":"+defaultTexture, 10);
+
 			if ( bgTexture != null )
 				background.bitmapData.copyPixels(bgTexture.bitmapdata, bgTexture.regin, new Point());
 			else if( defaultTexture != null )
@@ -90,6 +92,8 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 	
 	public function setColorsAndAplhas(color:Array<Dynamic>, alpha:Array<Dynamic>):Void
 	{
+		SystemUtils.print(color+":"+alpha, 10);
+
 		bgColors = color;
 		bgAlphas = alpha;
 		
@@ -124,10 +128,11 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 	
 	public function setSize(w:Float, h:Float):Void
 	{
+		SystemUtils.print(w+":"+h, 10);
 		containerWidth = w;
 		containerHeight = h;
 		
-		background.bitmapData = new BitmapData(Std.int(w), Std.int(h), true, 0xFFFFFF);
+		background.bitmapData = new BitmapData(Std.int(w), Std.int(h), true, #if neko {rgb:0,a:0} #else 0x00000000 #end);
 		
 		if( bgTexture == null && bgColors != null && bgAlphas != null )
 			defaultTexture = getDefaultTexture();
@@ -137,6 +142,8 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 
 	public function setPosition(cx:Float, cy:Float):Void
 	{
+		SystemUtils.print(cx+":"+cy, 10);
+		
 		positionX = cx;
 		positionY = cy;
 		

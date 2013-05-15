@@ -100,13 +100,24 @@ class SoctService extends DispatcherBase, implements IServiceBase
 			sock.bind(new Host(host),port);
 			sock.listen(listen);
 			
-			init();
-			listener = Thread.create(runListener);
-			
-			if( callbacks != null && callbacks.create != null ) callbacks.create();
-			else dispatchEvent(new DatasEvent(DatasEvent.DATA_CREATE));
-			
 			isServicing = true;
+
+			listener = Thread.create(runListener);
+			worker = Thread.create(runWorker);
+			timer = Thread.create(runTimer);
+			
+			for( i in 0...nthreads ) {
+				var t:ThreadInfos = {
+					id:i,
+					thread:null,
+					sockets : new Array()
+				};
+				threads.push(t);
+				t.thread = Thread.create(callback(runThread,t));
+			}
+			
+			if( callbacks != null && callbacks.done != null ) callbacks.done();
+			else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE));
 		}catch(e:Dynamic){
 			logError(e);
 		}
@@ -114,12 +125,12 @@ class SoctService extends DispatcherBase, implements IServiceBase
 	
 	public function close():Void
 	{
-		sock.close();
-		
-		if( callbacks != null && callbacks.destory != null ) callbacks.destory();
-		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DESTROY));
-		
 		isServicing = false;
+
+		sock.close();
+
+		if( callbacks != null && callbacks.destory != null ) callbacks.destory(null);
+		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DESTROY));
 	}
 	
 	public function getData():Dynamic 
@@ -141,25 +152,9 @@ class SoctService extends DispatcherBase, implements IServiceBase
 		removeAllEventListeners();
 	}
 	
-	function init():Void
-	{
-		worker = Thread.create(runWorker);
-		timer = Thread.create(runTimer);
-		
-		for( i in 0...nthreads ) {
-			var t:ThreadInfos = {
-				id:i,
-				thread:null,
-				sockets : new Array()
-			};
-			threads.push(t);
-			t.thread = Thread.create(callback(runThread,t));
-		}
-	}
-	
 	function runListener():Void
 	{
-		while( true ) {
+		while( getIsServicing() ) {
 			try {
 				addSocket(sock.accept());
 			} catch( e : Dynamic ) {
@@ -170,7 +165,7 @@ class SoctService extends DispatcherBase, implements IServiceBase
 	
 	function runThread(t:ThreadInfos):Void
 	{
-		while( true ) {
+		while( getIsServicing() ) {
 			try {
 				loopThread(t);
 			} catch( e : Dynamic ) {
@@ -193,7 +188,7 @@ class SoctService extends DispatcherBase, implements IServiceBase
 					work(callback(doClientDisconnected,s));
 				}
 			}
-		while( true ) {
+		while( getIsServicing() ) {
 			var m : { s : Socket, cnx : Bool } = Thread.readMessage(t.sockets.length == 0);
 			if( m == null )
 				break;
@@ -208,7 +203,7 @@ class SoctService extends DispatcherBase, implements IServiceBase
 	
 	function runWorker():Void
 	{
-		while( true ) {
+		while( getIsServicing() ) {
 			var f = Thread.readMessage(true);
 			try {
 				f();
@@ -226,7 +221,7 @@ class SoctService extends DispatcherBase, implements IServiceBase
 	function runTimer():Void
 	{
 		var l = new Lock();
-		while( true ) {
+		while( getIsServicing() ) {
 			l.wait(updateTime);
 			work(update);
 		}
@@ -336,13 +331,13 @@ class SoctService extends DispatcherBase, implements IServiceBase
 
 	function clientConnected(s:Socket):Void
 	{
-		if( callbacks != null && callbacks.done != null ) callbacks.done();
-		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE));
+		if( callbacks != null && callbacks.create != null ) callbacks.create(s);
+		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CREATE));
 	}
 
 	function clientDisconnected(s:Socket):Void
 	{
-		if( callbacks != null && callbacks.destory != null ) callbacks.destory();
+		if( callbacks != null && callbacks.destory != null ) callbacks.destory(s);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DESTROY));
 	}
 
