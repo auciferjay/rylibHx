@@ -1,5 +1,6 @@
 package cn.royan.hl.uis.sparrow;
 import cn.royan.hl.bases.Dictionary;
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.utils.SystemUtils;
 import flash.display.Bitmap;
 
@@ -16,12 +17,14 @@ class SparrowManager
 	
 	static public inline function setAtlas(type:String, bitmap:Bitmap, xml:Xml):Void
 	{
+		SystemUtils.print(type+":"+bitmap+":"+xml, PrintConst.UIS);
 		Reflect.setField(gameBitmaps, type, bitmap);
 		Reflect.setField(gameXMLs, type, xml);
 	}
 	
 	static public inline function getAtlas(type:String):SparrowAtlas
 	{
+		SystemUtils.print(type, PrintConst.UIS);
 		if (Reflect.field(gameSparrowAtlases, type) == null)
 		{
 			var texture:Sparrow = Sparrow.fromBitmap(Reflect.field(gameBitmaps,type));

@@ -1,5 +1,6 @@
 package cn.royan.hl.uis.normal;
 
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiItemStateBase;
 import cn.royan.hl.events.DatasEvent;
@@ -75,7 +76,7 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 		graphics.clear();
 		
 		if( containerWidth > 0 && containerHeight > 0 ){
-			SystemUtils.print(bgTexture+":"+defaultTexture, 10);
+			SystemUtils.print(bgTexture+":"+defaultTexture, PrintConst.UIS);
 
 			if ( bgTexture != null )
 				background.bitmapData.copyPixels(bgTexture.bitmapdata, bgTexture.regin, new Point());
@@ -92,7 +93,7 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 	
 	public function setColorsAndAplhas(color:Array<Dynamic>, alpha:Array<Dynamic>):Void
 	{
-		SystemUtils.print(color+":"+alpha, 10);
+		SystemUtils.print(color+":"+alpha, PrintConst.UIS);
 
 		bgColors = color;
 		bgAlphas = alpha;
@@ -128,7 +129,7 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 	
 	public function setSize(w:Float, h:Float):Void
 	{
-		SystemUtils.print(w+":"+h, 10);
+		SystemUtils.print(w+":"+h, PrintConst.UIS);
 		containerWidth = w;
 		containerHeight = h;
 		
@@ -142,7 +143,7 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 
 	public function setPosition(cx:Float, cy:Float):Void
 	{
-		SystemUtils.print(cx+":"+cy, 10);
+		SystemUtils.print(cx+":"+cy, PrintConst.UIS);
 		
 		positionX = cx;
 		positionY = cy;

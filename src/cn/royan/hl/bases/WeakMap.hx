@@ -1,4 +1,5 @@
 package cn.royan.hl.bases;
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.utils.SystemUtils;
 /**
  * ...
@@ -45,8 +46,9 @@ class WeakMap
 		return result;
 	}
 	
-	public function contentValue(value:Dynamic):Bool
+	public function containValue(value:Dynamic):Bool
 	{
+		SystemUtils.print(value, PrintConst.BASES);
 		for (i in Reflect.fields(map)) {
 			if (Reflect.field(map,i) == value) {
 				return true;
@@ -55,8 +57,9 @@ class WeakMap
 		return false;
 	}
 	
-	public function contentKey(key:String):Bool
+	public function containKey(key:String):Bool
 	{
+		SystemUtils.print(key, PrintConst.BASES);
 		for( i in keys) {
 			if( i == key ) {
 				return true;
@@ -66,17 +69,18 @@ class WeakMap
 		
 	}
 	
-	public function set(key:String,value:Dynamic):Void
+	public function set(key:String, value:Dynamic):Void
 	{
+		SystemUtils.print(key+":"+value, PrintConst.BASES);
 		//如果键存在，删除键
-		if( contentKey( key ) ) {
+		if( containKey( key ) ) {
 			for ( i in Reflect.fields(map) ) {
 				Reflect.field(map,i).splice(SystemUtils.arrayIndexOf(Reflect.field(map,i),key),1);
 			}
 			length--;
 		}
 		//如果值存在
-		if( contentValue( value ) ) {
+		if( containValue( value ) ) {
 			//增加指向值的键
 			Reflect.field(map,value).push(key);
 		} else {
@@ -93,6 +97,7 @@ class WeakMap
 	
 	public function getValue(key:String):Dynamic
 	{
+		SystemUtils.print(key, PrintConst.BASES);
 		// i 为值
 		for (item in Reflect.fields(map))
 		{
@@ -116,6 +121,7 @@ class WeakMap
 	
 	public function clear(key:String):Void
 	{
+		SystemUtils.print(key, PrintConst.BASES);
 		var value:Dynamic = getValue(key);
 		var key_arr:Array<Dynamic> = Reflect.field(map,value);
 		if( key_arr != null )

@@ -1,4 +1,5 @@
 package cn.royan.hl.utils;
+import cn.royan.hl.consts.PrintConst;
 import flash.display.BitmapData;
 import flash.display.DisplayObject;
 import flash.display.GradientType;
@@ -13,6 +14,8 @@ class BitmapDataUtils
 {
 	static public function fromColors(width:Int, height:Int, colors:Array<Dynamic>, alphas:Array<Dynamic>, length:Int = 1):BitmapData
 	{
+		SystemUtils.print(width+":"+height+":"+colors+":"+alphas+","+length, PrintConst.UTILS);
+		
 		var bitmapdata:BitmapData = new BitmapData(width * length, height, true, #if neko {rgb:0,a:0} #else 0x00000000 #end);
 		var shape:Shape = new Shape();
 		var matrix:Matrix = new Matrix();

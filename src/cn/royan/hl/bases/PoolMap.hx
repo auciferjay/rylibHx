@@ -1,4 +1,5 @@
 package cn.royan.hl.bases;
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.utils.SystemUtils;
 
 class PoolMap 
@@ -10,6 +11,7 @@ class PoolMap
 	
 	private static function getPool( type:Class<Dynamic> ):Array<Dynamic>
 	{
+		SystemUtils.print(type, PrintConst.BASES);
 		for ( t in Reflect.fields(pools) ) {
 			if ( Type.getClassName(type) == t )
 				return Reflect.field(pools, Type.getClassName(type));
@@ -20,6 +22,7 @@ class PoolMap
 		
 	private static function createInstanceByType(type:Class<Dynamic>, parameters:Array<Dynamic>):Dynamic
 	{
+		SystemUtils.print(type+":"+parameters, PrintConst.BASES);
 		var waterDrop:WaterDrop = new WaterDrop(type, parameters);
 		__weakMap.set(waterDrop.key, waterDrop.target);
 		
@@ -28,6 +31,7 @@ class PoolMap
 		
 	public static function getInstanceByType( type:Class<Dynamic>, ?parameters:Array<Dynamic>):Dynamic
 	{
+		SystemUtils.print(type+":"+parameters, PrintConst.BASES);
 		if ( parameters != null ) {
 			if( parameters.length == 1 && Std.is(parameters[0], Array) )
 				return createInstanceByType( type, parameters[0] );
@@ -45,6 +49,7 @@ class PoolMap
 		
 	public static function disposeInstance( object:Dynamic, type:Class<Dynamic> = null ):Void
 	{
+		SystemUtils.print(object+":"+type, PrintConst.BASES);
 		if ( type == null ) {
 			var typeName:String = Type.getClassName(Type.getClass( object ));
 			type = Type.resolveClass( typeName );
@@ -87,6 +92,7 @@ class WaterDrop
 	
 	public function new(type:Class<Dynamic>, parameters:Array<Dynamic>)
 	{
+		SystemUtils.print(type+":"+parameters, PrintConst.BASES);
 		this.type 		= type;
 		this.params 	= parameters;
 		this.autoKill 	= params!= null?params.length:0;
@@ -96,6 +102,7 @@ class WaterDrop
 	
 	function createInstanceByType(type:Class<Dynamic>, parameters:Array<Dynamic>):Dynamic
 	{
+		SystemUtils.print(type+":"+parameters, PrintConst.BASES);
 		return Type.createInstance(type, parameters!=null?parameters:[]);
 	}
 }

@@ -1,7 +1,9 @@
 package cn.royan.hl.uis.normal.bases;
 import cn.royan.hl.bases.DispatcherBase;
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.uis.normal.InteractiveUiN;
 import cn.royan.hl.events.DatasEvent;
+import cn.royan.hl.utils.SystemUtils;
 
 import flash.display.Sprite;
 import flash.text.TextField;
@@ -33,6 +35,7 @@ class UiNLoader extends InteractiveUiN
 	
 	public function setLoaderData(loader:DispatcherBase):Void
 	{
+		SystemUtils.print(loader, PrintConst.UIS);
 		loaderData = loader;
 		loaderData.addEventListener(DatasEvent.DATA_DOING, loaderProgressHandler);
 		loaderData.addEventListener(DatasEvent.DATA_DONE, loaderCompleteHandler);
@@ -40,7 +43,7 @@ class UiNLoader extends InteractiveUiN
 	
 	public function loaderProgress(data: { var loaded:Int; var total:Int; } ):Void
 	{
-		
+		SystemUtils.print(data, PrintConst.UIS);
 	}
 	
 	public function loaderComplete():Void
@@ -50,11 +53,11 @@ class UiNLoader extends InteractiveUiN
 	
 	function loaderProgressHandler(evt:DatasEvent):Void
 	{
-		
+		SystemUtils.print(evt, PrintConst.UIS);
 	}
 	
 	function loaderCompleteHandler(evt:DatasEvent):Void
 	{
-		
+		SystemUtils.print(evt, PrintConst.UIS);
 	}
 }

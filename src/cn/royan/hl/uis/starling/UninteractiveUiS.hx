@@ -1,9 +1,11 @@
 package cn.royan.hl.uis.starling;
 
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiItemStateBase;
 import cn.royan.hl.utils.BitmapDataUtils;
+import cn.royan.hl.utils.SystemUtils;
 
 import flash.geom.Rectangle;
 import flash.display.BitmapData;
@@ -75,6 +77,7 @@ class UninteractiveUiS extends Sprite, implements IUiBase, implements IUiItemSta
 	{
 		if ( !isInit ) return;
 		if ( containerWidth > 0 && containerHeight > 0 ) {
+			SystemUtils.print(bgTexture+":"+defaultTexture, PrintConst.UIS);
 			if( bgTexture != null )
 				graphics.texture = bgTexture;
 			else if( defaultTexture != null )
@@ -89,6 +92,7 @@ class UninteractiveUiS extends Sprite, implements IUiBase, implements IUiItemSta
 	
 	public function setColorsAndAplhas(color:Array<Dynamic>, alpha:Array<Dynamic>):Void
 	{
+		SystemUtils.print(color+":"+alpha, PrintConst.UIS);
 		bgColors = color;
 		bgAlphas = alpha;
 		
@@ -123,6 +127,7 @@ class UninteractiveUiS extends Sprite, implements IUiBase, implements IUiItemSta
 	
 	public function setSize(w:Float, h:Float):Void
 	{
+		SystemUtils.print(w+":"+h, PrintConst.UIS);
 		containerWidth = w;
 		containerHeight = h;
 		
@@ -134,6 +139,7 @@ class UninteractiveUiS extends Sprite, implements IUiBase, implements IUiItemSta
 
 	public function setPosition(cx:Float, cy:Float):Void
 	{
+		SystemUtils.print(cx+":"+cy, PrintConst.UIS);
 		positionX = cx;
 		positionY = cy;
 		

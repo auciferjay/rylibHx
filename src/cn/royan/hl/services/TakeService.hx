@@ -1,5 +1,6 @@
 package cn.royan.hl.services;
 
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.interfaces.services.IServiceBase;
 import cn.royan.hl.bases.DispatcherBase;
 import cn.royan.hl.utils.SystemUtils;
@@ -55,6 +56,7 @@ class TakeService extends DispatcherBase, implements IServiceBase
 		
 	public function sendRequest(url:String='', extra:Dynamic=null):Void
 	{
+		SystemUtils.print(url+":"+extra, PrintConst.SERVICES);
 		urlrequest = new URLRequest(url);
 		if( urlvariable != null ) urlrequest.data = urlvariable;
 		urlrequest.method = extra == URLRequestMethod.POST?extra:URLRequestMethod.GET;
@@ -95,14 +97,15 @@ class TakeService extends DispatcherBase, implements IServiceBase
 		}else {
 			var asset:Dynamic = ApplicationMain.getAsset(urlrequest.url);
 			if ( asset == null ) {
-				SystemUtils.print("[Class TakeService]:onError:"+urlrequest.url+"IOERROR");
+				SystemUtils.print("[Class TakeService]:onError:"+urlrequest.url+" IOERROR", PrintConst.SERVICES);
+				
 				if( callbacks != null && callbacks.error != null ) callbacks.error("IOERROR");
 				else dispatchEvent(new DatasEvent(DatasEvent.DATA_ERROR, "IOERROR"));
 				close();
 				return;
 			}
 			
-			SystemUtils.print("[Class TakeService]:onComplete");
+			SystemUtils.print("[Class TakeService]:onComplete", PrintConst.SERVICES);
 			isLoading = false;
 			if( Std.is( asset, ByteArray ) )
 				analyze();
@@ -156,7 +159,7 @@ class TakeService extends DispatcherBase, implements IServiceBase
 	
 	function onComplete(evt:Event):Void
 	{
-		SystemUtils.print("[Class TakeService]:onComplete");
+		SystemUtils.print("[Class TakeService]:onComplete", PrintConst.SERVICES);
 		
 		isLoading = false;
 		
@@ -192,6 +195,7 @@ class TakeService extends DispatcherBase, implements IServiceBase
 	
 	function loaderOnComplete(evt:Event):Void
 	{
+		SystemUtils.print("[Class TakeService]:SwfLoadOnComplete", PrintConst.SERVICES);
 		if( callbacks != null && callbacks.done != null ) callbacks.done(serviceData);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE, serviceData));
 		
@@ -200,13 +204,14 @@ class TakeService extends DispatcherBase, implements IServiceBase
 	
 	function onProgress(evt:ProgressEvent):Void
 	{
+		SystemUtils.print("[Class TakeService]:onProgress", PrintConst.SERVICES);
 		if( callbacks != null && callbacks.doing != null ) callbacks.doing({loaded:evt.bytesLoaded, total:evt.bytesTotal});
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING, {loaded:evt.bytesLoaded, total:evt.bytesTotal}));
 	}
 	
 	function onError(evt:IOErrorEvent):Void
 	{
-		SystemUtils.print("[Class TakeService]:onError:"+evt.type+"->"+urlrequest.url);
+		SystemUtils.print("[Class TakeService]:onError:"+evt.type+"->"+urlrequest.url, PrintConst.SERVICES);
 		if( callbacks != null && callbacks.error != null ) callbacks.error(evt.type);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_ERROR, evt.type));
 		close();
@@ -214,7 +219,7 @@ class TakeService extends DispatcherBase, implements IServiceBase
 	
 	function onSecurityError(evt:SecurityErrorEvent):Void
 	{
-		SystemUtils.print("[Class TakeService]:onSecurityError:"+evt.type+"->"+urlrequest.url);
+		SystemUtils.print("[Class TakeService]:onSecurityError:"+evt.type+"->"+urlrequest.url, PrintConst.SERVICES);
 		if( callbacks != null && callbacks.error != null ) callbacks.error(evt.type);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_ERROR, evt.type));
 		close();

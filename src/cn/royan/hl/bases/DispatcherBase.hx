@@ -1,4 +1,6 @@
 package cn.royan.hl.bases;
+import cn.royan.hl.consts.PrintConst;
+import cn.royan.hl.utils.SystemUtils;
 import flash.events.EventDispatcher;
 /**
  * ...
@@ -12,6 +14,7 @@ class DispatcherBase extends EventDispatcher
 	
 	override public function addEventListener(type:String, listener:Dynamic->Void, useCapture:Bool=false, priority:Int=0, useWeakReference:Bool=false):Void
 	{
+		SystemUtils.print(type+":"+listener, PrintConst.BASES);
 		if ( evtListenerDirectory == null ) {
 			evtListenerDirectory = [];
 			evtListenerType = [];
@@ -25,6 +28,7 @@ class DispatcherBase extends EventDispatcher
 
 	override public function removeEventListener(type:String, listener:Dynamic->Void, useCapture:Bool=false):Void
 	{
+		SystemUtils.print(type+":"+listener, PrintConst.BASES);
 		super.removeEventListener(type, listener, useCapture);
 		if ( evtListenerDirectory != null ) {
 			for ( i in 0...evtListenerDirectory.length ) {

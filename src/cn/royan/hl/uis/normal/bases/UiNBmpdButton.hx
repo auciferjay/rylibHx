@@ -1,5 +1,6 @@
 package cn.royan.hl.uis.normal.bases;
 
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.uis.normal.InteractiveUiN;
 import cn.royan.hl.uis.sparrow.Sparrow;
@@ -21,7 +22,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 	var isInGroup:Bool;
 	var freshRect:Rectangle;
 	
-	public function new(texture:Dynamic, frames:Int=5)
+	public function new(texture:Dynamic, frames:Int = 5)
 	{
 		super(Std.is( texture, Sparrow )?cast( texture, Sparrow ):null);
 		
@@ -111,7 +112,6 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 			var bmpd:Sparrow = Sparrow.fromSparrow(texture, regin, frame);
 			
 			bgTextures[i] = bmpd;
-			//addChild(new Bitmap(bgTextures[i])).visible = false;//确保显示
 		}
 		
 		setSize(frameWidth, frameHeight);
@@ -126,6 +126,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 	
 	function mouseMoveHandler(evt:MouseEvent):Void
 	{
+		SystemUtils.print(evt, PrintConst.UIS);
 		#if neko
 		buttonMode = currentStatus.bitmapData.getPixel32(Std.int(evt.localX), Std.int(evt.localY)).a != 0x00;
 		#else
@@ -138,7 +139,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 	{
 		if ( !isOnStage ) return;
 		if ( status < bgTextures.length && currentStatus != null ) {
-			SystemUtils.print(status+":"+bgTextures[status], 10);
+			SystemUtils.print(status, PrintConst.UIS);
 
 			freshRect.x = getRange().x;
 			freshRect.y = getRange().y;
@@ -156,7 +157,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 	
 	override public function setColorsAndAplhas(color:Array<Dynamic>, alpha:Array<Dynamic>):Void 
 	{
-		SystemUtils.print(color+":"+alpha, 10);
+		SystemUtils.print(color+":"+alpha, PrintConst.UIS);
 
 		bgColors = color;
 		bgAlphas = alpha;
@@ -204,7 +205,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 	
 	override public function setTexture(value:Sparrow, frames:Int=5):Void
 	{
-		SystemUtils.print(bgTexture, 10);
+		SystemUtils.print(bgTexture, PrintConst.UIS);
 		bgTexture = value;
 		
 		drawTextures(bgTexture, frames);

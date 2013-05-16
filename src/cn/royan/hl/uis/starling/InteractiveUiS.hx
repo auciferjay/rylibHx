@@ -1,10 +1,12 @@
 package cn.royan.hl.uis.starling;
 
 import cn.royan.hl.bases.Dictionary;
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiItemStateBase;
 import cn.royan.hl.utils.BitmapDataUtils;
+import cn.royan.hl.utils.SystemUtils;
 
 import flash.geom.Rectangle;
 import flash.display.BitmapData;
@@ -95,7 +97,8 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	{
 		if ( !isOnStage ) return;
 		
-		if( containerWidth > 0 && containerHeight > 0 ){
+		if ( containerWidth > 0 && containerHeight > 0 ) {
+			SystemUtils.print(bgTexture+":"+defaultTexture, PrintConst.UIS);
 			if( bgTexture != null )
 				graphics.texture = bgTexture;
 			else if( defaultTexture != null )
@@ -110,6 +113,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	
 	public function setColorsAndAplhas(color:Array<Dynamic>, alpha:Array<Dynamic>):Void
 	{
+		SystemUtils.print(color+":"+alpha, PrintConst.UIS);
 		bgColors = color;
 		bgAlphas = alpha;
 		
@@ -144,6 +148,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	
 	public function setSize(w:Float, h:Float):Void
 	{
+		SystemUtils.print(w+":"+h, PrintConst.UIS);
 		containerWidth = w;
 		containerHeight = h;
 		
@@ -155,6 +160,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 
 	public function setPosition(cx:Float, cy:Float):Void
 	{
+		SystemUtils.print(cx+":"+cy, PrintConst.UIS);
 		positionX = cx;
 		positionY = cy;
 		
@@ -293,6 +299,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	//Protected methods
 	function mouseOverHandler(touch:Touch):Void
 	{
+		SystemUtils.print(touch, PrintConst.UIS);
 		if ( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
 		if ( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.over != null ) callbacks.over(this, touch);
@@ -300,6 +307,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	
 	function mouseOutHandler():Void
 	{
+		SystemUtils.print("", PrintConst.UIS);
 		if ( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_NORMAL;
 		if ( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.out != null ) callbacks.out(this);
@@ -307,6 +315,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	
 	function mouseDownHandler(touch:Touch):Void
 	{
+		SystemUtils.print(touch, PrintConst.UIS);
 		if ( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_DOWN;
 		if ( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.down != null ) callbacks.down(this, touch);
@@ -314,6 +323,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	
 	function mouseUpHandler(touch:Touch):Void
 	{
+		SystemUtils.print(touch, PrintConst.UIS);
 		if ( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
 		if ( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.up != null ) callbacks.up(this, touch);
@@ -321,16 +331,19 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	
 	function mouseMoveHandler(touch:Touch):Void
 	{
+		SystemUtils.print(touch, PrintConst.UIS);
 		if ( callbacks != null && callbacks.move != null ) callbacks.move(this, touch);
 	}
 	
 	function mouseClickHandler(touch:Touch):Void
 	{
+		SystemUtils.print(touch, PrintConst.UIS);
 		if( callbacks != null && callbacks.click != null ) callbacks.click(this, touch);
 	}
 	
 	function addToStageHandler(evt:Event = null):Void
 	{
+		SystemUtils.print(evt, PrintConst.UIS);
 		if ( hasEventListener(Event.ADDED_TO_STAGE) )
 			removeEventListener(Event.ADDED_TO_STAGE, addToStageHandler);
 			

@@ -2,6 +2,7 @@ package cn.royan.hl.services;
 
 import cn.royan.hl.bases.PoolMap;
 import cn.royan.hl.bases.DispatcherBase;
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.services.IServiceBase;
 import cn.royan.hl.interfaces.services.IServiceMessageBase;
@@ -49,6 +50,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 
 	public function sendRequest(url:String='', extra:Dynamic=null):Void
 	{
+		SystemUtils.print(url+":"+extra, PrintConst.SERVICES);
 		if( getIsServicing() ){
 			socket.writeBytes( cast(extra) );
 			socket.flush();
@@ -123,7 +125,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	#if flash
 	function onConnect(evt:Event):Void
 	{
-		SystemUtils.print("[Class SoktService]:onConnect");
+		SystemUtils.print("[Class SoktService]:onConnect", PrintConst.SERVICES);
 		if( callbacks != null && callbacks.create != null ) callbacks.create();
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CREATE));
 		
@@ -132,7 +134,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	
 	function onClose(evt:Event):Void
 	{
-		SystemUtils.print("[Class SoktService]:onClose");
+		SystemUtils.print("[Class SoktService]:onClose", PrintConst.SERVICES);
 		if( callbacks != null && callbacks.destory != null ) callbacks.destory();
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DESTROY));
 		
@@ -141,7 +143,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	
 	function onIOError(evt:IOErrorEvent):Void
 	{
-		SystemUtils.print("[Class SoktService]:onIOError:"+evt);
+		SystemUtils.print("[Class SoktService]:onIOError:"+evt, PrintConst.SERVICES);
 		if( callbacks != null && callbacks.error != null ) callbacks.error(evt.type);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_ERROR, evt.type));
 		
@@ -150,7 +152,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	
 	function onSecurityError(evt:SecurityErrorEvent):Void
 	{
-		SystemUtils.print("[Class SoktService]:onSecurityError:"+evt);
+		SystemUtils.print("[Class SoktService]:onSecurityError:"+evt, PrintConst.SERVICES);
 		if( callbacks != null && callbacks.error != null ) callbacks.error(evt.type);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_ERROR, evt.type));
 		
@@ -159,7 +161,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	
 	function onProgress(evt:ProgressEvent):Void
 	{
-		SystemUtils.print("[Class SoktService]:onProgress");
+		SystemUtils.print("[Class SoktService]:onProgress:"+socket.bytesAvailable, PrintConst.SERVICES);
 		while( socket.bytesAvailable > 0 ){
 			packet = SystemUtils.getInstanceByClassName(Std.string(packetType));
 			packet.writeMessageFromBytes(socket);
@@ -174,7 +176,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	#elseif js
 	function jsOnData(data:String):Void
 	{
-		SystemUtils.print("[Class SoktService]:onProgress");
+		SystemUtils.print("[Class SoktService]:onProgress:"+data.length, PrintConst.SERVICES);
 		while( data.length > 0 ){
 			packet = SystemUtils.getInstanceByClassName(Std.string(packetType));
 			packet.writeMessageFromBytes(socket);
@@ -189,7 +191,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	
 	function jsOnClose():Void
 	{
-		SystemUtils.print("[Class SoktService]:onClose");
+		SystemUtils.print("[Class SoktService]:onClose", PrintConst.SERVICES);
 		if( callbacks != null && callbacks.destory != null ) callbacks.destory();
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DESTROY));
 		
@@ -199,13 +201,13 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	function jsOnConnect(b:Bool):Void
 	{
 		if ( b ) {
-			SystemUtils.print("[Class SoktService]:onConnect");
+			SystemUtils.print("[Class SoktService]:onConnect", PrintConst.SERVICES);
 			if( callbacks != null && callbacks.create != null ) callbacks.create();
 			else dispatchEvent(new DatasEvent(DatasEvent.DATA_CREATE));
 			
 			isServicing = true;
 		}else {
-			SystemUtils.print("[Class SoktService]:onIOError");
+			SystemUtils.print("[Class SoktService]:onIOError", PrintConst.SERVICES);
 			if( callbacks != null && callbacks.error != null ) callbacks.error("");
 			else dispatchEvent(new DatasEvent(DatasEvent.DATA_ERROR));
 			

@@ -1,5 +1,6 @@
 package cn.royan.hl.uis.normal.bases;
 
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.interfaces.uis.IUiContainerGroupBase;
@@ -41,6 +42,7 @@ class UiNContainerGroup extends UiNContainerAlign, implements IUiContainerGroupB
 	//Public methods
 	public function addGroupItem(item:IUiItemGroupBase, key:Dynamic = null):Void
 	{
+		SystemUtils.print(item+":"+key, PrintConst.UIS);
 		item.setInGroup(true);
 		
 		items.push(item);
@@ -60,6 +62,7 @@ class UiNContainerGroup extends UiNContainerAlign, implements IUiContainerGroupB
 	
 	public function addGroupItemAt(item:IUiItemGroupBase, index:Int, key:Dynamic = null):Void
 	{
+		SystemUtils.print(item+":"+index+":"+key, PrintConst.UIS);
 		item.setInGroup(true);
 		
 		var prev:Array<IUiBase> = items.slice(0, index);
@@ -88,6 +91,7 @@ class UiNContainerGroup extends UiNContainerAlign, implements IUiContainerGroupB
 	
 	public function removeGroupItem(item:IUiItemGroupBase):Void
 	{
+		SystemUtils.print(item, PrintConst.UIS);
 		var index:Int = SystemUtils.arrayIndexOf(items, item);
 		if ( index != -1 ) {
 			keys.splice(index, 1);
@@ -105,6 +109,7 @@ class UiNContainerGroup extends UiNContainerAlign, implements IUiContainerGroupB
 	
 	public function removeGroupItemAt(index:Int):Void
 	{
+		SystemUtils.print(index, PrintConst.UIS);
 		var prev:Array<IUiBase> = items.slice(0, index);
 		var next:Array<IUiBase> = items.slice(index);
 		

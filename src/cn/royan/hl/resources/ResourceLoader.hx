@@ -4,6 +4,7 @@ import cn.royan.hl.bases.Dictionary;
 import cn.royan.hl.bases.DispatcherBase;
 import cn.royan.hl.bases.WeakMap;
 import cn.royan.hl.bases.PoolMap;
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.IDisposeBase;
 import cn.royan.hl.services.TakeService;
@@ -113,12 +114,12 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 		
 		function loaderOnProgressHandler(data: { var loaded:Int; var total:Int; } ):Void
 		{
-			SystemUtils.print("[Class ResourceLoader]:Loader File OnProgress", 11);
+			SystemUtils.print("[Class ResourceLoader]:Loader File OnProgress", PrintConst.RESOURCES);
 		}
 		
 		function loaderOnCompleteHandler(data:Dynamic):Void
 		{
-			SystemUtils.print("[Class ResourceLoader]:Loader File OnComplete:"+ currentPath +":"+ uid, 11);
+			SystemUtils.print("[Class ResourceLoader]:Loader File OnComplete:"+ currentPath +":"+ uid, PrintConst.RESOURCES);
 			__weakMap.set(currentPath + uid, data);
 			
 			#if flash
@@ -149,19 +150,19 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 		
 		function loaderOnErrorHandler(message:String):Void
 		{
-			SystemUtils.print("[Class ResourceLoader]:Loader File OnError", 11);
+			SystemUtils.print("[Class ResourceLoader]:Loader File OnError", PrintConst.RESOURCES);
 			if ( callbacks != null && callbacks.error != null ) callbacks.error(message);
 		}
 		
 		function configFileOnProgressHandler(data: { var loaded:Int; var total:Int; } ):Void
 		{
-			SystemUtils.print("[Class ResourceLoader]:Config File onProgress", 11);
+			SystemUtils.print("[Class ResourceLoader]:Config File onProgress", PrintConst.RESOURCES);
 			//if ( callbacks != null && callbacks.doing != null ) callbacks.doing(data);
 		}
 		
 		function configFileOnCompleteHandler(data:Dynamic):Void
 		{
-			SystemUtils.print("[Class ResourceLoader]:Config File onComplete", 11);
+			SystemUtils.print("[Class ResourceLoader]:Config File onComplete", PrintConst.RESOURCES);
 			
 			__weakMap.set(currentPath + uid, data);
 			
@@ -176,7 +177,7 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 		
 		function configFileOnErrorHandler(message:String):Void
 		{
-			SystemUtils.print("[Class ResourceLoader]:Config File OnError", 11);
+			SystemUtils.print("[Class ResourceLoader]:Config File OnError", PrintConst.RESOURCES);
 			if ( callbacks != null && callbacks.error != null ) callbacks.error(message);
 		}
 		
@@ -185,7 +186,7 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 			var synFiles:Array<Dynamic> = cast(Reflect.field(Reflect.field(configFile.getValue(),'DLLS'),'DLL'), Array<Dynamic>);
 			if( synFiles != null && synFiles.length > 0 ){
 				
-				SystemUtils.print("[Class ResourceLoader]:syn File Start", 11);
+				SystemUtils.print("[Class ResourceLoader]:syn File Start", PrintConst.RESOURCES);
 				
 				var currentDll:Dynamic = synFiles.shift();
 				currentPath = Reflect.field(currentDll,'path');
@@ -195,7 +196,7 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 					return;
 				}
 				
-				SystemUtils.print("[Class ResourceLoader]:syn File Start:"+currentPath, 11);
+				SystemUtils.print("[Class ResourceLoader]:syn File Start:"+currentPath, PrintConst.RESOURCES);
 				
 				takeService = PoolMap.getInstanceByType( TakeService, ["version="+moduleVer] );
 				takeService.setCallbacks({done:synFileOnCompleteHandler,
@@ -205,7 +206,7 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 				takeService.connect();
 				
 			}else{
-				SystemUtils.print("[Class ResourceLoader]:syn File OnFinish", 11);
+				SystemUtils.print("[Class ResourceLoader]:syn File OnFinish", PrintConst.RESOURCES);
 				if( callbacks != null && callbacks.doing != null )callbacks.doing(this);
 				asynFileStartLoadHandler();	
 				return;
@@ -219,7 +220,7 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 		
 		function synFileOnCompleteHandler(data:Dynamic):Void
 		{
-			SystemUtils.print("[Class ResourceLoader]:syn File OnComplete", 11);
+			SystemUtils.print("[Class ResourceLoader]:syn File OnComplete", PrintConst.RESOURCES);
 			
 			loader.loaderComplete();
 			
@@ -233,7 +234,7 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 		
 		function synFileOnErrorHandler(message:String):Void
 		{
-			SystemUtils.print("[Class ResourceLoader]:syn File OnError", 11);
+			SystemUtils.print("[Class ResourceLoader]:syn File OnError", PrintConst.RESOURCES);
 			if ( callbacks != null && callbacks.error != null ) callbacks.error(message);
 		}
 		
@@ -241,7 +242,7 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 		{
 			var asynFiles:Array<Dynamic> = cast(Reflect.field(Reflect.field(configFile.getValue(),'AYSNDLLS'),'DLL'), Array<Dynamic>);
 			if( asynFiles != null && asynFiles.length > 0 ){
-				SystemUtils.print("[Class ResourceLoader]:asyn File Start", 11);
+				SystemUtils.print("[Class ResourceLoader]:asyn File Start", PrintConst.RESOURCES);
 				
 				var currentDll:Dynamic = asynFiles.shift();
 				currentPath = Reflect.field(currentDll,'path');
@@ -251,7 +252,7 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 					return;
 				}
 				
-				SystemUtils.print("[Class ResourceLoader]:asyn File Start:"+currentPath, 11);
+				SystemUtils.print("[Class ResourceLoader]:asyn File Start:"+currentPath, PrintConst.RESOURCES);
 				
 				takeService = PoolMap.getInstanceByType( TakeService, ["version="+moduleVer] );
 				takeService.setCallbacks({done:asynFileOnCompleteHandler,
@@ -261,7 +262,7 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 				takeService.connect();
 				
 			}else{
-				SystemUtils.print("[Class ResourceLoader]:asyn File OnFinish", 11);
+				SystemUtils.print("[Class ResourceLoader]:asyn File OnFinish", PrintConst.RESOURCES);
 				if( callbacks != null && callbacks.done != null ) callbacks.done(this);
 			}
 		}
@@ -273,7 +274,7 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 		
 		function asynFileOnCompleteHandler(data:Dynamic):Void
 		{
-			SystemUtils.print("[Class ResourceLoader]:asyn File OnComplete", 11);
+			SystemUtils.print("[Class ResourceLoader]:asyn File OnComplete", PrintConst.RESOURCES);
 			
 			__weakMap.set(currentPath + uid, data);
 			
@@ -285,7 +286,7 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 		
 		function asynFileOnErrorHandler(message:String):Void
 		{
-			SystemUtils.print("[Class ResourceLoader]:asyn File OnError", 11);
+			SystemUtils.print("[Class ResourceLoader]:asyn File OnError", PrintConst.RESOURCES);
 		}
 		
 		function checkResourceByPath(path:String):Bool

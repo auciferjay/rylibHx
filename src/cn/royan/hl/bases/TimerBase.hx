@@ -60,7 +60,6 @@ class TimerBase implements IDisposeBase
 	public function stop():Void
 	{
 		isStart = false;
-		
 		timerlists.remove(this);
 	}
 

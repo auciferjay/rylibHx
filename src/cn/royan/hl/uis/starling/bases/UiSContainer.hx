@@ -1,5 +1,6 @@
 package cn.royan.hl.uis.starling.bases;
 
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiContainerBase;
@@ -29,8 +30,6 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase, implemen
 		items = [];
 		
 		states = [];
-		
-		//setBackgroundAlphas([0]);
 	}
 	
 	override private function addToStageHandler(evt:Event = null):Void 
@@ -43,6 +42,7 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase, implemen
 	
 	public function addItem(item:IUiBase):Void
 	{
+		SystemUtils.print(item, PrintConst.UIS);
 		items.push(item);
 		
 		setScale(getScale());
@@ -57,6 +57,7 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase, implemen
 	
 	public function addItemAt(item:IUiBase, index:Int):Void
 	{
+		SystemUtils.print(item+":"+index, PrintConst.UIS);
 		var prev:Array<IUiBase> = items.slice(0, index);
 		var next:Array<IUiBase> = items.slice(index);
 		
@@ -76,6 +77,7 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase, implemen
 	
 	public function removeItem(item:IUiBase):Void
 	{
+		SystemUtils.print(item, PrintConst.UIS);
 		items.remove(item);
 		removeChild(cast(item, DisplayObject));
 		
@@ -87,13 +89,11 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase, implemen
 	
 	public function removeItemAt(index:Int):Void
 	{
+		SystemUtils.print(index, PrintConst.UIS);
 		var prev:Array<IUiBase> = items.slice(0, index);
 		var next:Array<IUiBase> = items.slice(index);
 		
 		removeItem(next.shift());
-		
-		//if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
-		//else dispatchEvent(new Event(DatasEvent.DATA_CHANGE));
 		
 		items = prev.concat(next);
 	}
@@ -130,6 +130,7 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase, implemen
 	
 	public function setState(value:String):Void
 	{
+		SystemUtils.print(value, PrintConst.UIS);
 		if( SystemUtils.arrayIndexOf( states, value ) == -1 ) return;
 
 		current = value;

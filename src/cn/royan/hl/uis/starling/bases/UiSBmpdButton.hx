@@ -1,5 +1,6 @@
 package cn.royan.hl.uis.starling.bases;
 
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.uis.starling.InteractiveUiS;
 import cn.royan.hl.utils.BitmapDataUtils;
@@ -58,11 +59,6 @@ class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 		isInGroup = value;
 	}
 	
-	override function addToStageHandler(evt:Event=null):Void
-	{
-		super.addToStageHandler(evt);
-	}
-	
 	override private function mouseOverHandler(touch:Touch):Void 
 	{
 		super.mouseOverHandler(touch);
@@ -74,18 +70,6 @@ class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 		super.mouseOutHandler();
 		Mouse.cursor = MouseCursor.AUTO;
 	}
-	
-	// override function mouseClickHandler(touch:Touch):Void
-	// {
-		// if( isInGroup ){
-		// 	selected = !selected;
-		// 	status = selected?InteractiveUiS.INTERACTIVE_STATUS_SELECTED:status;
-			
-		// 	draw();
-		// }
-		
-		// super.mouseClickHandler(touch);
-	// }
 	
 	//Public methods
 	override public function draw():Void
@@ -99,6 +83,7 @@ class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 	
 	override public function setColorsAndAplhas(color:Array<Dynamic>, alpha:Array<Dynamic>):Void 
 	{
+		SystemUtils.print(color+":"+alpha, PrintConst.UIS);
 		bgColors = color;
 		bgAlphas = alpha;
 		

@@ -1,5 +1,6 @@
 package cn.royan.hl.uis.normal.bases;
 
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiContainerBase;
@@ -45,6 +46,7 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 	
 	public function addItem(item:IUiBase):Void
 	{
+		SystemUtils.print(item, PrintConst.UIS);
 		items.push(item);
 		
 		item.setScale(getScale());
@@ -59,6 +61,7 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 	
 	public function addItemAt(item:IUiBase, index:Int):Void
 	{
+		SystemUtils.print(item+":"+index, PrintConst.UIS);
 		var prev:Array<IUiBase> = items.slice(0, index);
 		var next:Array<IUiBase> = items.slice(index);
 		
@@ -78,6 +81,7 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 	
 	public function removeItem(item:IUiBase):Void
 	{
+		SystemUtils.print(item, PrintConst.UIS);
 		items.remove(item);
 		removeChild(cast(item, DisplayObject));
 		
@@ -89,13 +93,11 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 	
 	public function removeItemAt(index:Int):Void
 	{
+		SystemUtils.print(index, PrintConst.UIS);
 		var prev:Array<IUiBase> = items.slice(0, index);
 		var next:Array<IUiBase> = items.slice(index);
 		
 		removeItem(next.shift());
-		
-		//if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
-		//else dispatchEvent(new Event(DatasEvent.DATA_CHANGE));
 		
 		items = prev.concat(next);
 	}
@@ -141,6 +143,7 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 	
 	public function setState(value:String):Void
 	{
+		SystemUtils.print(value, PrintConst.UIS);
 		if( SystemUtils.arrayIndexOf( states, value ) == -1 ) return;
 		
 		current = value;

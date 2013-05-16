@@ -1,5 +1,6 @@
 package cn.royan.hl.uis.normal.bases;
 
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.interfaces.uis.IUiItemPlayBase;
 import cn.royan.hl.bases.TimerBase;
 import cn.royan.hl.events.DatasEvent;
@@ -134,8 +135,6 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 			var bmpd:Sparrow = Sparrow.fromSparrow(bgTexture, regin, frame);
 			
 			bgTextures[i] = bmpd;
-			
-			//addChild(new Bitmap(bgTextures[i])).x = i * 60 + 60;
 		}
 		
 		setSize(frameWidth, frameHeight);
@@ -158,11 +157,13 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 
 	public function goTo(frame:Int):Void
 	{
+		SystemUtils.print(current+":"+frame, PrintConst.UIS);
 		goFromTo(current, frame);
 	}
 
 	public function jumpTo(frame:Int):Void
 	{
+		SystemUtils.print(frame, PrintConst.UIS);
 		loop = false;
 		current = frame;
 		
@@ -177,6 +178,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 
 	public function goFromTo(from:Int, to:Int):Void
 	{
+		SystemUtils.print(from+":"+to, PrintConst.UIS);
 		if( from == to ) return;
 		
 		loop = false;
