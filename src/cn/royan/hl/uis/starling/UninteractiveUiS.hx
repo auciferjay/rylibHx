@@ -64,6 +64,7 @@ class UninteractiveUiS extends Sprite, implements IUiBase, implements IUiItemSta
 		
 		if ( containerHeight > 0 && containerWidth > 0 ) {
 			graphics = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), [0x000000], [0x00])));
+			graphics.touchable = false;
 			addChild( graphics );
 		}
 		
@@ -170,6 +171,7 @@ class UninteractiveUiS extends Sprite, implements IUiBase, implements IUiItemSta
 			
 			if ( containerHeight > 0 && containerWidth > 0 && graphics == null ) {
 				graphics = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), [0x000000], [0x00])));
+				graphics.touchable = false;
 				addChild( graphics );
 			}
 		}

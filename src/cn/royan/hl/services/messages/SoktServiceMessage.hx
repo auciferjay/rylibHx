@@ -72,5 +72,4 @@ class SoktServiceMessage extends ByteArray, implements IServiceMessageBase
 		value.length = 0;
 		PoolMap.disposeInstance(value);
 	}
-	
 }

@@ -92,6 +92,11 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 			configType = value;
 		}
 		
+		public function getConfigFile():ConfigFile
+		{
+			return configFile;
+		}
+		
 		public function getResourceByPath(path:String):Dynamic
 		{
 			return __weakMap.getValue(path + uid);

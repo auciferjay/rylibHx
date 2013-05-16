@@ -239,6 +239,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	{
 		isMouseRender = value;
 		mouseEnabled = value;
+		touchable = value;
 	}
 	
 	public function setExclude(args:Array<String>):Void
