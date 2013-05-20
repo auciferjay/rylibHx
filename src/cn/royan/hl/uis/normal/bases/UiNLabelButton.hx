@@ -27,6 +27,9 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 	//Contructor
 	public function new(label:String='', texture:Dynamic=null, frames:Int=5) 
 	{
+		btnLabelText = new UiNText();
+		btnLabelText.setText(label);
+		
 		super(texture, frames);
 		
 		bgTextures = [];
@@ -34,8 +37,6 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 		btnLabel = label;
 		textColors = getDefaultTextColor();
 		
-		btnLabelText = new UiNText();
-		btnLabelText.setText(label);
 		addChild(btnLabelText);
 		
 		setMouseRender(true);
@@ -67,9 +68,10 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 		return [0x000000,0x666666,0xFFFFFF,0xFFFFFF,0xCCCCCC];
 	}
 	
-	public function autoSize(value:Int):Void
+	public function autoCenter():Void
 	{
-		btnLabelText.autoSize(value);
+		btnLabelText.autoSize(UiNText.TEXT_AUTOSIZE_LEFT);
+		btnLabelText.setPosition((getRange().width - btnLabelText.getRange().width)/2, (getRange().height - btnLabelText.getRange().height)/2);
 	}
 	
 	public function setTextSpace(r:Int, c:Int):Void
@@ -100,9 +102,10 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 		btnLabelText.setScale(value);
 	}
 	
-	public function setTextMargin(t:Int, r:Int, b:Int, l:Int ):Void
-	{
-		btnLabelText.setPosition(t, r);
+	public function setTextMargin(left:Int, top:Int, right:Int, bottom:Int):Void
+	{  
+		btnLabelText.setSize(getRange().width - left - right, getRange().height - top - bottom);
+		btnLabelText.setPosition(left, top);
 	}
 	
 	public function setText(value:String):Void

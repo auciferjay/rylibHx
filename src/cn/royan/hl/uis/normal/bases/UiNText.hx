@@ -111,7 +111,6 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 			case TEXT_AUTOSIZE_RIGHT:
 				inputText.autoSize = TextFieldAutoSize.RIGHT;
 		}
-		
 		setSize(Std.int(inputText.textWidth), Std.int(inputText.textHeight));
 	}
 	

@@ -11,8 +11,6 @@ import flash.text.TextFormat;
 
 interface IUiTextBase implements IUiBase 
 {
-	function autoSize(value:Int):Void;
-	
 	function setTextSpace(r:Int, c:Int):Void;
 	function setType(type:Int):Void;
 	
