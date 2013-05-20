@@ -8,8 +8,9 @@ import cn.royan.hl.interfaces.services.IServiceBase;
 import cn.royan.hl.interfaces.services.IServiceMessageBase;
 import cn.royan.hl.utils.SystemUtils;
 
-#if !flash && !js
+#if (!flash && !js)
 import sys.net.Socket;
+import sys.net.Host;
 #elseif flash
 import flash.net.Socket;
 import flash.events.Event;
@@ -52,8 +53,11 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	{
 		SystemUtils.print(url+":"+extra, PrintConst.SERVICES);
 		if( getIsServicing() ){
+			#if flash
 			socket.writeBytes( cast(extra) );
 			socket.flush();
+			#else
+			#end
 		}else{
 			if( url == "" || extra == null ) throw "host and port must be filled in";
 			host = url;
@@ -71,23 +75,22 @@ class SoktService extends DispatcherBase, implements IServiceBase
 		#if !js
 			socket = new Socket();
 			#if !flash
-				
+				socket.connect(new Host(host), port);
 			#else
 				socket.addEventListener(Event.CONNECT, onConnect);
 				socket.addEventListener(Event.CLOSE, onClose);
 				socket.addEventListener(IOErrorEvent.IO_ERROR, onIOError);
 				socket.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
 				socket.addEventListener(ProgressEvent.SOCKET_DATA, onProgress);
-				//socket.connect(host, port);
+				socket.connect(host, port);
 			#end
 		#else
 			socket = new XMLSocket();
 			socket.onClose 		= jsOnClose;
 			socket.onConnect 	= jsOnConnect;
 			socket.onData 		= jsOnData;
+			socket.connect(host, port);
 		#end
-		
-		socket.connect(host, port);
 	}
 
 	public function close():Void

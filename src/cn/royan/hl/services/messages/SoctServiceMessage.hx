@@ -1,8 +1,8 @@
 package cn.royan.hl.services.messages;
-import haxe.io.Bytes;
-import haxe.io.Input;
 
 import cn.royan.hl.interfaces.services.IServiceMessageBase;
+import haxe.io.Bytes;
+import haxe.io.Input;
 /**
  * ...
  * @author RoYan

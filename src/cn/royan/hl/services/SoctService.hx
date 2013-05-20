@@ -2,6 +2,7 @@ package cn.royan.hl.services;
 
 import cn.royan.hl.bases.DispatcherBase;
 import cn.royan.hl.events.DatasEvent;
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.interfaces.services.IServiceBase;
 import cn.royan.hl.utils.SystemUtils;
 
@@ -280,7 +281,7 @@ class SoctService extends DispatcherBase, implements IServiceBase
 
 	function addClient(sock:Socket):Void
 	{
-		SystemUtils.print("add Client:"+sock);
+		SystemUtils.print("add Client:"+sock, PrintConst.SERVICES);
 		var infos:ClientInfos = {
 			thread:threads[Std.random(nthreads)],
 			socket:sock,
@@ -302,7 +303,7 @@ class SoctService extends DispatcherBase, implements IServiceBase
 
 	function sendData(s:Socket, data:Bytes):Void
 	{
-		SystemUtils.print("Listener send:"+data.length);
+		SystemUtils.print("Listener send:"+data.length, PrintConst.SERVICES);
 		try {
 			s.output.write(data);
 		} catch( e:Dynamic ) {
@@ -343,7 +344,7 @@ class SoctService extends DispatcherBase, implements IServiceBase
 
 	function readClientMessage( buf:Bytes, pos:Int, len:Int, ?s:Socket ): { msg : String, bytes : Int }
 	{
-		SystemUtils.print("Listener read:"+len);
+		SystemUtils.print("Listener read:"+len, PrintConst.SERVICES);
 		if( buf.get(pos) == 60 && buf.readString(pos,len)=="<policy-file-request/>\x00" )
 			s.write( makePolicyFile() );
 		else {
