@@ -78,7 +78,38 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 	
 	public function serialize():Void
 	{
-		
+		var serializer:Serializer = new Serializer();
+		var fields:Array<String> = getSortedFields();
+		for ( field in fields ) {
+			if ( !Reflect.isFunction( Reflect.field(this, field) ) ) {
+				serializer.serialize( Reflect.field(this, field) );
+			}
+		}
+		writeMessageData(serializer);
+	}
+
+	public function unserialize():Void 
+	{
+		var fields:Array<String> = getSortedFields();
+		for ( field in fields ) {
+			if ( !Reflect.isFunction( Reflect.field(this, field) ) ) {
+				Reflect.setField(this, field, Unserializer.unserialize( data ) );
+			}
+		}
+	}
+
+	function getSortedFields():Array<String>
+	{
+		var fields:Array<String> = Reflect.fields(this);
+			fields.sort( function(a:String, b:String):Int
+			{
+			    a = a.toLowerCase();
+			    b = b.toLowerCase();
+			    if (a < b) return -1;
+			    if (a > b) return 1;
+			    return 0;
+			} )
+		return fields;
 	}
 	
 	public function dispose():Void

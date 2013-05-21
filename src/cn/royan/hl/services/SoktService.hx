@@ -85,6 +85,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 			socket.writeBytes( cast(extra) );
 			socket.flush();
 			#else
+			socket.output.writeBytes( cast(extra) );
 			#end
 		}else{
 			if( url == "" || extra == null ) throw "host and port must be filled in";
