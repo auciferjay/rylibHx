@@ -149,6 +149,9 @@ class TakeService extends DispatcherBase, implements IServiceBase
 	
 	public function getData():Dynamic
 	{
+		if (BytesUtils.isSWF(BytesUtils.simpleDecode(serviceData, "gameuzgame"))) {
+			return swfLoader;
+		}
 		return serviceData;
 	}
 	
@@ -177,6 +180,7 @@ class TakeService extends DispatcherBase, implements IServiceBase
 		switch( BytesUtils.getType(serviceData) ){
 			case "SWF":
 				swfLoader = new Loader();
+				swfLoader.name = urlrequest.url;
 				swfLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, loaderOnComplete);
 				swfLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError);
 				swfLoader.loadBytes(BytesUtils.simpleDecode(serviceData, "gameuzgame")#if flash, SystemUtils.getLoaderContext() #end);
@@ -188,8 +192,8 @@ class TakeService extends DispatcherBase, implements IServiceBase
 			case "FLV":
 			case "MP3":*/
 			default:
-				if( callbacks != null && callbacks.done != null) callbacks.done(serviceData);
-				else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE, serviceData));
+				if( callbacks != null && callbacks.done != null) callbacks.done(getData());
+				else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE, getData()));
 		}
 	}
 	
