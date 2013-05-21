@@ -23,6 +23,18 @@ import flash.events.SecurityErrorEvent;
 #elseif js
 import js.XMLSocket;
 #end
+import haxe.io.Bytes;
+#if neko
+import neko.vm.Thread;
+#elseif cpp
+import cpp.vm.Thread;
+#end
+
+private typedef ClientInfos = {
+	var buf			:Bytes;
+	var bufpos		:Int;
+	var socket		:Socket;
+}
 
 class SoktService extends DispatcherBase, implements IServiceBase
 {
@@ -38,6 +50,14 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	#else
 	var socket:XMLSocket;
 	#end
+
+	#if ( cpp || neko )
+	var worker:Thread;
+	var thread:Thread;
+	var clientInfos:ClientInfos;
+	var bufferSize:Int;
+	var headerSize:Int;
+	#end
 	
 	var packet:IServiceMessageBase;
 	var packetType:Class<IServiceMessageBase>;
@@ -50,6 +70,11 @@ class SoktService extends DispatcherBase, implements IServiceBase
 		
 		this.host = host;
 		this.port = port;
+
+		#if ( cpp || neko )
+		bufferSize = (1 << 16);
+		headerSize = 1;
+		#end
 	}
 
 	public function sendRequest(url:String='', extra:Dynamic=null):Void
@@ -79,6 +104,20 @@ class SoktService extends DispatcherBase, implements IServiceBase
 			socket = new Socket();
 			#if !flash
 				socket.connect(new Host(host), port);
+				clientInfos = {
+					buf:Bytes.alloc( bufferSize ),
+					bufpos:0,
+					socket:socket
+				}
+				
+				worker = Thread.create( runWorker );
+				thread = Thread.create( runThread );
+				
+				isServicing = true;
+
+				SystemUtils.print("[Class SoktService]:onConnect", PrintConst.SERVICES);
+				if( callbacks != null && callbacks.create != null ) callbacks.create();
+				else dispatchEvent(new DatasEvent(DatasEvent.DATA_CREATE));
 			#else
 				socket.addEventListener(Event.CONNECT, onConnect);
 				socket.addEventListener(Event.CLOSE, onClose);
@@ -223,6 +262,113 @@ class SoktService extends DispatcherBase, implements IServiceBase
 		}
 	}
 	#else
+	function runThread():Void
+	{
+		while ( true ) {
+			try {
+				loopThread();
+			}catch ( e:Dynamic ) {
+			}
+		}
+	}
 	
+	function loopThread():Void
+	{
+		var available:Int = clientInfos.buf.length - clientInfos.bufpos;
+		if ( available == 0 ) {
+			var newsize:Int = clientInfos.buf.length * 2;
+			if ( newsize > bufferSize ) {
+				newsize = bufferSize;
+				if ( clientInfos.buf.length == bufferSize )
+					throw "Max buffer size reached";
+			}
+			var newbuf:Bytes = Bytes.alloc( newsize );
+				newbuf.blit( 0, clientInfos.buf, 0, clientInfos.bufpos );
+			clientInfos.buf = newbuf;
+			available = newsize - clientInfos.bufpos;
+		}
+		var bytes:Int = cast(clientInfos.socket).input.readBytes( clientInfos.buf, clientInfos.bufpos, available );
+		var pos:Int = 0;
+		var len:Int = clientInfos.bufpos + bytes;
+		while ( len >= headerSize ) {
+			var m: { msg:String, bytes:Int } = readClientMessage( clientInfos.socket, clientInfos.buf, pos, len );
+			if ( m == null ) break;
+			pos += m.bytes;
+			len -= m.bytes;
+			work( callback( clientMessage, clientInfos.socket, m.msg ) );
+		}
+		if ( pos > 0 )
+			clientInfos.buf.blit( 0, clientInfos.buf, pos, len );
+		clientInfos.bufpos = len;
+	}
+	
+	function work( fun: Void -> Void ):Void
+	{
+		worker.sendMessage( fun );
+	}
+	
+	function runWorker() {
+		while( true ) {
+			var f = Thread.readMessage(true);
+			try {
+				f();
+			} catch( e : Dynamic ) {
+				onErrorHandler(e);
+			}
+			try {
+				afterEvent();
+			} catch( e : Dynamic ) {
+				onErrorHandler(e);
+			}
+		}
+	}
+	
+	function afterEvent():Void
+	{
+		
+	}
+	
+	function clientMessage( c:Socket, msg:String ):Void
+	{
+		
+	}
+	
+	function readClientMessage( c:Socket, buf:Bytes, pos:Int, len:Int ): {msg:String, bytes:Int }
+	{
+		SystemUtils.print("Listenee read:"+buf.readString(pos,len), PrintConst.SERVICES);
+		var cpos:Int = pos;
+		var complete:Bool = false;
+		var isStart:Bool = buf.get(cpos) == 123;//
+		var isMeet:Bool = false;//
+		while (cpos < (pos + len) && !complete && isStart)
+		{
+			complete = isMeet && (buf.get(cpos) == 46);
+			isMeet = buf.get(cpos) == 125;
+			cpos++;
+		}
+		// no full message
+		if ( !complete ) return null;
+		
+		var msg:String = buf.readString( pos, cpos - pos );
+		
+		if( callbacks != null && callbacks.doing != null ) callbacks.doing( msg );
+			else dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING, msg));
+		if ( cpos < (pos + len) )
+		{
+			readClientMessage( c, buf, cpos, len + pos - cpos );
+		}
+		// got a full message, return it
+		return {
+			msg : msg,
+			bytes : len,
+		};
+	}
+
+	function onErrorHandler( e:Dynamic ):Void
+	{
+		SystemUtils.print(e, PrintConst.SERVICES);
+		if( callbacks != null && callbacks.error != null ) callbacks.error(e);
+			else dispatchEvent(new DatasEvent(DatasEvent.DATA_ERROR, e));
+	}
 	#end
 }
