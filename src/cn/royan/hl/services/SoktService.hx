@@ -7,6 +7,9 @@ import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.services.IServiceBase;
 import cn.royan.hl.interfaces.services.IServiceMessageBase;
 import cn.royan.hl.utils.SystemUtils;
+import flash.utils.ByteArray;
+import haxe.io.Bytes;
+import haxe.io.BytesInput;
 
 #if (!flash && !js)
 import sys.net.Socket;
@@ -164,10 +167,12 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	
 	function onProgress(evt:ProgressEvent):Void
 	{
-		SystemUtils.print("[Class SoktService]:onProgress:"+socket.bytesAvailable, PrintConst.SERVICES);
-		while( socket.bytesAvailable > 0 ){
+		SystemUtils.print("[Class SoktService]:onProgress:" + socket.bytesAvailable, PrintConst.SERVICES);
+		var bytes:ByteArray = new ByteArray();
+		socket.writeBytes(bytes);
+		while( bytes.bytesAvailable > 0 ){
 			packet = SystemUtils.getInstanceByClassName(Std.string(packetType));
-			packet.writeMessageFromBytes(socket);
+			packet.writeMessageFromBytes(new BytesInput(Bytes.ofData(bytes)));
 			
 			if( callbacks != null && callbacks.doing != null ) callbacks.doing( packet );
 			else dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING, packet));
