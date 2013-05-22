@@ -1,5 +1,6 @@
 package cn.royan.hl.services.messages;
 
+import cn.royan.hl.bases.PoolMap;
 import cn.royan.hl.interfaces.services.IServiceMessageBase;
 import cn.royan.hl.utils.SystemUtils;
 import cn.royan.hl.consts.PrintConst;
@@ -46,9 +47,10 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 		blit(3, data, 0, len);
 	}
 	
-	public function writeMessageFromBytes(input:Input):Void
+	public function writeMessageFromInput(input:Input):Void
 	{
-		type = input.readByte();
+		if ( type == 0 )
+			type = input.readByte();
 		
 		len = (input.readByte() << 8 ) + input.readByte();
 		length = 1 + 2 + len;
@@ -70,6 +72,15 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 				SystemUtils.print(field+":"+Reflect.field(this, field), PrintConst.SERVICES);
 			}
 		}
+	}
+	
+	static public function fromInput(input:Input):SocketServiceMessage 
+	{
+		var type:Int = input.readByte();
+		var message:SocketServiceMessage = Type.createInstance(MessageManager.getMessageByType(type), []);
+			message.writeMessageType(type);
+			message.writeMessageFromInput(input);
+		return message;
 	}
 	
 	public function readMessageType():Int

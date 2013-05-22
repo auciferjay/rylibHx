@@ -9,7 +9,7 @@ interface IServiceMessageBase implements IDisposeBase
 	function writeMessageType(value:Int):Void;
 	function writeMessageLen(value:Int):Void;
 	function writeMessageData(value:BytesData):Void;
-	function writeMessageFromBytes(input:Input):Void;
+	function writeMessageFromInput(input:Input):Void;
 	function readMessageType():Int;
 	function readMessageLen():Int;
 	function readMessageData():BytesData;
