@@ -1,6 +1,13 @@
 package cn.royan.hl.bases;
+
 import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.utils.SystemUtils;
+
+#if !flash
+import nme.ObjectHash;
+#else
+import flash.utils.TypedDictionary;
+#end
 /**
  * ...
  * @author RoYan
@@ -10,7 +17,11 @@ class WeakMap
 {
 	static var __instance:WeakMap;
 	
-	var map:Dictionary;
+	#if !flash
+	var map:ObjectHash<Dynamic, Array<String>>;
+	#else
+	var map:TypedDictionary<Dynamic, Array<String>>;
+	#end
 	var keys:Array<String>;
 	var length:Int;
 	
@@ -22,7 +33,11 @@ class WeakMap
 	
 	function new()
 	{
-		map = #if flash new Dictionary(true); #else {}; #end
+		#if !flash
+		map = new ObjectHash < Dynamic, Array<String> > ();
+		#else
+		map = new TypedDictionary < Dynamic, Array<String> > (true);
+		#end
 		keys = [];
 		length = 0;
 	}
@@ -40,17 +55,17 @@ class WeakMap
 	public function getValues():Array<Dynamic>
 	{
 		var result:Array<Dynamic> = [];
-		for (i in Reflect.fields(map)) {
-			result.push(Reflect.field(map, i));
+		for (item in map) {
+			result.push(item);
 		}
 		return result;
 	}
 	
 	public function containValue(value:Dynamic):Bool
 	{
-		SystemUtils.print(value, PrintConst.BASES);
-		for (i in Reflect.fields(map)) {
-			if (Reflect.field(map,i) == value) {
+		//SystemUtils.print(Type.getClass(value), PrintConst.BASES);
+		for (item in map) {
+			if ( item == value ) {
 				return true;
 			}
 		}
@@ -60,49 +75,59 @@ class WeakMap
 	public function containKey(key:String):Bool
 	{
 		SystemUtils.print(key, PrintConst.BASES);
-		for( i in keys) {
-			if( i == key ) {
+		for( item in keys) {
+			if( item == key ) {
 				return true;
 			}
 		}
 		return false;
-		
 	}
 	
 	public function set(key:String, value:Dynamic):Void
 	{
-		SystemUtils.print(key+":"+value, PrintConst.BASES);
+		SystemUtils.print(key, PrintConst.BASES);
 		//如果键存在，删除键
 		if( containKey( key ) ) {
-			for ( i in Reflect.fields(map) ) {
-				Reflect.field(map,i).splice(SystemUtils.arrayIndexOf(Reflect.field(map,i),key),1);
+			for ( item in map ) {
+				item.remove( key );
 			}
 			length--;
 		}
 		//如果值存在
 		if( containValue( value ) ) {
 			//增加指向值的键
-			Reflect.field(map,value).push(key);
+			#if flash
+			untyped map[value].push( key );
+			#else
+			map.get(value).push(key);
+			#end
 		} else {
 			//指向值的键
-			SystemUtils.print(map +":"+ value +":"+ [key], 11);
-			Reflect.setField(map,value,[key]);
+			SystemUtils.print(map +":"+[key], PrintConst.BASES);
+			#if flash
+			untyped map[value] = [key];
+			#else
+			map.set(value, [key]);
+			#end
 		}
 		length++;
-		if(SystemUtils.arrayIndexOf(keys, key)<0)
-		{
+		if( SystemUtils.arrayIndexOf(keys, key) == -1 )
 			keys.push(key);
-		}
 	}
 	
 	public function getValue(key:String):Dynamic
 	{
 		SystemUtils.print(key, PrintConst.BASES);
 		// i 为值
-		for (item in Reflect.fields(map))
+		for (item in map.keys())
 		{
 			// 指向 i 的键
-			var key_arr:Array<Dynamic> = Reflect.field(map, item);
+			#if flash
+			var key_arr:Array<Dynamic> = untyped map[item];
+			#else
+			var key_arr:Array<Dynamic> = map.get(item);
+			#end
+			SystemUtils.print(map.get(item), PrintConst.BASES);
 			for( k in key_arr )
 			{
 				if( k == key )
@@ -116,26 +141,26 @@ class WeakMap
 	
 	public function getKeys(value:Dynamic):Array<Dynamic>
 	{
-		return Reflect.field(map,value);
+		return untyped map[value];
 	}
 	
 	public function clear(key:String):Void
 	{
 		SystemUtils.print(key, PrintConst.BASES);
 		var value:Dynamic = getValue(key);
-		var key_arr:Array<Dynamic> = Reflect.field(map,value);
+		var key_arr:Array<Dynamic> = untyped map[value];
 		if( key_arr != null )
 		{
-			key_arr.splice(SystemUtils.arrayIndexOf(key_arr, key), 1);
+			key_arr.remove(key);
 			
 			if( key_arr.length <= 0 )
 			{
-				Reflect.deleteField(map,value);
+				untyped map[value];
 			}
 			
 			length--;
 			
-			keys.splice(SystemUtils.arrayIndexOf(keys, key),1);
+			keys.remove(key);
 		}
 	}
 }

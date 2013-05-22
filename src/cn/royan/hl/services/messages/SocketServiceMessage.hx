@@ -23,7 +23,11 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 	var data:Bytes;
 	
 	public function new() {
+		#if flash
 		super(1, new BytesData());
+		#elseif neko
+		super(10, BytesData.ofString("0"));
+		#end
 	}
 	
 	public function writeMessageType(value:Int):Void
@@ -36,6 +40,14 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 	{
 		len = value;
 		length = 1 + 2 + len;
+		#if neko
+		var temp:String = "";
+		for ( i in 0...length ) {
+			temp += "0";
+		}
+		b = BytesData.ofString(temp);
+		#end
+		
 		set(1, len >> 8);
 		set(2, len & 0xFF);
 	}
@@ -44,24 +56,37 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 	{
 		data = Bytes.ofData(value);
 		writeMessageLen(data.length);
+		#if neko
+		for ( i in 0...len ) {
+			set( 3 + i, data.get(i) );
+		}
+		#else
 		blit(3, data, 0, len);
+		#end
 	}
 	
-	public function writeMessageFromInput(input:Input):Void
+	public function writeMessageFromBytes(input:Bytes):Void
 	{
 		if ( type == 0 )
-			type = input.readByte();
+			type = input.get(0);
 		
-		len = (input.readByte() << 8 ) + input.readByte();
+		var top:Int = input.get(1);
+		len = (top << 8 ) + input.get(2);
 		length = 1 + 2 + len;
 		
 		data = Bytes.alloc(len);
-		input.readBytes(data, 0, len);
+		data.blit(0, input, 3, len);
 		
 		set(0, type);
 		set(1, len >> 8);
 		set(2, len & 0xFF);
+		#if neko
+		for ( i in 0...len ) {
+			set( 3 + i, data.get(i) );
+		}
+		#else
 		blit(3, data, 0, len);
+		#end
 		
 		var datainput:BytesInput = new BytesInput(data);
 		var unserializer:Unserializer = new Unserializer();
@@ -73,13 +98,14 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 			}
 		}
 	}
-	
-	static public function fromInput(input:Input):SocketServiceMessage 
+
+	static public function fromBytes(input:Bytes):SocketServiceMessage 
 	{
-		var type:Int = input.readByte();
+		var type:Int = input.get(0);
+		SystemUtils.print(type, PrintConst.SERVICES);
 		var message:SocketServiceMessage = Type.createInstance(MessageManager.getMessageByType(type), []);
 			message.writeMessageType(type);
-			message.writeMessageFromInput(input);
+			message.writeMessageFromBytes(input);
 		return message;
 	}
 	
@@ -116,6 +142,7 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 		}
 		
 		writeMessageData(serializer.getBytes());
+		
 	}
 	
 	function getSortedFields():Array<String>

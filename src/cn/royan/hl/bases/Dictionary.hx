@@ -7,5 +7,5 @@ package cn.royan.hl.bases;
 #if flash
 typedef Dictionary = flash.utils.Dictionary;
 #else
-typedef Dictionary = Dynamic;
+typedef Dictionary = Dynamic<Dynamic>;
 #end
