@@ -5,7 +5,6 @@ import cn.royan.hl.bases.DispatcherBase;
 import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.services.IServiceBase;
-import cn.royan.hl.interfaces.services.IServiceMessageBase;
 import cn.royan.hl.utils.SystemUtils;
 import flash.utils.ByteArray;
 import haxe.io.Bytes;
@@ -59,14 +58,9 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	var headerSize:Int;
 	#end
 
-	var packet:IServiceMessageBase;
-	var packetType:Class<IServiceMessageBase>;
-
-	public function new(messageType:Class<IServiceMessageBase>, host:String="", port:Int=0)
+	public function new(host:String="", port:Int=0)
 	{
 		super();
-
-		packetType = messageType;
 
 		this.host = host;
 		this.port = port;
@@ -79,13 +73,14 @@ class SoktService extends DispatcherBase, implements IServiceBase
 
 	public function sendRequest(url:String='', extra:Dynamic=null):Void
 	{
-		SystemUtils.print(url+":"+extra, PrintConst.SERVICES);
+		SystemUtils.print(url, PrintConst.SERVICES);
 		if( getIsServicing() ){
 			#if flash
 			socket.writeBytes( cast(extra) );
 			socket.flush();
 			#else
-			socket.output.writeBytes( cast(extra) );
+			SystemUtils.print("Listenee send:"+cast(extra).length, PrintConst.SERVICES);
+			socket.output.write( cast(extra) );
 			#end
 		}else{
 			if( url == "" || extra == null ) throw "host and port must be filled in";
@@ -111,10 +106,9 @@ class SoktService extends DispatcherBase, implements IServiceBase
 					socket:socket
 				}
 
+				isServicing = true;
 				worker = Thread.create( runWorker );
 				thread = Thread.create( runThread );
-
-				isServicing = true;
 
 				SystemUtils.print("[Class SoktService]:onConnect", PrintConst.SERVICES);
 				if( callbacks != null && callbacks.create != null ) callbacks.create();
@@ -143,7 +137,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 
 	public function getData():Dynamic
 	{
-		return packet;
+		return null;
 	}
 
 	public function getIsServicing():Bool
@@ -210,16 +204,9 @@ class SoktService extends DispatcherBase, implements IServiceBase
 		SystemUtils.print("[Class SoktService]:onProgress:" + socket.bytesAvailable, PrintConst.SERVICES);
 		var bytes:ByteArray = new ByteArray();
 		socket.writeBytes(bytes);
-		while( bytes.bytesAvailable > 0 ){
-			packet = SystemUtils.getInstanceByClassName(Std.string(packetType));
-			packet.writeMessageFromBytes(new BytesInput(Bytes.ofData(bytes)));
 
-			if( callbacks != null && callbacks.doing != null ) callbacks.doing( packet );
-			else dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING, packet));
-
-			packet.dispose();
-			PoolMap.disposeInstance(packet);
-		}
+		if( callbacks != null && callbacks.doing != null ) callbacks.doing( bytes );
+		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING, bytes));
 	}
 	#elseif js
 	function jsOnData(data:String):Void
@@ -265,7 +252,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	#else
 	function runThread():Void
 	{
-		while ( true ) {
+		while ( getIsServicing() ) {
 			try {
 				loopThread();
 			}catch ( e:Dynamic ) {
@@ -291,6 +278,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 		var bytes:Int = cast(clientInfos.socket).input.readBytes( clientInfos.buf, clientInfos.bufpos, available );
 		var pos:Int = 0;
 		var len:Int = clientInfos.bufpos + bytes;
+
 		while ( len >= headerSize ) {
 			var m: { msg:String, bytes:Int } = readClientMessage( clientInfos.socket, clientInfos.buf, pos, len );
 			if ( m == null ) break;
@@ -309,7 +297,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	}
 
 	function runWorker() {
-		while( true ) {
+		while( getIsServicing() ) {
 			var f = Thread.readMessage(true);
 			try {
 				f();
@@ -336,29 +324,12 @@ class SoktService extends DispatcherBase, implements IServiceBase
 
 	function readClientMessage( c:Socket, buf:Bytes, pos:Int, len:Int ): {msg:String, bytes:Int }
 	{
-		SystemUtils.print("Listenee read:"+buf.readString(pos,len), PrintConst.SERVICES);
-		var cpos:Int = pos;
-		var complete:Bool = false;
-		var isStart:Bool = buf.get(cpos) == 123;//
-		var isMeet:Bool = false;//
-		while (cpos < (pos + len) && !complete && isStart)
-		{
-			complete = isMeet && (buf.get(cpos) == 46);
-			isMeet = buf.get(cpos) == 125;
-			cpos++;
-		}
-		// no full message
-		if ( !complete ) return null;
+		SystemUtils.print("Listenee read:"+len, PrintConst.SERVICES);
+		var msg:String = buf.readString( pos, len );
 
-		var msg:String = buf.readString( pos, cpos - pos );
-
-		if( callbacks != null && callbacks.doing != null ) callbacks.doing( msg );
-			else dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING, msg));
-		if ( cpos < (pos + len) )
-		{
-			readClientMessage( c, buf, cpos, len + pos - cpos );
-		}
-		// got a full message, return it
+		if( callbacks != null && callbacks.done != null ) callbacks.doing(buf.sub(pos,len));
+		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING, buf.sub(pos,len)));
+		
 		return {
 			msg : msg,
 			bytes : len,
@@ -369,7 +340,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	{
 		SystemUtils.print(e, PrintConst.SERVICES);
 		if( callbacks != null && callbacks.error != null ) callbacks.error(e);
-			else dispatchEvent(new DatasEvent(DatasEvent.DATA_ERROR, e));
+		else dispatchEvent(new DatasEvent(DatasEvent.DATA_ERROR, e));
 	}
 	#end
 }

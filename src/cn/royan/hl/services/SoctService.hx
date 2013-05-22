@@ -33,6 +33,7 @@ private typedef ThreadInfos = {
 
 private typedef ClientInfos = {
 	var socket:Socket;
+	var unid:Int;
 	var thread:ThreadInfos;
 	var buffer:Bytes;
 	var bufferpos:Int;
@@ -40,6 +41,8 @@ private typedef ClientInfos = {
 
 class SoctService extends DispatcherBase, implements IServiceBase
 {
+	static var __id:Int = 0;
+
 	var callbacks:Dynamic;
 		
 	var host:String;
@@ -85,8 +88,22 @@ class SoctService extends DispatcherBase, implements IServiceBase
 	
 	public function sendRequest(url:String='', extra:Dynamic=null):Void
 	{
-		//if(request!= null && extra != null)
-		//	sendData(cast(extra), cast(request));
+		SystemUtils.print(url, PrintConst.SERVICES);
+		if( getIsServicing() ){
+			//socket.output.write( cast(extra) );
+			for( thread in threads ) {
+				for ( sock in thread.sockets ) {
+					if ( Std.string(sock.custom.unid) == url ) {
+						sendData(sock, cast(extra) );
+						return ;
+					}
+				}
+			}
+		}else{
+			if( url == "" || extra == null ) throw "host and port must be filled in";
+			host = url;
+			port = Std.int(extra);
+		}
 	}
 	
 	public function setCallbacks(value:Dynamic):Void
@@ -281,12 +298,12 @@ class SoctService extends DispatcherBase, implements IServiceBase
 
 	function addClient(sock:Socket):Void
 	{
-		SystemUtils.print("add Client:"+sock, PrintConst.SERVICES);
 		var infos:ClientInfos = {
-			thread:threads[Std.random(nthreads)],
-			socket:sock,
-			buffer:Bytes.alloc(initialBufferSize),
-			bufferpos:0,
+			unid: __id++,
+			thread: threads[Std.random(nthreads)],
+			socket: sock,
+			buffer: Bytes.alloc(initialBufferSize),
+			bufferpos: 0,
 		};
 		
 		clientConnected(sock);
@@ -332,12 +349,14 @@ class SoctService extends DispatcherBase, implements IServiceBase
 
 	function clientConnected(s:Socket):Void
 	{
+		SystemUtils.print("add Client:"+sock, PrintConst.SERVICES);
 		if( callbacks != null && callbacks.create != null ) callbacks.create(s);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CREATE));
 	}
 
 	function clientDisconnected(s:Socket):Void
 	{
+		SystemUtils.print("remove Client:"+sock, PrintConst.SERVICES);
 		if( callbacks != null && callbacks.destory != null ) callbacks.destory(s);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DESTROY));
 	}
