@@ -1,6 +1,6 @@
 package cn.royan.hl.services.messages;
 
-import haxe.io.BytesInput;
+import haxe.io.Input;
 import haxe.io.Bytes;
 
 /**
@@ -10,6 +10,8 @@ import haxe.io.Bytes;
 
 class Unserializer 
 {
+	public function new() {
+	}
 	/**
 	 * 
 	 * @param	v
@@ -24,23 +26,8 @@ class Unserializer
 	 * String	7
 	 * Array	8
 	 * Date		9
-	 * Request	20;
 	 */
-	static public function unserialize( v:BytesInput ):Array<Dynamic>
-	{
-		var result:Array<Dynamic> = [];
-		var input:BytesInput = v;
-		var length:Int = 1;
-		while(length > 0){
-			result.push(unserializeInput(input));
-			var rest:Bytes = input.readAll();
-			length = rest.length;
-			input = new BytesInput(rest);
-		}
-		return result;
-	}
-	
-	function unserializeInput( v:BytesInput ):Dynamic
+	public function unserialize( v:Input ):Dynamic
 	{
 		var type:Int = v.readInt8();
 		switch( type ) {
@@ -66,45 +53,29 @@ class Unserializer
 				return unserializeArray(v);
 			case 9:
 				return Date.fromTime(v.readDouble());
-			case 20:
-				return unserializeData(v);
 		}
 		return null;
 	}
 	
-	function unserializeObject(v:BytesInput):Dynamic
+	function unserializeObject(v:Input):Dynamic
 	{
 		var object = { };
 		var len:Int = v.readInt16();
 		for ( i in 0...len ) {
-			var key:String = unserializeInput(v);
-			var value:String = unserializeInput(v);
+			var key:String = unserialize(v);
+			var value:String = unserialize(v);
 			Reflect.setField( object, key, value );
 		}
 		return object;
 	}
 	
-	function unserializeArray(v:BytesInput):Array<Dynamic>
+	function unserializeArray(v:Input):Array<Dynamic>
 	{
 		var array:Array<Dynamic> = [];
 		var len:Int = v.readInt16();
 		for ( i in 0...len ) {
-			array.push(unserializeInput(v));
+			array.push(unserialize(v));
 		}
 		return array;
-	}
-	
-	function unserializeData(v:BytesInput):Data
-	{
-		var code:Int = v.readInt16();
-		var clss:Class<IBuilder<Dynamic>> = datalistManager.retrieveBuilder(code);
-		var array:Array<Dynamic> = [];
-		var len:Int = v.readInt16();
-		for ( i in 0...len ) {
-			array.push(unserializeInput(v));
-		}
-		var builder:IBuilder<Dynamic> = Type.createInstance( clss, [] );
-			builder.build(array);
-		return builder.getResult();
 	}
 }

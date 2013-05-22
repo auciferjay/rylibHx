@@ -1,5 +1,6 @@
 package cn.royan.hl.services.messages;
 
+import haxe.io.BytesData;
 import haxe.io.BytesOutput;
 import haxe.io.Bytes;
 import Type.ValueType;
@@ -29,7 +30,7 @@ class Serializer
 	 * TEnum	6
 	 * String	7
 	 * Array	8
-	 * Request	9;
+	 * Date		9;
 	 */
 	public function serialize( v:Dynamic ):BytesOutput
 	{
@@ -96,5 +97,10 @@ class Serializer
 			serialize(i);
 		}
 		return bytesOutput;
+	}
+	
+	public function getBytes():BytesData
+	{
+		return bytesOutput.getBytes().getData();
 	}
 }

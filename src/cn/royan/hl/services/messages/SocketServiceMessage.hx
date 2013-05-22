@@ -1,6 +1,10 @@
 package cn.royan.hl.services.messages;
 
 import cn.royan.hl.interfaces.services.IServiceMessageBase;
+import cn.royan.hl.utils.SystemUtils;
+import cn.royan.hl.consts.PrintConst;
+import haxe.io.BytesInput;
+
 import haxe.io.Bytes;
 import haxe.io.BytesData;
 import haxe.io.Input;
@@ -11,6 +15,8 @@ import haxe.io.Input;
  */
 class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 {
+	static inline var ignores:Array<String> = ["b", "length", "data", "type", "len"];
+	
 	var type:Int;
 	var len:Int;
 	var data:Bytes;
@@ -36,6 +42,7 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 	public function writeMessageData(value:BytesData):Void
 	{
 		data = Bytes.ofData(value);
+		writeMessageLen(data.length);
 		blit(3, data, 0, len);
 	}
 	
@@ -53,6 +60,16 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 		set(1, len >> 8);
 		set(2, len & 0xFF);
 		blit(3, data, 0, len);
+		
+		var datainput:BytesInput = new BytesInput(data);
+		var unserializer:Unserializer = new Unserializer();
+		var fields:Array<String> = getSortedFields();
+		for ( field in fields ) {
+			if ( !Reflect.isFunction( Reflect.field(this, field) ) && SystemUtils.arrayIndexOf(ignores, field) == -1 ) {
+				Reflect.setField(this, field, unserializer.unserialize( datainput ) );
+				SystemUtils.print(field+":"+Reflect.field(this, field), PrintConst.SERVICES);
+			}
+		}
 	}
 	
 	public function readMessageType():Int
@@ -81,34 +98,26 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 		var serializer:Serializer = new Serializer();
 		var fields:Array<String> = getSortedFields();
 		for ( field in fields ) {
-			if ( !Reflect.isFunction( Reflect.field(this, field) ) ) {
+			if ( !Reflect.isFunction( Reflect.field(this, field) ) && SystemUtils.arrayIndexOf(ignores, field) == -1 ) {
+				SystemUtils.print(field + ":" + Reflect.field(this, field), PrintConst.SERVICES);
 				serializer.serialize( Reflect.field(this, field) );
 			}
 		}
-		writeMessageData(serializer);
+		
+		writeMessageData(serializer.getBytes());
 	}
-
-	public function unserialize():Void 
-	{
-		var fields:Array<String> = getSortedFields();
-		for ( field in fields ) {
-			if ( !Reflect.isFunction( Reflect.field(this, field) ) ) {
-				Reflect.setField(this, field, Unserializer.unserialize( data ) );
-			}
-		}
-	}
-
+	
 	function getSortedFields():Array<String>
 	{
-		var fields:Array<String> = Reflect.fields(this);
+		var fields:Array<String> = Type.getInstanceFields(Type.getClass(this));
 			fields.sort( function(a:String, b:String):Int
 			{
-			    a = a.toLowerCase();
-			    b = b.toLowerCase();
-			    if (a < b) return -1;
-			    if (a > b) return 1;
-			    return 0;
-			} )
+				a = a.toLowerCase();
+				b = b.toLowerCase();
+				if (a < b) return -1;
+				if (a > b) return 1;
+				return 0;
+			} );
 		return fields;
 	}
 	

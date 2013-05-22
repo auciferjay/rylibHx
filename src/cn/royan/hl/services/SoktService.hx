@@ -39,12 +39,12 @@ private typedef ClientInfos = {
 class SoktService extends DispatcherBase, implements IServiceBase
 {
 	var callbacks:Dynamic;
-		
+
 	var host:String;
 	var port:Int;
-	
+
 	var isServicing:Bool;
-	
+
 	#if !js
 	var socket:Socket;
 	#else
@@ -58,16 +58,16 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	var bufferSize:Int;
 	var headerSize:Int;
 	#end
-	
+
 	var packet:IServiceMessageBase;
 	var packetType:Class<IServiceMessageBase>;
-	
+
 	public function new(messageType:Class<IServiceMessageBase>, host:String="", port:Int=0)
 	{
 		super();
-		
+
 		packetType = messageType;
-		
+
 		this.host = host;
 		this.port = port;
 
@@ -110,10 +110,10 @@ class SoktService extends DispatcherBase, implements IServiceBase
 					bufpos:0,
 					socket:socket
 				}
-				
+
 				worker = Thread.create( runWorker );
 				thread = Thread.create( runThread );
-				
+
 				isServicing = true;
 
 				SystemUtils.print("[Class SoktService]:onConnect", PrintConst.SERVICES);
@@ -150,11 +150,11 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	{
 		return isServicing;
 	}
-	
+
 	public function dispose():Void
 	{
 		if( getIsServicing() ) socket.close();
-		
+
 		#if flash
 		socket.removeEventListener(Event.CONNECT, onConnect);
 		socket.removeEventListener(IOErrorEvent.IO_ERROR, onIOError);
@@ -162,49 +162,49 @@ class SoktService extends DispatcherBase, implements IServiceBase
 		socket.removeEventListener(ProgressEvent.SOCKET_DATA, onProgress);
 		socket.removeEventListener(Event.CLOSE, onClose);
 		#end
-		
+
 		socket = null;
 		callbacks = null;
 		removeAllEventListeners();
 	}
-	
+
 	#if flash
 	function onConnect(evt:Event):Void
 	{
 		SystemUtils.print("[Class SoktService]:onConnect", PrintConst.SERVICES);
 		if( callbacks != null && callbacks.create != null ) callbacks.create();
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CREATE));
-		
+
 		isServicing = true;
 	}
-	
+
 	function onClose(evt:Event):Void
 	{
 		SystemUtils.print("[Class SoktService]:onClose", PrintConst.SERVICES);
 		if( callbacks != null && callbacks.destory != null ) callbacks.destory();
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DESTROY));
-		
+
 		isServicing = false;
 	}
-	
+
 	function onIOError(evt:IOErrorEvent):Void
 	{
 		SystemUtils.print("[Class SoktService]:onIOError:"+evt, PrintConst.SERVICES);
 		if( callbacks != null && callbacks.error != null ) callbacks.error(evt.type);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_ERROR, evt.type));
-		
+
 		isServicing = false;
 	}
-	
+
 	function onSecurityError(evt:SecurityErrorEvent):Void
 	{
 		SystemUtils.print("[Class SoktService]:onSecurityError:"+evt, PrintConst.SERVICES);
 		if( callbacks != null && callbacks.error != null ) callbacks.error(evt.type);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_ERROR, evt.type));
-		
+
 		isServicing = false;
 	}
-	
+
 	function onProgress(evt:ProgressEvent):Void
 	{
 		SystemUtils.print("[Class SoktService]:onProgress:" + socket.bytesAvailable, PrintConst.SERVICES);
@@ -213,10 +213,10 @@ class SoktService extends DispatcherBase, implements IServiceBase
 		while( bytes.bytesAvailable > 0 ){
 			packet = SystemUtils.getInstanceByClassName(Std.string(packetType));
 			packet.writeMessageFromBytes(new BytesInput(Bytes.ofData(bytes)));
-			
+
 			if( callbacks != null && callbacks.doing != null ) callbacks.doing( packet );
 			else dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING, packet));
-			
+
 			packet.dispose();
 			PoolMap.disposeInstance(packet);
 		}
@@ -228,37 +228,37 @@ class SoktService extends DispatcherBase, implements IServiceBase
 		while( data.length > 0 ){
 			packet = SystemUtils.getInstanceByClassName(Std.string(packetType));
 			packet.writeMessageFromBytes(socket);
-			
+
 			if( callbacks != null && callbacks.doing != null ) callbacks.doing( packet );
 			else dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING, packet));
-			
+
 			packet.dispose();
 			PoolMap.disposeInstance(packet);
 		}
 	}
-	
+
 	function jsOnClose():Void
 	{
 		SystemUtils.print("[Class SoktService]:onClose", PrintConst.SERVICES);
 		if( callbacks != null && callbacks.destory != null ) callbacks.destory();
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DESTROY));
-		
+
 		isServicing = false;
 	}
-	
+
 	function jsOnConnect(b:Bool):Void
 	{
 		if ( b ) {
 			SystemUtils.print("[Class SoktService]:onConnect", PrintConst.SERVICES);
 			if( callbacks != null && callbacks.create != null ) callbacks.create();
 			else dispatchEvent(new DatasEvent(DatasEvent.DATA_CREATE));
-			
+
 			isServicing = true;
 		}else {
 			SystemUtils.print("[Class SoktService]:onIOError", PrintConst.SERVICES);
 			if( callbacks != null && callbacks.error != null ) callbacks.error("");
 			else dispatchEvent(new DatasEvent(DatasEvent.DATA_ERROR));
-			
+
 			isServicing = false;
 		}
 	}
@@ -272,7 +272,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 			}
 		}
 	}
-	
+
 	function loopThread():Void
 	{
 		var available:Int = clientInfos.buf.length - clientInfos.bufpos;
@@ -302,12 +302,12 @@ class SoktService extends DispatcherBase, implements IServiceBase
 			clientInfos.buf.blit( 0, clientInfos.buf, pos, len );
 		clientInfos.bufpos = len;
 	}
-	
+
 	function work( fun: Void -> Void ):Void
 	{
 		worker.sendMessage( fun );
 	}
-	
+
 	function runWorker() {
 		while( true ) {
 			var f = Thread.readMessage(true);
@@ -323,17 +323,17 @@ class SoktService extends DispatcherBase, implements IServiceBase
 			}
 		}
 	}
-	
+
 	function afterEvent():Void
 	{
-		
+
 	}
-	
+
 	function clientMessage( c:Socket, msg:String ):Void
 	{
-		
+
 	}
-	
+
 	function readClientMessage( c:Socket, buf:Bytes, pos:Int, len:Int ): {msg:String, bytes:Int }
 	{
 		SystemUtils.print("Listenee read:"+buf.readString(pos,len), PrintConst.SERVICES);
@@ -349,9 +349,9 @@ class SoktService extends DispatcherBase, implements IServiceBase
 		}
 		// no full message
 		if ( !complete ) return null;
-		
+
 		var msg:String = buf.readString( pos, cpos - pos );
-		
+
 		if( callbacks != null && callbacks.doing != null ) callbacks.doing( msg );
 			else dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING, msg));
 		if ( cpos < (pos + len) )
