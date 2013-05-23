@@ -182,7 +182,7 @@ class BytesUtils
 	public static function isEncrypt(bytes:ByteArray):Bool
 	{
 		bytes.position = 0;
-		var BYTE_KEY:Array<Int> = [10, 40, 90, 80];
+		var BYTE_KEY:Array<Int> = [10, 40, 90];
 		var isEnc:Bool = true;
 		for (i in 0...3) {
 			if (bytes.readByte() != BYTE_KEY[i]) {
@@ -202,7 +202,7 @@ class BytesUtils
 			var result:ByteArray = new ByteArray();
 			for ( i in 3...bytes.length ) {
 				if (flag >= key.length) flag = 0;
-				result.writeByte(bytes.readByte() - key.charCodeAt(flag));
+				result.writeByte(bytes[i] - key.charCodeAt(flag));
 				flag++;
 			}
 			return result;

@@ -21,7 +21,7 @@ class SystemUtils
 	
 	static public function print(v:Dynamic, level:Int=0,?info:PosInfos):Void
 	{
-		if ( showDebug == level || showDebug == 0 ) {
+		if ( showDebug == level || showDebug == 0 || level == 0) {
 			#if !swc
 			if ( info != null )
 				Log.trace(Timer.stamp() + "|[" + info.className + "][" + info.methodName + "]:" + v);
@@ -86,8 +86,15 @@ class SystemUtils
 	static var __loaderContext:LoaderContext;
 	public static function getLoaderContext():LoaderContext
 	{
-		if( __loaderContext == null )
-			__loaderContext = new LoaderContext(false, ApplicationDomain.currentDomain);
+		if ( __loaderContext == null ) {
+			__loaderContext = new LoaderContext(false);
+			/* 加载到子域(模块) */
+			__loaderContext.applicationDomain = new ApplicationDomain(ApplicationDomain.currentDomain);
+			/* 加载到同域(共享库) */
+			//__loaderContext.applicationDomain = ApplicationDomain.currentDomain;
+			/* 加载到新域(独立运行的程序或模块) */
+			//__loaderContext.applicationDomain = new ApplicationDomain();
+		}
 			
 		return __loaderContext;
 	}
