@@ -12,7 +12,7 @@ import flash.geom.Matrix;
  */
 class BitmapDataUtils
 {
-	static public function fromColors(width:Int, height:Int, colors:Array<Dynamic>, alphas:Array<Dynamic>, length:Int = 1):BitmapData
+	static public function fromColors(width:Int, height:Int, colors:Array<Dynamic>, alphas:Array<Dynamic>, length:Int = 1, border:Int = 0x000000, thick:Int = 0, alpha:Float = 0.0, rx:Int = 0, ry:Int = 0):BitmapData
 	{
 		SystemUtils.print(width+":"+height+":"+colors+":"+alphas+","+length, PrintConst.UTILS);
 		
@@ -25,6 +25,9 @@ class BitmapDataUtils
 		
 		if ( length == 1 ) {
 			if ( Std.is( colors, Array ) ) {
+				if ( alpha > 0.0 && thick > 0 ) {
+					shape.graphics.lineStyle(thick, border, alpha);
+				}
 				matrix.createGradientBox(width, height, Math.PI / 2, 0, 0);
 				ratios = [];
 				colorLen = Std.int(colors.length - 1);
@@ -39,11 +42,15 @@ class BitmapDataUtils
 				shape.graphics.beginFill(colors[0], alphas[0]);
 			}
 			
-			shape.graphics.drawRect( 0, 0, width, height );
+			shape.graphics.drawRoundRect( 0, 0, width - thick, height - thick, rx, ry );
 			shape.graphics.endFill();
 		}else {
 			for ( i in 0...length ) {
 				if ( Std.is( colors[i], Array ) ) {
+					if ( alpha > 0.0 && thick > 0 ) {
+						shape.graphics.lineStyle(thick, border, alpha);
+					}
+					
 					matrix.createGradientBox(width, height, Math.PI / 2, 0, 0);
 					ratios = [];
 					colorLen = Std.int(colors[i].length - 1);
@@ -58,7 +65,7 @@ class BitmapDataUtils
 					shape.graphics.beginFill(colors[i], alphas[i]);
 				}
 				
-				shape.graphics.drawRect( width * i, 0, width, height );
+				shape.graphics.drawRoundRect( width * i, 0, width - thick, height - thick, rx, ry );
 				shape.graphics.endFill();
 			}
 		}

@@ -18,6 +18,7 @@ interface IUiBase implements IDisposeBase
 	function setColorsAndAplhas(color:Array<Dynamic>, alpha:Array<Dynamic>):Void;
 	function getColors():Array<Dynamic>;
 	function getAlphas():Array<Dynamic>;
+	function setBorder(thick:Int, color:Int, alpha:Float, rx:Int=0, ry:Int=0):Void;
 	function setSize(cWidth:Float, cHeight:Float):Void;
 	function setPosition(cX:Float, cY:Float):Void;
 	function setRange(value:Range):Void;

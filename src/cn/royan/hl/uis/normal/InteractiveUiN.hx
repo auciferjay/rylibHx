@@ -36,8 +36,14 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 	
 	var bgColors:Array<Dynamic>;
 	var bgAlphas:Array<Dynamic>;
-	var defaultTexture:Sparrow;
 	var bgTexture:Sparrow;
+	var defaultTexture:Sparrow;
+	
+	var borderThick:Int;
+	var borderColor:Int;
+	var borderAlpha:Float;
+	var borderRx:Int;
+	var borderRy:Int;
 	
 	var callbacks:Dynamic;
 	var isMouseRender:Bool;
@@ -73,6 +79,12 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 		positionX = 0;
 		positionY = 0;
 		
+		borderThick = 0;
+		borderColor = 0;
+		borderAlpha = 0;
+		borderRx	= 0;
+		borderRy	= 0;
+		
 		status = INTERACTIVE_STATUS_NORMAL;
 		
 		background = new Bitmap();
@@ -107,7 +119,8 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 	
 	public function getDefaultTexture():Dynamic
 	{
-		return Sparrow.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), bgColors, bgAlphas));
+		return Sparrow.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
+										bgColors, bgAlphas, 1, borderColor, borderThick, borderAlpha, borderRx, borderRy));
 	}
 	
 	public function setColorsAndAplhas(color:Array<Dynamic>, alpha:Array<Dynamic>):Void
@@ -139,6 +152,15 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 	public function getAlphas():Array<Dynamic>
 	{
 		return bgAlphas;
+	}
+	
+	public function setBorder(thick:Int, color:Int, alpha:Float, rx:Int=0, ry:Int=0):Void
+	{
+		borderThick = thick;
+		borderColor = color;
+		borderAlpha = alpha;
+		borderRx	= rx;
+		borderRy 	= ry;
 	}
 	
 	public function setCallbacks(value:Dynamic):Void

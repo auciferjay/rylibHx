@@ -31,6 +31,12 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 	var defaultTexture:Sparrow;
 	var bgTexture:Sparrow;
 	
+	var borderThick:Int;
+	var borderColor:Int;
+	var borderAlpha:Float;
+	var borderRx:Int;
+	var borderRy:Int;
+	
 	var containerWidth:Float;
 	var containerHeight:Float;
 	var positionX:Float;
@@ -88,7 +94,8 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 	
 	public function getDefaultTexture():Sparrow
 	{
-		return Sparrow.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), bgColors, bgAlphas));
+		return Sparrow.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
+										bgColors, bgAlphas, 1, borderColor, borderThick, borderAlpha, borderRx, borderRy));
 	}
 	
 	public function setColorsAndAplhas(color:Array<Dynamic>, alpha:Array<Dynamic>):Void
@@ -120,6 +127,15 @@ class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemSta
 	public function getAlphas():Array<Dynamic>
 	{
 		return bgAlphas;
+	}
+	
+	public function setBorder(thick:Int, color:Int, alpha:Float, rx:Int=0, ry:Int=0):Void
+	{
+		borderThick = thick;
+		borderColor = color;
+		borderAlpha = alpha;
+		borderRx	= rx;
+		borderRy 	= ry;
 	}
 	
 	public function setCallbacks(value:Dynamic):Void

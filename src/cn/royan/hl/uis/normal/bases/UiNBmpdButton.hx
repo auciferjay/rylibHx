@@ -171,7 +171,8 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 		}
 		
 		if ( containerWidth > 0 && containerHeight > 0 ) {
-			defaultTexture = Sparrow.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), bgColors, bgAlphas, InteractiveUiN.STATUS_LEN));
+			defaultTexture = Sparrow.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
+									bgColors, bgAlphas, InteractiveUiN.STATUS_LEN, borderColor, borderThick, borderAlpha, borderRx, borderRy));
 			
 			drawTextures(defaultTexture, InteractiveUiN.STATUS_LEN);
 			

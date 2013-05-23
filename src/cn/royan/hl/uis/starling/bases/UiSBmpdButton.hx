@@ -47,7 +47,8 @@ class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 			return;
 		}
 		
-		currentStatus = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), [0x00000], [0])));
+		currentStatus = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
+									[0x00000], [0], 1, borderColor, borderThick, borderAlpha, borderRx, borderRy)));
 		if ( bgTextures[status] != null ) {
 			currentStatus.texture = bgTextures[status];
 		}
@@ -96,11 +97,13 @@ class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 		}
 		
 		for ( i in 0...bgColors.length ) {
-			bgTextures[i] = Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), bgColors[i], bgAlphas[i]));
+			bgTextures[i] = Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
+									bgColors[i], bgAlphas[i], 1, borderColor, borderThick, borderAlpha, borderRx, borderRy));
 		}
 		
 		if ( currentStatus == null ) {
-			currentStatus = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), [0x00000], [0x00])));
+			currentStatus = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
+									[0x00000], [0x00], 1, borderColor, borderThick, borderAlpha, borderRx, borderRy)));
 			if( bgTextures[status] != null )
 				currentStatus.texture = bgTextures[status];
 			addChildAt(currentStatus, 0);

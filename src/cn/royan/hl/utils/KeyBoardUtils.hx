@@ -12,6 +12,10 @@ class KeyBoardUtils
 	static var keyObj:KeyBoardUtils;
     static var keys:Dictionary;
 	
+	function new() {
+		
+	}
+	
 	static public function init(display:DisplayObject):Void
 	{
 		if ( keyObj == null ) {
@@ -24,18 +28,18 @@ class KeyBoardUtils
 		}
 	}
 	
-	static public function isDown():Bool
+	static public function isDown(code:UInt):Bool
 	{
-		
+		return Reflect.field( keys, Std.string(code) );
 	}
 	
 	static function keyDownHandler(evt:KeyboardEvent):Void
 	{
-		keys[evt.keyCode] = true;
+		Reflect.setField( keys, Std.string(evt.keyCode), true );
 	}
 	
 	static function keyUpHandler(evt:KeyboardEvent):Void
 	{
-		delete keys[evt.keyCode];
+		Reflect.deleteField( keys, Std.string(evt.keyCode) );
 	}
 }

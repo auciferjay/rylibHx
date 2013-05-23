@@ -31,6 +31,12 @@ class UninteractiveUiS extends Sprite, implements IUiBase, implements IUiItemSta
 	var defaultTexture:Texture;
 	var bgTexture:Texture;
 	
+	var borderThick:Int;
+	var borderColor:Int;
+	var borderAlpha:Float;
+	var borderRx:Int;
+	var borderRy:Int;
+	
 	var containerWidth:Float;
 	var containerHeight:Float;
 	var positionX:Float;
@@ -63,7 +69,8 @@ class UninteractiveUiS extends Sprite, implements IUiBase, implements IUiItemSta
 		}
 		
 		if ( containerHeight > 0 && containerWidth > 0 ) {
-			graphics = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), [0x000000], [0x00])));
+			graphics = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
+											[0x000000], [0x00], 1, borderColor, borderThick, borderAlpha, borderRx, borderRy)));
 			graphics.touchable = false;
 			addChild( graphics );
 		}
@@ -88,7 +95,8 @@ class UninteractiveUiS extends Sprite, implements IUiBase, implements IUiItemSta
 	
 	public function getDefaultTexture():Dynamic
 	{
-		return Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), bgColors, bgAlphas));
+		return Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
+										bgColors, bgAlphas, 1, borderColor, borderThick, borderAlpha, borderRx, borderRy));
 	}
 	
 	public function setColorsAndAplhas(color:Array<Dynamic>, alpha:Array<Dynamic>):Void
@@ -119,6 +127,15 @@ class UninteractiveUiS extends Sprite, implements IUiBase, implements IUiItemSta
 	public function getAlphas():Array<Dynamic>
 	{
 		return bgAlphas;
+	}
+	
+	public function setBorder(thick:Int, color:Int, alpha:Float, rx:Int=0, ry:Int=0):Void
+	{
+		borderThick = thick;
+		borderColor = color;
+		borderAlpha = alpha;
+		borderRx	= rx;
+		borderRy 	= ry;
 	}
 	
 	public function setCallbacks(value:Dynamic):Void
@@ -170,7 +187,8 @@ class UninteractiveUiS extends Sprite, implements IUiBase, implements IUiItemSta
 			setSize(Std.int(bgTexture.width), Std.int(bgTexture.height));
 			
 			if ( containerHeight > 0 && containerWidth > 0 && graphics == null ) {
-				graphics = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), [0x000000], [0x00])));
+				graphics = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
+								[0x000000], [0x00], 1, borderColor, borderThick, borderAlpha, borderRx, borderRy)));
 				graphics.touchable = false;
 				addChild( graphics );
 			}
