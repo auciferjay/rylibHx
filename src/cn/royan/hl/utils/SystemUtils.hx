@@ -9,8 +9,8 @@ import haxe.Timer;
 import flash.system.ApplicationDomain;
 import flash.system.LoaderContext;
 import flash.errors.Error;
-import flash.Lib;
 #end
+import flash.Lib;
 
 /**
  * ...
