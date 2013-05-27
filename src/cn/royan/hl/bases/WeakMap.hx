@@ -88,8 +88,15 @@ class WeakMap
 		SystemUtils.print(key, PrintConst.BASES);
 		//如果键存在，删除键
 		if( containKey( key ) ) {
-			for ( item in map ) {
-				item.remove( key );
+			for (item in map.keys())
+			{
+				// 指向 i 的键
+				#if flash
+				var key_arr:Array<Dynamic> = untyped map[item];
+				#else
+				var key_arr:Array<Dynamic> = map.get(item);
+				#end
+				key_arr.remove(key);
 			}
 			length--;
 		}

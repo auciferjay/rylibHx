@@ -29,9 +29,11 @@ class PoolMap
 	{
 		SystemUtils.print(type+":"+parameters, PrintConst.BASES);
 		var waterDrop:WaterDrop = new WaterDrop(type, parameters);
-		__weakMap.set(waterDrop.key, waterDrop.target);
-		
-		return waterDrop.target;
+		if ( __weakMap.getValue(waterDrop.key) == null ) {
+			__weakMap.set(waterDrop.key, waterDrop.target);
+			return waterDrop.target;
+		}
+		return __weakMap.getValue(waterDrop.key);
 	}
 		
 	public static function getInstanceByType( type:Class<Dynamic>, ?parameters:Array<Dynamic>):Dynamic
