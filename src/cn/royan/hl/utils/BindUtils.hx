@@ -12,7 +12,9 @@ class BindUtils
 	{
 		var fun:Dynamic->Void = function(evt:DatasEvent):Void
 		{
-			Reflect.setField( ob, fb, Reflect.field(oa, fa) );
+			if ( evt.getParams() == fa ) {
+				Reflect.setField( ob, fb, Reflect.field(oa, fa) );
+			}
 		}
 		oa.addEventListener(DatasEvent.DATA_CHANGE, fun );
 	}
@@ -21,7 +23,9 @@ class BindUtils
 	{
 		var fun:Dynamic->Void = function(evt:DatasEvent):Void
 		{
-			call(Reflect.field(oa, fa));
+			if ( evt.getParams() == fa ) {
+				call(Reflect.field(oa, fa));
+			}
 		}
 			
 		oa.addEventListener(DatasEvent.DATA_CHANGE, fun );
