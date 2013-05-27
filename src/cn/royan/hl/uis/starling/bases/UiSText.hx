@@ -3,8 +3,10 @@ package cn.royan.hl.uis.starling.bases;
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.uis.IUiTextBase;
 import cn.royan.hl.uis.starling.InteractiveUiS;
+
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
+
 import starling.text.TextField;
 import starling.utils.HAlign;
 
@@ -12,7 +14,6 @@ import starling.utils.HAlign;
  * ...
  * @author RoYan
  */
-
 class UiSText extends InteractiveUiS, implements IUiTextBase
 {
 	static public inline var TEXT_ALIGN_LEFT:Int 	= 0;

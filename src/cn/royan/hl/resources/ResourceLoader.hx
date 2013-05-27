@@ -10,14 +10,15 @@ import cn.royan.hl.interfaces.IDisposeBase;
 import cn.royan.hl.services.TakeService;
 import cn.royan.hl.uis.normal.bases.UiNLoader;
 import cn.royan.hl.utils.SystemUtils;
+
 import flash.display.DisplayObjectContainer;
+
 import haxe.Timer;
 
 /**
  * ...
  * @author RoYan
  */
-
 class ResourceLoader extends DispatcherBase, implements IDisposeBase
 {
 		static var __loaderMap:Dictionary = #if flash new Dictionary(); #else {}; #end

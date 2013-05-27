@@ -22,6 +22,10 @@ import flash.events.SecurityErrorEvent;
 import flash.events.EventDispatcher;
 import flash.display.Loader;
 
+/**
+ * ...
+ * @author RoYan
+ */
 class TakeService extends DispatcherBase, implements IServiceBase 
 {
 	#if flash

@@ -15,7 +15,6 @@ import flash.display.DisplayObject;
  * ...
  * @author RoYan
  */
-
 typedef ContainerGap = {
 	var x:Int;
 	var y:Int;

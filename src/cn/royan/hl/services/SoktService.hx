@@ -13,6 +13,11 @@ import haxe.io.BytesInput;
 #if (!flash && !js)
 import sys.net.Socket;
 import sys.net.Host;
+#if neko
+import neko.vm.Thread;
+#elseif cpp
+import cpp.vm.Thread;
+#end
 #elseif flash
 import flash.net.Socket;
 import flash.events.Event;
@@ -23,12 +28,11 @@ import flash.events.SecurityErrorEvent;
 import js.XMLSocket;
 #end
 import haxe.io.Bytes;
-#if neko
-import neko.vm.Thread;
-#elseif cpp
-import cpp.vm.Thread;
-#end
 
+/**
+ * ...
+ * @author RoYan
+ */
 private typedef ClientInfos = {
 	var buf			:Bytes;
 	var bufpos		:Int;

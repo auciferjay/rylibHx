@@ -1,4 +1,5 @@
 package cn.royan.hl.uis.normal.bases;
+
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiScrollBarBase;
 import cn.royan.hl.uis.normal.InteractiveUiN;
@@ -11,7 +12,6 @@ import flash.geom.Rectangle;
  * ...
  * @author RoYan
  */
-
 class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 {
 	public static inline var SCROLLBAR_TYPE_HORIZONTAL:Int 	= 0;

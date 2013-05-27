@@ -13,11 +13,11 @@ import browser.display.Graphics;
 import browser.Lib;
 import browser.Html5Dom;
 #end
+
 /**
  * ...
  * @author RoYan
  */
-
 class UiNScrollPane extends InteractiveUiN
 {
 	public static inline var SCROLL_TYPE_NONE:Int				= 0;

@@ -4,7 +4,6 @@ package cn.royan.hl.interfaces.uis;
  * ...
  * @author RoYan
  */
-
 interface IUiContainerBase implements IUiBase
 {
 	function addItem(item:IUiBase):Void;

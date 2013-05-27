@@ -16,7 +16,6 @@ import flash.display.DisplayObject;
  * ...
  * @author RoYan
  */
-
 class UiNContainerGroup extends UiNContainerAlign, implements IUiContainerGroupBase
 {
 	var isMulti:Bool;

@@ -5,9 +5,11 @@ import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.uis.starling.InteractiveUiS;
 import cn.royan.hl.utils.BitmapDataUtils;
 import cn.royan.hl.utils.SystemUtils;
+
 import flash.geom.Rectangle;
 import flash.ui.Mouse;
 import flash.ui.MouseCursor;
+
 import starling.display.Image;
 import starling.events.Event;
 import starling.events.Touch;
@@ -18,7 +20,6 @@ import starling.textures.Texture;
  * ...
  * @author RoYan
  */
-
 class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 {
 	var bgTextures:Array<Texture>;

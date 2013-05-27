@@ -1,7 +1,12 @@
 package cn.royan.hl.bases;
+
 import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.utils.SystemUtils;
 
+/**
+ * ...
+ * @author RoYan
+ */
 class PoolMap 
 {
 	public static var maxValue:Int = 10;

@@ -4,7 +4,6 @@ package cn.royan.hl.interfaces.uis;
  * ...
  * @author RoYan
  */
-
 interface IUiContainerAlignBase implements IUiBase
 {
 	function setHorizontalAlign(value:Int):Void;

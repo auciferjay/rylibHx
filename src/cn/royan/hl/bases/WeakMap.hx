@@ -8,11 +8,11 @@ import nme.ObjectHash;
 #else
 import flash.utils.TypedDictionary;
 #end
+
 /**
  * ...
  * @author RoYan
  */
-
 class WeakMap
 {
 	static var __instance:WeakMap;

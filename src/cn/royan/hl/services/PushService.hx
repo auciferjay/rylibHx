@@ -5,6 +5,10 @@ import cn.royan.hl.interfaces.services.IServiceBase;
 
 import flash.events.EventDispatcher;
 
+/**
+ * ...
+ * @author RoYan
+ */
 class PushService extends DispatcherBase, implements IServiceBase 
 {
 

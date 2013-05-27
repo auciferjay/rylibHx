@@ -16,6 +16,10 @@ import flash.geom.Rectangle;
 import flash.geom.Point;
 import flash.errors.Error;
 
+/**
+ * ...
+ * @author RoYan
+ */
 class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 {
 	//properties

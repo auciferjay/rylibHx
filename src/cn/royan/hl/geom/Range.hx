@@ -1,5 +1,9 @@
 package cn.royan.hl.geom;
 
+/**
+ * ...
+ * @author RoYan
+ */
 typedef Range = {
 	@:optional var x:Float;
 	@:optional var y:Float;

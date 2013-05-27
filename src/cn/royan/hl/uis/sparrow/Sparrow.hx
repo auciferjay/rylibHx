@@ -1,4 +1,5 @@
 package cn.royan.hl.uis.sparrow;
+
 import cn.royan.hl.interfaces.IDisposeBase;
 import flash.display.Bitmap;
 import flash.display.BitmapData;

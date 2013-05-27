@@ -9,17 +9,19 @@ import cn.royan.hl.systems.DeviceCapabilities;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.utils.BitmapDataUtils;
 import cn.royan.hl.utils.SystemUtils;
-import flash.display.Bitmap;
-import flash.geom.Rectangle;
 
+import flash.geom.Point;
+import flash.display.Bitmap;
 import flash.display.BitmapData;
-import flash.display.GradientType;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.EventDispatcher;
-import flash.geom.Point;
 
+/**
+ * ...
+ * @author RoYan
+ */
 class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemStateBase
 {
 	//properties

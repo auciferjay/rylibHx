@@ -1,12 +1,14 @@
 package cn.royan.hl.bases;
+
 import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.utils.SystemUtils;
+
 import flash.events.EventDispatcher;
+
 /**
  * ...
  * @author RoYan
  */
-
 class DispatcherBase extends EventDispatcher
 {
 	var evtListenerType:Array<String>;

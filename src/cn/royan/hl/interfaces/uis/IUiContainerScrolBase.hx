@@ -4,7 +4,6 @@ package cn.royan.hl.interfaces.uis;
  * ...
  * @author RoYan
  */
-
 interface IUiContainerScrolBase implements IUiBase
 {
 	function setScrollerSize(cWidth:Int, cHeight:Int):Void;

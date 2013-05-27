@@ -4,6 +4,10 @@ import cn.royan.hl.interfaces.IDisposeBase;
 
 import flash.events.IEventDispatcher;
 
+/**
+ * ...
+ * @author RoYan
+ */
 interface IServiceBase implements IEventDispatcher, implements IDisposeBase
 {
 	function sendRequest(url:String='', extra:Dynamic=null):Void;

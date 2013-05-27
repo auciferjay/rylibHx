@@ -1,4 +1,5 @@
 package cn.royan.hl.uis.normal.bases;
+
 import cn.royan.hl.bases.DispatcherBase;
 import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.uis.normal.InteractiveUiN;

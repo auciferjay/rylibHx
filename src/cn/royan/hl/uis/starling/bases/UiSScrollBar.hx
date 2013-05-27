@@ -3,9 +3,10 @@ package cn.royan.hl.uis.starling.bases;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiScrollBarBase;
 import cn.royan.hl.uis.starling.InteractiveUiS;
-import starling.events.Touch;
 
+import starling.events.Touch;
 import starling.events.Event;
+
 import flash.events.MouseEvent;
 import flash.geom.Rectangle;
 

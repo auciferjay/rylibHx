@@ -4,8 +4,8 @@ import cn.royan.hl.bases.PoolMap;
 import cn.royan.hl.interfaces.services.IServiceMessageBase;
 import cn.royan.hl.utils.SystemUtils;
 import cn.royan.hl.consts.PrintConst;
-import haxe.io.BytesInput;
 
+import haxe.io.BytesInput;
 import haxe.io.Bytes;
 import haxe.io.BytesData;
 import haxe.io.Input;

@@ -6,8 +6,8 @@ import cn.royan.hl.uis.normal.InteractiveUiN;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.utils.BitmapDataUtils;
 import cn.royan.hl.utils.SystemUtils;
-import flash.errors.Error;
 
+import flash.errors.Error;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.display.Bitmap;
@@ -15,6 +15,10 @@ import flash.display.BitmapData;
 import flash.geom.Rectangle;
 import flash.geom.Point;
 
+/**
+ * ...
+ * @author RoYan
+ */
 class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 {
 	var bgTextures:Array<Sparrow>;

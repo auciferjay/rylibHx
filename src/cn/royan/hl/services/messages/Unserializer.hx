@@ -7,7 +7,6 @@ import haxe.io.Bytes;
  * ...
  * @author RoYan
  */
-
 class Unserializer 
 {
 	public function new() {

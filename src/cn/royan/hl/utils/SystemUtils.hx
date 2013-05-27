@@ -9,9 +9,13 @@ import haxe.Timer;
 import flash.system.ApplicationDomain;
 import flash.system.LoaderContext;
 import flash.errors.Error;
-#end
 import flash.Lib;
+#end
 
+/**
+ * ...
+ * @author RoYan
+ */
 class SystemUtils 
 {
 	static inline var ukey:Array<String> = ["A", "B", "C", "D", "E", "F", "G", "H"];

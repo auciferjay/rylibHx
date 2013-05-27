@@ -1,4 +1,5 @@
 package cn.royan.hl.utils;
+
 import cn.royan.hl.consts.PrintConst;
 import flash.display.BitmapData;
 import flash.display.DisplayObject;

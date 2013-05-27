@@ -1,11 +1,11 @@
 package cn.royan.hl.utils;
+
 import flash.utils.ByteArray;
 
 /**
  * ...
  * @author RoYan
  */
-
 class BytesUtils 
 {
 

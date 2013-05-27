@@ -2,6 +2,7 @@ package cn.royan.hl.uis.starling.bases;
 
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiContainerAlignBase;
+
 import starling.display.DisplayObject;
 import starling.textures.Texture;
 
@@ -9,7 +10,6 @@ import starling.textures.Texture;
  * ...
  * @author RoYan
  */
-
 typedef ContainerGap = {
 	var x:Int;
 	var y:Int;

@@ -2,13 +2,13 @@ package cn.royan.hl.uis.normal.exts;
 
 import cn.royan.hl.uis.normal.bases.UiNContainerAlign;
 import cn.royan.hl.uis.normal.bases.UiNBmpdMovieClip;
+
 import flash.display.BitmapData;
 
 /**
  * ...
  * @author RoYan
  */
-
 class UiNExtBmpNumberText extends UiNContainerAlign
 {
 

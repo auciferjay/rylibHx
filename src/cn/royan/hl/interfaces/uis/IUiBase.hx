@@ -2,15 +2,14 @@ package cn.royan.hl.interfaces.uis;
 
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.IDisposeBase;
-import flash.geom.Rectangle;
 
+import flash.geom.Rectangle;
 import flash.events.EventDispatcher;
 
 /**
  * ...
  * @author RoYan
  */
-
 interface IUiBase implements IDisposeBase
 {
 	function draw():Void;

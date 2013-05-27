@@ -9,7 +9,6 @@ import Type.ValueType;
  * ...
  * @author RoYan
  */
-
 class Serializer 
 {
 	var bytesOutput:BytesOutput;

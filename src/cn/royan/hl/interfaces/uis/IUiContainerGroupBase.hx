@@ -4,7 +4,6 @@ package cn.royan.hl.interfaces.uis;
  * ...
  * @author RoYan
  */
-
 interface IUiContainerGroupBase implements IUiBase
 {
 	function addGroupItem(item:IUiItemGroupBase, key:Dynamic = null):Void;

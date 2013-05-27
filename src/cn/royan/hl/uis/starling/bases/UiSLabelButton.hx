@@ -5,11 +5,11 @@ import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.interfaces.uis.IUiTextBase;
 import cn.royan.hl.uis.starling.InteractiveUiS;
 import cn.royan.hl.uis.starling.UninteractiveUiS;
-import flash.display.BitmapData;
-import starling.events.Touch;
 
+import starling.events.Touch;
 import starling.textures.Texture;
 
+import flash.display.BitmapData;
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
 import flash.events.MouseEvent;
@@ -18,7 +18,6 @@ import flash.events.MouseEvent;
  * ...
  * @author RoYan
  */
-
 class UiSLabelButton extends UiSBmpdButton, implements IUiTextBase, implements IUiItemGroupBase
 {
 	//properties

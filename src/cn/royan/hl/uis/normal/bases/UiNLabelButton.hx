@@ -6,8 +6,8 @@ import cn.royan.hl.interfaces.uis.IUiTextBase;
 import cn.royan.hl.uis.normal.InteractiveUiN;
 import cn.royan.hl.uis.normal.UninteractiveUiN;
 import cn.royan.hl.uis.sparrow.Sparrow;
-import flash.display.BitmapData;
 
+import flash.display.BitmapData;
 import flash.geom.Rectangle;
 import flash.text.TextFormat;
 import flash.events.MouseEvent;
@@ -16,7 +16,6 @@ import flash.events.MouseEvent;
  * ...
  * @author RoYan
  */
-
 class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements IUiItemGroupBase
 {
 	//properties

@@ -4,7 +4,6 @@ package cn.royan.hl.interfaces.uis;
  * ...
  * @author RoYan
  */
-
 interface IUiScrollBarBase implements IUiBase
 {
 	function getValue():Int;

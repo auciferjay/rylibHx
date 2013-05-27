@@ -9,6 +9,10 @@ import nme.Lib;
 import nme.events.Event;
 #end
 
+/**
+ * ...
+ * @author RoYan
+ */
 class TimerBase implements IDisposeBase
 {
 	static private inline var TIMERBASE_DELAY:Int = 10;

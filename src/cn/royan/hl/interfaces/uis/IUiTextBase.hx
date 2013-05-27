@@ -1,6 +1,7 @@
 package cn.royan.hl.interfaces.uis;
 
 import cn.royan.hl.geom.Range;
+
 import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
 
@@ -8,7 +9,6 @@ import flash.text.TextFormat;
  * ...
  * @author RoYan
  */
-
 interface IUiTextBase implements IUiBase 
 {
 	function setTextSpace(r:Int, c:Int):Void;

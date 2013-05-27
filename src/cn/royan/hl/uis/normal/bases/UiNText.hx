@@ -3,14 +3,18 @@ package cn.royan.hl.uis.normal.bases;
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.uis.IUiTextBase;
 import cn.royan.hl.uis.normal.InteractiveUiN;
-import flash.events.EventDispatcher;
 
+import flash.events.EventDispatcher;
 import flash.text.TextFieldType;
 import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 import flash.text.TextFieldAutoSize;
 
+/**
+ * ...
+ * @author RoYan
+ */
 class UiNText extends InteractiveUiN, implements IUiTextBase
 {
 	static public inline var TEXT_ALIGN_LEFT:Int 	= 0;

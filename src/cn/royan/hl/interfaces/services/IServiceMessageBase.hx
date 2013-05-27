@@ -1,9 +1,14 @@
 package cn.royan.hl.interfaces.services;
 
 import cn.royan.hl.interfaces.IDisposeBase;
+
 import haxe.io.Bytes;
 import haxe.io.BytesData;
 
+/**
+ * ...
+ * @author RoYan
+ */
 interface IServiceMessageBase implements IDisposeBase
 {
 	function writeMessageType(value:Int):Void;

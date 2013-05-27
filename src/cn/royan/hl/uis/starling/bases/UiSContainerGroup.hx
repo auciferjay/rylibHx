@@ -1,9 +1,11 @@
 package cn.royan.hl.uis.starling.bases;
+
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiContainerGroupBase;
 import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.utils.SystemUtils;
+
 import starling.display.DisplayObject;
 import starling.events.Event;
 import starling.events.Touch;
@@ -14,7 +16,6 @@ import starling.textures.Texture;
  * ...
  * @author RoYan
  */
-
 class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupBase
 {
 	var isMulti:Bool;

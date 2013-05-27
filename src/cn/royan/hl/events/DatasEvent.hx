@@ -2,6 +2,10 @@ package cn.royan.hl.events;
 
 import flash.events.Event;
 
+/**
+ * ...
+ * @author RoYan
+ */
 class DatasEvent extends Event
 {
 	static public inline var DATA_CHANGE:String 	= "data_change";

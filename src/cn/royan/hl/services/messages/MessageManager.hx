@@ -1,4 +1,5 @@
 package cn.royan.hl.services.messages;
+
 import cn.royan.hl.bases.Dictionary;
 import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.utils.SystemUtils;

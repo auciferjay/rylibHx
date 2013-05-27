@@ -2,14 +2,15 @@ package cn.royan.hl.resources;
 
 import cn.royan.hl.interfaces.IDisposeBase;
 import cn.royan.hl.utils.SystemUtils;
+
 import haxe.Json;
 
 import flash.errors.Error;
+
 /**
  * ...
  * @author RoYan
  */
-
 class ConfigFile implements IDisposeBase
 {
 	static public inline var CONFIG_FILE_TYPE_JSON:Int 	= 0;

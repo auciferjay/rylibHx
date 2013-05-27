@@ -9,15 +9,14 @@ import cn.royan.hl.interfaces.uis.IUiContainerStateBase;
 import cn.royan.hl.uis.normal.InteractiveUiN;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.utils.SystemUtils;
-import flash.events.Event;
 
+import flash.events.Event;
 import flash.display.DisplayObject;
 
 /**
  * ...
  * @author RoYan
  */
-
 class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implements IUiContainerStateBase
 {
 	var states:Array<String>;
