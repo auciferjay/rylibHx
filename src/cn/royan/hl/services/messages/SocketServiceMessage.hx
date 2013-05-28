@@ -26,7 +26,9 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 		#if flash
 		super(1, new BytesData());
 		#elseif neko
-		super(10, BytesData.ofString("0"));
+		super(1, BytesData.ofString("0"));
+		#elseif cpp
+		super(1, new Array<haxe.io.Unsigned_char__>() );
 		#end
 	}
 	

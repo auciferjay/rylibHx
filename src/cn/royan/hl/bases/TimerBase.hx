@@ -54,6 +54,7 @@ class TimerBase implements IDisposeBase
 		}
 		
 		isStart = true;
+		current = delay;//Std.int( Timer.stamp() * 1000 );
 		last = Std.int( Timer.stamp() * 1000 );
 		begin = last;
 		jumped = 0;

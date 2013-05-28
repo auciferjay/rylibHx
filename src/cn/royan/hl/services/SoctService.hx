@@ -367,8 +367,8 @@ class SoctService extends DispatcherBase, implements IServiceBase
 		if( buf.get(pos) == 60 && buf.readString(pos,len)=="<policy-file-request/>\x00" )
 			s.write( makePolicyFile() );
 		else {
-			if( callbacks != null && callbacks.done != null ) callbacks.doing({bytes:buf.sub(pos,len),sock:s});
-			else dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING, {bytes:buf.sub(pos,len),sock:s}));
+			if( callbacks != null && callbacks.done != null ) callbacks.doing({bytes:buf.sub(pos,len),unid:s.custom.unid});
+			else dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING, {bytes:buf.sub(pos,len),unid:s.custom.unid}));
 		}
 		return {
 			msg : null,

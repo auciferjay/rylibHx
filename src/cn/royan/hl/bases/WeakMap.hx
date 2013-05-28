@@ -63,7 +63,6 @@ class WeakMap
 	
 	public function containValue(value:Dynamic):Bool
 	{
-		//SystemUtils.print(Type.getClass(value), PrintConst.BASES);
 		for (item in map) {
 			if ( item == value ) {
 				return true;
@@ -74,7 +73,6 @@ class WeakMap
 	
 	public function containKey(key:String):Bool
 	{
-		SystemUtils.print(key, PrintConst.BASES);
 		for( item in keys) {
 			if( item == key ) {
 				return true;
@@ -85,7 +83,6 @@ class WeakMap
 	
 	public function set(key:String, value:Dynamic):Void
 	{
-		SystemUtils.print(key, PrintConst.BASES);
 		//如果键存在，删除键
 		if( containKey( key ) ) {
 			for (item in map.keys())
@@ -110,7 +107,6 @@ class WeakMap
 			#end
 		} else {
 			//指向值的键
-			SystemUtils.print(map +":"+[key], PrintConst.BASES);
 			#if flash
 			untyped map[value] = [key];
 			#else
@@ -124,7 +120,6 @@ class WeakMap
 	
 	public function getValue(key:String):Dynamic
 	{
-		SystemUtils.print(key, PrintConst.BASES);
 		// i 为值
 		for (item in map.keys())
 		{
@@ -134,7 +129,6 @@ class WeakMap
 			#else
 			var key_arr:Array<Dynamic> = map.get(item);
 			#end
-			SystemUtils.print(map.get(item), PrintConst.BASES);
 			for( k in key_arr )
 			{
 				if( k == key )
@@ -148,21 +142,32 @@ class WeakMap
 	
 	public function getKeys(value:Dynamic):Array<Dynamic>
 	{
+		#if flash
 		return untyped map[value];
+		#else
+		return map.get(value);
+		#end
 	}
 	
 	public function clear(key:String):Void
 	{
-		SystemUtils.print(key, PrintConst.BASES);
 		var value:Dynamic = getValue(key);
+		#if flash
 		var key_arr:Array<Dynamic> = untyped map[value];
+		#else
+		var key_arr:Array<Dynamic> = map.get(value);
+		#end
 		if( key_arr != null )
 		{
 			key_arr.remove(key);
 			
 			if( key_arr.length <= 0 )
 			{
+				#if flash
 				untyped map[value];
+				#else
+				map.get(value);
+				#end
 			}
 			
 			length--;
