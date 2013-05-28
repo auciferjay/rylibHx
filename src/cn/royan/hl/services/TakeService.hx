@@ -1,8 +1,10 @@
 package cn.royan.hl.services;
 
+import cn.royan.hl.bases.WeakMap;
 import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.interfaces.services.IServiceBase;
 import cn.royan.hl.bases.DispatcherBase;
+import cn.royan.hl.utils.BitmapDataUtils;
 import cn.royan.hl.utils.SystemUtils;
 import cn.royan.hl.utils.BytesUtils;
 import cn.royan.hl.events.DatasEvent;
@@ -38,12 +40,16 @@ class TakeService extends DispatcherBase, implements IServiceBase
 	var serviceData:ByteArray;
 	var callbacks:Dynamic;
 	
+	var weakMap:WeakMap;
+	
 	var swfLoader:Loader;
 	var isLoading:Bool;
 	
 	public function new( param:Dynamic = null )
 	{
 		super();
+		
+		weakMap = WeakMap.getInstance();
 		
 		if( param != null )
 			if ( Std.is(param, URLVariables) ) {
@@ -78,6 +84,12 @@ class TakeService extends DispatcherBase, implements IServiceBase
 	public function connect():Void
 	{
 		close();
+		
+		if ( weakMap.containKey(urlrequest.url) ) {
+			if( callbacks != null && callbacks.done != null) callbacks.done( getData() );
+			else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE, getData()));
+			return;
+		}
 		
 		serviceData = new ByteArray();
 		
@@ -145,7 +157,7 @@ class TakeService extends DispatcherBase, implements IServiceBase
 		urlrequest = null;
 		urlvariable = null;
 		callbacks = null;
-		
+		swfLoader = null;
 		isLoading = false;
 		
 		removeAllEventListeners();
@@ -153,10 +165,10 @@ class TakeService extends DispatcherBase, implements IServiceBase
 	
 	public function getData():Dynamic
 	{
-		if (BytesUtils.isSWF(BytesUtils.simpleDecode(serviceData, "gameuzgame"))) {
-			return swfLoader;
-		}
-		return serviceData;
+		//if (BytesUtils.isSWF(BytesUtils.simpleDecode(serviceData, "gameuzgame"))) {
+		//	return swfLoader;
+		//}
+		return weakMap.getValue(urlrequest.url);//serviceData;
 	}
 	
 	public function getIsServicing():Bool
@@ -182,32 +194,37 @@ class TakeService extends DispatcherBase, implements IServiceBase
 	function analyze():Void
 	{
 		switch( BytesUtils.getType(serviceData) ){
-			case "SWF":
+			case "SWF","PNG","JPEG","GIF","BMP":
 				swfLoader = new Loader();
 				swfLoader.name = urlrequest.url;
 				swfLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, loaderOnComplete);
 				swfLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError);
 				swfLoader.loadBytes(BytesUtils.simpleDecode(serviceData, "gameuzgame")#if flash, SystemUtils.getLoaderContext() #end);
 			/*case "XML":
-			case "PNG":
-			case "JPEG":
-			case "GIF":
-			case "BMP":
 			case "FLV":
 			case "MP3":*/
 			default:
-				if( callbacks != null && callbacks.done != null) callbacks.done(getData());
+				weakMap.set( urlrequest.url, serviceData );
+				if( callbacks != null && callbacks.done != null) callbacks.done( getData() );
 				else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE, getData()));
 		}
 	}
 	
 	function loaderOnComplete(evt:Event):Void
 	{
-		SystemUtils.print("[Class TakeService]:SwfLoadOnComplete", PrintConst.SERVICES);
-		if( callbacks != null && callbacks.done != null ) callbacks.done(serviceData);
-		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE, serviceData));
-		
-		swfLoader = null;
+		SystemUtils.print("[Class TakeService]:DISPLAYLoadOnComplete", PrintConst.SERVICES);
+		switch( BytesUtils.getType(serviceData) ) {
+			case "SWF":
+				weakMap.set( urlrequest.url, swfLoader );
+				if( callbacks != null && callbacks.done != null ) callbacks.done( getData() );
+				else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE, getData()));
+				
+				swfLoader = null;
+			default:
+				weakMap.set( urlrequest.url, BitmapDataUtils.fromDisplayObject(swfLoader));
+				if( callbacks != null && callbacks.done != null ) callbacks.done( getData() );
+				else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE, getData()));
+		}
 	}
 	
 	function onProgress(evt:ProgressEvent):Void
