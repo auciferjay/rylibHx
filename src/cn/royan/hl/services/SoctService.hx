@@ -23,6 +23,7 @@ import haxe.Stack;
 
 /**
  * ...
+ * Socket服务
  * @author RoYan
  */
 private typedef ThreadInfos = {

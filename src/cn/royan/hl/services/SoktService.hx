@@ -31,6 +31,7 @@ import haxe.io.Bytes;
 
 /**
  * ...
+ * Socket客户
  * @author RoYan
  */
 private typedef ClientInfos = {

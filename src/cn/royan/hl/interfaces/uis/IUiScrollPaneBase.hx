@@ -6,7 +6,7 @@ package cn.royan.hl.interfaces.uis;
  * <p>IUiScrollPane->IUiBase</p>
  * @author RoYan
  */
-interface IUiScrollPane implements IUiBase
+interface IUiScrollPaneBase implements IUiBase
 {
 	/**
 	 * 设置滚动类型

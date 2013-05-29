@@ -26,6 +26,7 @@ import flash.display.Loader;
 
 /**
  * ...
+ * 获取
  * @author RoYan
  */
 class TakeService extends DispatcherBase, implements IServiceBase 

@@ -2,6 +2,7 @@ package cn.royan.hl.uis.starling.bases;
 
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiBase;
+import cn.royan.hl.interfaces.uis.IUiScrollPaneBase;
 import cn.royan.hl.uis.starling.InteractiveUiS;
 import cn.royan.hl.uis.starling.UninteractiveUiS;
 
@@ -13,7 +14,7 @@ import flash.geom.Rectangle;
  * ...
  * @author RoYan
  */
-class UiSScrollPane extends InteractiveUiS
+class UiSScrollPane extends InteractiveUiS, implements IUiScrollPaneBase
 {
 	public static inline var SCROLL_TYPE_NONE:Int				= 0;
 	public static inline var SCROLL_TYPE_HORIZONTAL_ONLY:Int 	= 1;

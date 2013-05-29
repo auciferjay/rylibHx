@@ -2,22 +2,26 @@ package cn.royan.hl.services;
 
 import cn.royan.hl.bases.DispatcherBase;
 import cn.royan.hl.interfaces.services.IServiceBase;
-
-import flash.events.EventDispatcher;
+import nme.external.ExternalInterface;
 
 /**
  * ...
- * MQTT协议接口
+ * Js交互
  * @author RoYan
  */
-class MQTTService extends DispatcherBase, implements IServiceBase
+class JsService extends DispatcherBase implements IServiceBase
 {
-
-	public function new()
+	var fun:String;
+	var params:Array<Dynamic>;
+	var serviceData:String;
+	
+	var callbacks:Dynamic;
+	
+	public function new() 
 	{
 		super();
 	}
-
+	
 	/**
 	 * 设置请求
 	 * @param	url
@@ -25,7 +29,8 @@ class MQTTService extends DispatcherBase, implements IServiceBase
 	 */
 	public function sendRequest(url:String = '', extra:Dynamic = null):Void
 	{
-		
+		fun = url;
+		params = cast extra;
 	}
 	
 	/**
@@ -33,7 +38,7 @@ class MQTTService extends DispatcherBase, implements IServiceBase
 	 */
 	public function connect():Void
 	{
-		
+		serviceData = ExternalInterface.call(fun, params);
 	}
 	
 	/**
@@ -50,7 +55,7 @@ class MQTTService extends DispatcherBase, implements IServiceBase
 	 */
 	public function setCallbacks(value:Dynamic):Void
 	{
-		
+		callbacks = value;
 	}
 	
 	/**
@@ -59,7 +64,7 @@ class MQTTService extends DispatcherBase, implements IServiceBase
 	 */
 	public function getData():Dynamic
 	{
-		return null;
+		return serviceData;
 	}
 	
 	/**
@@ -68,7 +73,7 @@ class MQTTService extends DispatcherBase, implements IServiceBase
 	 */
 	public function getIsServicing():Bool
 	{
-		
+		return false;
 	}
 	
 	/**

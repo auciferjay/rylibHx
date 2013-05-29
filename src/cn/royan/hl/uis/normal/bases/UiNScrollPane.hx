@@ -4,6 +4,7 @@ import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.uis.normal.InteractiveUiN;
 import cn.royan.hl.uis.normal.UninteractiveUiN;
+import cn.royan.hl.interfaces.uis.IUiScrollPaneBase;
 
 import flash.events.Event;
 import flash.geom.Rectangle;
@@ -18,7 +19,7 @@ import browser.Html5Dom;
  * ...
  * @author RoYan
  */
-class UiNScrollPane extends InteractiveUiN
+class UiNScrollPane extends InteractiveUiN, implements IUiScrollPaneBase
 {
 	public static inline var SCROLL_TYPE_NONE:Int				= 0;
 	public static inline var SCROLL_TYPE_HORIZONTAL_ONLY:Int 	= 1;
