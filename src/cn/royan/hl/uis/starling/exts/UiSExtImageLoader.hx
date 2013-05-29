@@ -16,7 +16,7 @@ class UiSExtImageLoader extends UiSContainerAlign
 	var takeService:TakeService;
 	var image:InteractiveUiS;
 	
-	public function new() 
+	public function new(url:String="") 
 	{
 		super();
 		
@@ -24,7 +24,11 @@ class UiSExtImageLoader extends UiSContainerAlign
 		addItem( image );
 		
 		takeService = new TakeService();
-		takeService.setCallbacks({done:doneHandler}); 
+		takeService.setCallbacks( { done:doneHandler } ); 
+		
+		if ( url != "" ) {
+			load(url);
+		}
 	}
 	
 	function doneHandler(data:BitmapData):Void

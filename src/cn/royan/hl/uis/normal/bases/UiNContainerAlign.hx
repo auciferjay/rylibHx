@@ -57,6 +57,8 @@ class UiNContainerAlign extends UiNContainer, implements IUiContainerAlignBase
 	var itemsWidth:Float;
 	var itemsHeight:Float;
 	
+	var moveProp:Dynamic->Void;
+	
 	public function new(texture:Sparrow = null) 
 	{
 		super(texture);
@@ -108,6 +110,11 @@ class UiNContainerAlign extends UiNContainer, implements IUiContainerAlignBase
 		margins = { top:top, bottom:bottom, left:left, right:right };
 	}
 	
+	public function setMove(effect:Dynamic->Void):Void
+	{
+		moveProp = effect;
+	}
+	
 	function fillRow():Void
 	{
 		var rowW:Float	= 0;
@@ -129,7 +136,7 @@ class UiNContainerAlign extends UiNContainer, implements IUiContainerAlignBase
 		
 		for ( i in 0...items.length ) {
 			var item:IUiBase = items[i];
-				item.setPosition(0, 0);
+				//item.setPosition(0, 0);
 			if ( !cast(item,DisplayObject).visible ) continue;
 			
 			if ( rowW + ( (i > 0 ? 1:0) * gapX + item.getRange().width ) > containerWidth - marginL - marginR ) {
@@ -199,11 +206,15 @@ class UiNContainerAlign extends UiNContainer, implements IUiContainerAlignBase
 				
 				switch( contentAlign ) {
 					case CONTAINER_CONTENT_ALIGN_MIDDLE:
-						items[z].setPosition( offsetX, offsetY + (rows[i].height - items[z].getRange().height)/2 );
+						items[z].setPosition( offsetX, offsetY + (rows[i].height - items[z].getRange().height) / 2 );
 					case CONTAINER_CONTENT_ALIGN_BOTTOM:
 						items[z].setPosition( offsetX, offsetY + rows[i].height - items[z].getRange().height );
 					default:
 						items[z].setPosition( offsetX, offsetY );
+				}
+				
+				if ( !additems.remove(items[z]) && moveProp != null ) {
+					moveProp(items[z]);
 				}
 				
 				offsetX += items[z].getRange().width + gapX;

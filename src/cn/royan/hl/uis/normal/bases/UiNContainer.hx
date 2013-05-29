@@ -24,15 +24,17 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 	
 	var items:Array<IUiBase>;
 	
+	var additems:Array<IUiBase>;
+	var showProp:Dynamic->Void;
+	var hideProp:Dynamic->Dynamic->Void;
+	
 	public function new(texture:Sparrow = null)
 	{
 		super(texture);
 		
 		items = [];
-		
+		additems = [];
 		states = [];
-		
-		//setBackgroundAlphas([0]);
 	}
 	
 	override private function addToStageHandler(evt:Event = null):Void 
@@ -47,12 +49,17 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 	{
 		SystemUtils.print(item, PrintConst.UIS);
 		items.push(item);
+		additems.push( item );
 		
 		item.setScale(getScale());
 		
 		addChild(cast( item, DisplayObject ));
 		
 		draw();
+		
+		if ( showProp != null ) {
+			showProp( item );
+		}
 		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
@@ -68,11 +75,17 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 		
 		items = prev.concat(next);
 		
+		additems.push( item );
+		
 		item.setScale(getScale());
 		
 		addChildAt(cast( item, DisplayObject ), index);
 		
 		draw();
+		
+		if ( showProp != null ) {
+			showProp( item );
+		}
 		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
@@ -81,8 +94,14 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 	public function removeItem(item:IUiBase):Void
 	{
 		SystemUtils.print(item, PrintConst.UIS);
+		
 		items.remove(item);
-		removeChild(cast(item, DisplayObject));
+		
+		if ( hideProp != null ) {
+			hideProp( item, callback( removeChild, cast(item, DisplayObject) ) );
+		}else {
+			removeChild(cast(item, DisplayObject));
+		}
 		
 		draw();
 		
@@ -104,7 +123,12 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 	public function removeAllItems():Void
 	{
 		while ( items.length > 0 ) {
-			removeItem(items.shift());
+			var item:IUiBase = items.shift();
+			if ( hideProp != null ) {
+				hideProp( item, callback( removeChild, cast(item, DisplayObject) ) );
+			}else {
+				removeChild(cast(item, DisplayObject));
+			}
 		}
 		
 		draw();
@@ -172,5 +196,15 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 	public function getState():String
 	{
 		return current;
+	}
+	
+	public function setShow(effect:Dynamic->Void):Void
+	{
+		showProp = effect;
+	}
+	
+	public function setHide(effect:Dynamic->Dynamic->Void):Void
+	{
+		hideProp = effect;
 	}
 }

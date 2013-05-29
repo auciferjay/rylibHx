@@ -24,11 +24,16 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase, implemen
 	
 	var items:Array<IUiBase>;
 	
+	var additems:Array<IUiBase>;
+	var showProp:Dynamic->Void;
+	var hideProp:Dynamic->Dynamic->Void;
+	
 	public function new(texture:Texture = null)
 	{
 		super(texture);
 		
 		items = [];
+		additems = [];
 		
 		states = [];
 	}
@@ -52,6 +57,10 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase, implemen
 		
 		draw();
 		
+		if ( showProp != null ) {
+			showProp(item);
+		}
+		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
 		else dispatchEvent(new Event(DatasEvent.DATA_CHANGE));
 	}
@@ -72,6 +81,10 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase, implemen
 		
 		draw();
 		
+		if ( showProp != null ) {
+			showProp(item);
+		}
+		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
 		else dispatchEvent(new Event(DatasEvent.DATA_CHANGE));
 	}
@@ -80,7 +93,12 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase, implemen
 	{
 		SystemUtils.print(item, PrintConst.UIS);
 		items.remove(item);
-		removeChild(cast(item, DisplayObject));
+		
+		if ( hideProp != null ) {
+			hideProp( item, callback(removeChild, cast(item, DisplayObject)) );
+		}else {
+			removeChild(cast(item, DisplayObject));
+		}
 		
 		draw();
 		
@@ -102,7 +120,13 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase, implemen
 	public function removeAllItems():Void
 	{
 		while ( items.length > 0 ) {
-			removeItem(items.shift());
+			var item:IUiBase = items.shift();
+			
+			if ( hideProp != null ) {
+				hideProp( item, callback(removeChild, cast(item, DisplayObject)) );
+			}else {
+				removeChild(cast(item, DisplayObject));
+			}
 		}
 		
 		draw();
@@ -161,5 +185,15 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase, implemen
 	public function getState():String
 	{
 		return current;
+	}
+	
+	public function setShow(effect:Dynamic->Void):Void
+	{
+		showProp = effect;
+	}
+	
+	public function setHide(effect:Dynamic->Dynamic->Void):Void
+	{
+		hideProp = effect;
 	}
 }

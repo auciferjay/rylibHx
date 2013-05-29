@@ -16,4 +16,7 @@ interface IUiContainerBase implements IUiBase
 	function getItemAt(index:Int):IUiBase;
 	function getIndexByItem(item:IUiBase):Int;
 	function getItems():Array<IUiBase>;
+	
+	function setShow(effect:Dynamic->Void):Void;
+	function setHide(effect:Dynamic->Dynamic->Void):Void;
 }

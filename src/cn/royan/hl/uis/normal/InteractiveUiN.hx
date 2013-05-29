@@ -65,7 +65,7 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 	var evtListenerDirectory:Array<Dynamic>;
 	
 	var background:Bitmap;
-	
+
 	//Constructor
 	public function new(texture:Sparrow = null)
 	{
@@ -278,7 +278,7 @@ class InteractiveUiN extends Sprite, implements IUiBase, implements IUiItemState
 	{
 		return includes;
 	}
-
+	
 	override public function addEventListener(type:String, listener:Dynamic->Void, useCapture:Bool=false, priority:Int=0, useWeakReference:Bool=false):Void
 	{
 		if ( evtListenerDirectory == null ) {

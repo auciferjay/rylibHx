@@ -52,6 +52,8 @@ class UiSContainerAlign extends UiSContainer, implements IUiContainerAlignBase
 	var itemsWidth:Float;
 	var itemsHeight:Float;
 	
+	var moveProp:Dynamic->Void;
+	
 	public function new(texture:Texture = null) 
 	{
 		super(texture);
@@ -101,6 +103,11 @@ class UiSContainerAlign extends UiSContainer, implements IUiContainerAlignBase
 	public function setMargins(left:Int, top:Int, right:Int, bottom:Int):Void
 	{
 		margins = { top:top, bottom:bottom, left:left, right:right };
+	}
+	
+	public function setMove(effect:Dynamic->Void):Void
+	{
+		moveProp = effect;
 	}
 	
 	function fillRow():Void
@@ -199,6 +206,10 @@ class UiSContainerAlign extends UiSContainer, implements IUiContainerAlignBase
 						items[z].setPosition( offsetX, offsetY + rows[i].height - items[z].getRange().height );
 					default:
 						items[z].setPosition( offsetX, offsetY );
+				}
+				
+				if ( !additems.remove(items[z]) && moveProp != null ) {
+					moveProp(items[z]);
 				}
 				
 				offsetX += items[z].getRange().width + gapX;

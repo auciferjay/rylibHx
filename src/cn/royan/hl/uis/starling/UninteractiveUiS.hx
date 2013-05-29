@@ -44,7 +44,7 @@ class UninteractiveUiS extends Sprite, implements IUiBase, implements IUiItemSta
 	
 	var excludes:Array<String>;
 	var includes:Array<String>;
-
+	
 	public var graphics:Image;
 	
 	var isInit:Bool;
@@ -239,7 +239,7 @@ class UninteractiveUiS extends Sprite, implements IUiBase, implements IUiItemSta
 	{
 		return includes;
 	}
-
+	
 	override public function dispose():Void
 	{
 		bgTexture.dispose();

@@ -281,7 +281,7 @@ class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemState
 	{
 		return includes;
 	}
-
+	
 	public function removeAllChildren():Void
 	{
 		removeChildren();

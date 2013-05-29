@@ -11,4 +11,6 @@ interface IUiContainerAlignBase implements IUiBase
 	function setGaps(gapX:Int, gapY:Int):Void;
 	function setContentAlign(value:Int):Void;
 	function setMargins(left:Int, top:Int, right:Int, bottom:Int):Void;
+	
+	function setMove(effect:Dynamic->Void):Void;
 }

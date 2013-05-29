@@ -16,7 +16,7 @@ class UiNExtImageLoader extends UiNContainerAlign
 	var takeService:TakeService;
 	var image:InteractiveUiN;
 	
-	public function new() 
+	public function new(url:String="") 
 	{
 		super();
 		
@@ -24,7 +24,11 @@ class UiNExtImageLoader extends UiNContainerAlign
 		addItem( image );
 		
 		takeService = new TakeService();
-		takeService.setCallbacks({done:doneHandler}); 
+		takeService.setCallbacks( { done:doneHandler } ); 
+		
+		if ( url != "" ) {
+			load(url);
+		}
 	}
 	
 	function doneHandler(data:BitmapData):Void
