@@ -68,7 +68,7 @@ class MQTTService extends DispatcherBase, implements IServiceBase
 	 */
 	public function getIsServicing():Bool
 	{
-		
+		return false;
 	}
 	
 	/**

@@ -2,14 +2,15 @@ package cn.royan.hl.services;
 
 import cn.royan.hl.bases.DispatcherBase;
 import cn.royan.hl.interfaces.services.IServiceBase;
-import nme.external.ExternalInterface;
+
+import flash.external.ExternalInterface;
 
 /**
  * ...
  * Js交互
  * @author RoYan
  */
-class JsService extends DispatcherBase implements IServiceBase
+class JsService extends DispatcherBase, implements IServiceBase
 {
 	var fun:String;
 	var params:Array<Dynamic>;
