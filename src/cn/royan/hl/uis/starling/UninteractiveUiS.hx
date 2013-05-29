@@ -3,7 +3,6 @@ package cn.royan.hl.uis.starling;
 import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.uis.IUiBase;
-import cn.royan.hl.interfaces.uis.IUiItemStateBase;
 import cn.royan.hl.utils.BitmapDataUtils;
 import cn.royan.hl.utils.SystemUtils;
 
@@ -20,7 +19,7 @@ import starling.events.Event;
  * ...
  * @author RoYan
  */
-class UninteractiveUiS extends Sprite, implements IUiBase, implements IUiItemStateBase
+class UninteractiveUiS extends Sprite, implements IUiBase
 {
 	//properties
 	var originalDPI:Int;

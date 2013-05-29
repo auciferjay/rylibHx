@@ -2,7 +2,6 @@ package cn.royan.hl.uis.normal;
 
 import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.interfaces.uis.IUiBase;
-import cn.royan.hl.interfaces.uis.IUiItemStateBase;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.systems.DeviceCapabilities;
@@ -22,7 +21,7 @@ import flash.events.EventDispatcher;
  * ...
  * @author RoYan
  */
-class UninteractiveUiN extends Sprite, implements IUiBase, implements IUiItemStateBase
+class UninteractiveUiN extends Sprite, implements IUiBase
 {
 	//properties
 	var originalDPI:Int;

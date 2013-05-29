@@ -44,12 +44,12 @@ class SoctService extends DispatcherBase, implements IServiceBase
 	static var __id:Int = 0;
 
 	var callbacks:Dynamic;
-		
+
 	var host:String;
 	var port:Int;
-	
+
 	var isServicing:Bool;
-	
+
 	var threads:Array<ThreadInfos>;
 	var sock:Socket;
 	var worker:Thread;
@@ -64,16 +64,16 @@ class SoctService extends DispatcherBase, implements IServiceBase
 	var messageHeaderSize:Int;
 	var updateTime:Float;
 	var maxSockPerThread:Int;
-	
+
 	public function new(host:String="", port:Int=0) 
 	{
 		super();
-		
+
 		//packetType = messageType;
-		
+
 		this.host = host;
 		this.port = port;
-		
+
 		threads = new Array();
 		nthreads = if( Sys.systemName() == "Windows" ) 150 else 10;
 		messageHeaderSize = 1;
@@ -85,7 +85,7 @@ class SoctService extends DispatcherBase, implements IServiceBase
 		maxSockPerThread = 64;
 		updateTime = 1;
 	}
-	
+
 	public function sendRequest(url:String='', extra:Dynamic=null):Void
 	{
 		SystemUtils.print(url, PrintConst.SERVICES);
@@ -105,7 +105,7 @@ class SoctService extends DispatcherBase, implements IServiceBase
 			port = Std.int(extra);
 		}
 	}
-	
+
 	public function setCallbacks(value:Dynamic):Void
 	{
 		callbacks = value;
@@ -117,13 +117,13 @@ class SoctService extends DispatcherBase, implements IServiceBase
 			sock = new Socket();
 			sock.bind(new Host(host),port);
 			sock.listen(listen);
-			
+
 			isServicing = true;
 
 			listener = Thread.create(runListener);
 			worker = Thread.create(runWorker);
 			timer = Thread.create(runTimer);
-			
+
 			for( i in 0...nthreads ) {
 				var t:ThreadInfos = {
 					id:i,
@@ -133,14 +133,14 @@ class SoctService extends DispatcherBase, implements IServiceBase
 				threads.push(t);
 				t.thread = Thread.create(callback(runThread,t));
 			}
-			
+
 			if( callbacks != null && callbacks.done != null ) callbacks.done();
 			else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE));
 		}catch(e:Dynamic){
 			logError(e);
 		}
 	}
-	
+
 	public function close():Void
 	{
 		isServicing = false;
@@ -150,26 +150,26 @@ class SoctService extends DispatcherBase, implements IServiceBase
 		if( callbacks != null && callbacks.destory != null ) callbacks.destory(null);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DESTROY));
 	}
-	
+
 	public function getData():Dynamic 
 	{
 		return null;
 	}
-	
+
 	public function getIsServicing():Bool
 	{
 		return isServicing;
 	}
-	
+
 	public function dispose():Void
 	{
 		if ( getIsServicing() ) sock.close();
-		
+
 		sock = null;
 		callbacks = null;
 		removeAllEventListeners();
 	}
-	
+
 	function runListener():Void
 	{
 		while( getIsServicing() ) {
@@ -180,7 +180,7 @@ class SoctService extends DispatcherBase, implements IServiceBase
 			}
 		}
 	}
-	
+
 	function runThread(t:ThreadInfos):Void
 	{
 		while( getIsServicing() ) {
@@ -191,7 +191,7 @@ class SoctService extends DispatcherBase, implements IServiceBase
 			}
 		}
 	}
-	
+
 	function loopThread(t:ThreadInfos):Void
 	{
 		if( t.sockets.length > 0 )
@@ -218,7 +218,7 @@ class SoctService extends DispatcherBase, implements IServiceBase
 			}
 		}
 	}
-	
+
 	function runWorker():Void
 	{
 		while( getIsServicing() ) {
@@ -235,7 +235,7 @@ class SoctService extends DispatcherBase, implements IServiceBase
 			}
 		}
 	}
-	
+
 	function runTimer():Void
 	{
 		var l = new Lock();
@@ -244,7 +244,7 @@ class SoctService extends DispatcherBase, implements IServiceBase
 			work(update);
 		}
 	}
-	
+
 	function work(f:Void->Void):Void
 	{
 		worker.sendMessage(f);
@@ -305,9 +305,9 @@ class SoctService extends DispatcherBase, implements IServiceBase
 			buffer: Bytes.alloc(initialBufferSize),
 			bufferpos: 0,
 		};
-		
+
 		clientConnected(sock);
-		
+
 		sock.custom = infos;
 		infos.thread.thread.sendMessage({ s : sock, cnx : true });
 	}
@@ -340,10 +340,10 @@ class SoctService extends DispatcherBase, implements IServiceBase
 		var estr = try Std.string(e) catch( e2 : Dynamic ) "???" + try "["+Std.string(e2)+"]" catch( e : Dynamic ) "";
 		errorOutput.writeString( estr + "\n" + Stack.toString(stack) );
 		errorOutput.flush();
-		
+
 		if( callbacks != null && callbacks.error != null ) callbacks.error(e);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_ERROR, e));
-		
+
 		isServicing = false;
 	}
 
@@ -375,7 +375,7 @@ class SoctService extends DispatcherBase, implements IServiceBase
 			bytes : len,
 		};
 	}
-	
+
 	function makePolicyFile():String
 	{
 		var str = "<cross-domain-policy>";

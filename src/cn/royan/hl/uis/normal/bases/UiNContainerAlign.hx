@@ -2,10 +2,7 @@ package cn.royan.hl.uis.normal.bases;
 
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiContainerAlignBase;
-import cn.royan.hl.interfaces.uis.IUiItemStateBase;
 import cn.royan.hl.interfaces.uis.IUiContainerBase;
-import cn.royan.hl.interfaces.uis.IUiContainerScrolBase;
-import cn.royan.hl.interfaces.uis.IUiContainerStateBase;
 import cn.royan.hl.uis.normal.InteractiveUiN;
 import cn.royan.hl.uis.sparrow.Sparrow;
 
@@ -213,7 +210,7 @@ class UiNContainerAlign extends UiNContainer, implements IUiContainerAlignBase
 						items[z].setPosition( offsetX, offsetY );
 				}
 				
-				if ( !additems.remove(items[z]) && moveProp != null ) {
+				if ( moveProp != null ) {
 					moveProp(items[z]);
 				}
 				

@@ -208,7 +208,7 @@ class UiSContainerAlign extends UiSContainer, implements IUiContainerAlignBase
 						items[z].setPosition( offsetX, offsetY );
 				}
 				
-				if ( !additems.remove(items[z]) && moveProp != null ) {
+				if ( moveProp != null ) {
 					moveProp(items[z]);
 				}
 				

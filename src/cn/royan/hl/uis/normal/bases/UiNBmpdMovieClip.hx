@@ -84,12 +84,12 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 	
 	function drawTextures():Void
 	{
-		var frameWidth:Int = Std.int(bgTexture.regin.width / totalRow);
-		var frameHeight:Int = Std.int(bgTexture.regin.height / totalCol);
+		var frameWidth:Int = Std.int(bgTexture.regin.width / total);
+		var frameHeight:Int = Std.int(bgTexture.regin.height);
 		
 		if ( bgTexture.frame != null ) {
-			frameWidth = Std.int(bgTexture.frame.width / totalRow);
-			frameHeight = Std.int(bgTexture.frame.height / totalCol);
+			frameWidth = Std.int(bgTexture.frame.width / total);
+			frameHeight = Std.int(bgTexture.frame.height);
 		}
 		
 		var i:Int;
@@ -175,11 +175,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 		freshRect.y = getRange().y;
 		freshRect.width 	= getRange().width;
 		freshRect.height 	= getRange().height;
-		#if neko
-		currentFrame.bitmapData.fillRect(freshRect, {rgb:0x000000, a:0x00});
-		#else
 		currentFrame.bitmapData.fillRect(freshRect, 0x00000000);
-		#end
 		currentFrame.bitmapData.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point(bgTextures[current - 1].frame.x, bgTextures[current - 1].frame.y));
 		currentFrame.scaleX = currentFrame.scaleY = getScale();
 	}
@@ -198,11 +194,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 		freshRect.y = getRange().y;
 		freshRect.width 	= getRange().width;
 		freshRect.height 	= getRange().height;
-		#if neko
-		currentFrame.bitmapData.fillRect(freshRect, {rgb:0x000000, a:0x00});
-		#else
 		currentFrame.bitmapData.fillRect(freshRect, 0x00000000);
-		#end
 		currentFrame.bitmapData.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point(bgTextures[current - 1].frame.x, bgTextures[current - 1].frame.y));
 		currentFrame.scaleX = currentFrame.scaleY = getScale();
 		
@@ -259,12 +251,7 @@ class UiNBmpdMovieClip extends InteractiveUiN, implements IUiItemPlayBase
 		freshRect.y = getRange().y;
 		freshRect.width 	= getRange().width;
 		freshRect.height 	= getRange().height;
-		
-		#if neko
-		currentFrame.bitmapData.fillRect(freshRect, {rgb:0x000000, a:0x00});
-		#else
 		currentFrame.bitmapData.fillRect(freshRect, 0x00000000);
-		#end
 		currentFrame.bitmapData.copyPixels(bgTextures[current - 1].bitmapdata, bgTextures[current - 1].regin, new Point(bgTextures[current - 1].frame.x, bgTextures[current - 1].frame.y));
 		currentFrame.scaleX = currentFrame.scaleY = getScale();
 		

@@ -16,7 +16,7 @@ import flash.utils.TypedDictionary;
 class WeakMap
 {
 	static var __instance:WeakMap;
-	
+
 	#if !flash
 	var map:ObjectHash<Dynamic, Array<String>>;
 	#else
@@ -24,13 +24,13 @@ class WeakMap
 	#end
 	var keys:Array<String>;
 	var length:Int;
-	
+
 	public static function getInstance():WeakMap
 	{
 		if ( __instance == null ) __instance = new WeakMap();
 		return __instance;
 	}
-	
+
 	function new()
 	{
 		#if !flash
@@ -41,17 +41,17 @@ class WeakMap
 		keys = [];
 		length = 0;
 	}
-	
+
 	public function getLength():Int
 	{
 		return length;
 	}
-	
+
 	public function getAllKeys():Array<String>
 	{
 		return keys;
 	}
-	
+
 	public function getValues():Array<Dynamic>
 	{
 		var result:Array<Dynamic> = [];
@@ -60,7 +60,7 @@ class WeakMap
 		}
 		return result;
 	}
-	
+
 	public function containValue(value:Dynamic):Bool
 	{
 		for (item in map) {
@@ -70,7 +70,7 @@ class WeakMap
 		}
 		return false;
 	}
-	
+
 	public function containKey(key:String):Bool
 	{
 		for( item in keys) {
@@ -80,7 +80,7 @@ class WeakMap
 		}
 		return false;
 	}
-	
+
 	public function set(key:String, value:Dynamic):Void
 	{
 		//如果键存在，删除键
@@ -117,7 +117,7 @@ class WeakMap
 		if( SystemUtils.arrayIndexOf(keys, key) == -1 )
 			keys.push(key);
 	}
-	
+
 	public function getValue(key:String):Dynamic
 	{
 		// i 为值
@@ -139,7 +139,7 @@ class WeakMap
 		}
 		return null;
 	}
-	
+
 	public function getKeys(value:Dynamic):Array<Dynamic>
 	{
 		#if flash
@@ -148,7 +148,7 @@ class WeakMap
 		return map.get(value);
 		#end
 	}
-	
+
 	public function clear(key:String):Void
 	{
 		var value:Dynamic = getValue(key);
@@ -160,7 +160,7 @@ class WeakMap
 		if( key_arr != null )
 		{
 			key_arr.remove(key);
-			
+
 			if( key_arr.length <= 0 )
 			{
 				#if flash
@@ -169,9 +169,9 @@ class WeakMap
 				map.get(value);
 				#end
 			}
-			
+
 			length--;
-			
+
 			keys.remove(key);
 		}
 	}

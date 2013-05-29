@@ -4,8 +4,6 @@ import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiContainerBase;
-import cn.royan.hl.interfaces.uis.IUiContainerStateBase;
-import cn.royan.hl.interfaces.uis.IUiItemStateBase;
 import cn.royan.hl.uis.starling.InteractiveUiS;
 import cn.royan.hl.utils.SystemUtils;
 
@@ -17,14 +15,13 @@ import starling.textures.Texture;
  * ...
  * @author RoYan
  */
-class UiSContainer extends InteractiveUiS, implements IUiContainerBase, implements IUiContainerStateBase
+class UiSContainer extends InteractiveUiS, implements IUiContainerBase
 {
 	var states:Array<String>;
 	var current:String;
 	
 	var items:Array<IUiBase>;
 	
-	var additems:Array<IUiBase>;
 	var showProp:Dynamic->Void;
 	var hideProp:Dynamic->Dynamic->Void;
 	
@@ -33,7 +30,6 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase, implemen
 		super(texture);
 		
 		items = [];
-		additems = [];
 		
 		states = [];
 	}
@@ -162,8 +158,8 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase, implemen
 		
 		var i:Int;
 		for(i in 0...numChildren){
-			if( Std.is(getChildAt(i), IUiItemStateBase) ){
-				var item:IUiItemStateBase = cast(getChildAt(i), IUiItemStateBase);
+			if( Std.is(getChildAt(i), IUiBase) ){
+				var item:IUiBase = cast(getChildAt(i), IUiBase);
 				if ( item.getInclude() != null ) {
 					if( SystemUtils.arrayIndexOf(item.getInclude(), current) != -1 ){
 						cast(item, DisplayObject).visible = true;

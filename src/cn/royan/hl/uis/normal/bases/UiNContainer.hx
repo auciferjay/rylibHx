@@ -4,8 +4,6 @@ import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiContainerBase;
-import cn.royan.hl.interfaces.uis.IUiItemStateBase;
-import cn.royan.hl.interfaces.uis.IUiContainerStateBase;
 import cn.royan.hl.uis.normal.InteractiveUiN;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.utils.SystemUtils;
@@ -17,14 +15,13 @@ import flash.display.DisplayObject;
  * ...
  * @author RoYan
  */
-class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implements IUiContainerStateBase
+class UiNContainer extends InteractiveUiN, implements IUiContainerBase
 {
 	var states:Array<String>;
 	var current:String;
 	
 	var items:Array<IUiBase>;
 	
-	var additems:Array<IUiBase>;
 	var showProp:Dynamic->Void;
 	var hideProp:Dynamic->Dynamic->Void;
 	
@@ -33,7 +30,6 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 		super(texture);
 		
 		items = [];
-		additems = [];
 		states = [];
 	}
 	
@@ -49,7 +45,6 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 	{
 		SystemUtils.print(item, PrintConst.UIS);
 		items.push(item);
-		additems.push( item );
 		
 		item.setScale(getScale());
 		
@@ -74,8 +69,6 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 		prev.push(item);
 		
 		items = prev.concat(next);
-		
-		additems.push( item );
 		
 		item.setScale(getScale());
 		
@@ -173,8 +166,8 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase, implemen
 		
 		var i:Int;
 		for(i in 0...numChildren){
-			if( Std.is(getChildAt(i), IUiItemStateBase) ){
-				var item:IUiItemStateBase = cast(getChildAt(i), IUiItemStateBase);
+			if( Std.is(getChildAt(i), IUiBase) ){
+				var item:IUiBase = cast(getChildAt(i), IUiBase);
 				if ( item.getInclude() != null ) {
 					if( SystemUtils.arrayIndexOf(item.getInclude(), current) != -1 ){
 						cast(item, DisplayObject).visible = true;

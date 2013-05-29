@@ -4,7 +4,6 @@ import cn.royan.hl.bases.Dictionary;
 import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.uis.IUiBase;
-import cn.royan.hl.interfaces.uis.IUiItemStateBase;
 import cn.royan.hl.utils.BitmapDataUtils;
 import cn.royan.hl.utils.SystemUtils;
 
@@ -24,7 +23,7 @@ import starling.events.TouchEvent;
  * ...
  * @author RoYan
  */
-class InteractiveUiS extends Sprite, implements IUiBase, implements IUiItemStateBase
+class InteractiveUiS extends Sprite, implements IUiBase
 {
 	static public inline var INTERACTIVE_STATUS_NORMAL:Int 		= 0;
 	static public inline var INTERACTIVE_STATUS_OVER:Int 		= 1;
