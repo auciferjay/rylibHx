@@ -38,8 +38,9 @@ class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 		if( Std.is( texture, Array ) ){
 			bgTextures = cast(texture);
 			
-		 	setSize(Std.int(bgTextures[0].width), Std.int(bgTextures[0].height));
-			
+			setSize(Std.int(bgTextures[0].frame != null ? bgTextures[0].frame.width : bgTextures[0].width ), 
+					Std.int(bgTextures[0].frame != null ? bgTextures[0].frame.height : bgTextures[0].height ));
+
 			while ( bgTextures.length < 5 ) {
 				bgTextures.push(bgTextures[bgTextures.length - 1]);
 			}

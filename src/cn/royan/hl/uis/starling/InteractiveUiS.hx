@@ -86,7 +86,8 @@ class InteractiveUiS extends Sprite, implements IUiBase
 		if (texture != null) {
 			bgTexture = texture;
 			
-			setSize(Std.int(bgTexture.frame.width), Std.int(bgTexture.frame.height));
+			setSize(Std.int(bgTexture.frame != null ? bgTexture.frame.width : bgTexture.width ), 
+					Std.int(bgTexture.frame != null ? bgTexture.frame.height : bgTexture.height ));
 		}
 		
 		if ( containerHeight > 0 && containerWidth > 0 ) {
