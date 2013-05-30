@@ -64,7 +64,7 @@ class UninteractiveUiS extends Sprite, implements IUiBase
 		if (texture != null) {
 			bgTexture = texture;
 			
-			setSize(Std.int(bgTexture.width), Std.int(bgTexture.height));
+			setSize(Std.int(bgTexture.frame.width), Std.int(bgTexture.frame.height));
 		}
 		
 		if ( containerHeight > 0 && containerWidth > 0 ) {
