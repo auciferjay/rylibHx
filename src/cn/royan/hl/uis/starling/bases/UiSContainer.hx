@@ -56,7 +56,7 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase
 		SystemUtils.print(item, PrintConst.UIS);
 		items.push(item);
 		
-		setScale(getScale());
+		item.setScale(getScale());
 		
 		addChild(cast( item, DisplayObject ));
 		
@@ -80,7 +80,7 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase
 		
 		items = prev.concat(next);
 		
-		setScale(getScale());
+		item.setScale(getScale());
 		
 		addChildAt(cast( item, DisplayObject ), index);
 		

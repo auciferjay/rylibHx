@@ -48,7 +48,7 @@ class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupB
 		
 		item.setCallbacks({click:itemSelectHandler});
 		
-		setScale(getScale());
+		item.setScale(getScale());
 
 		addChild(cast( item, DisplayObject ));
 		
@@ -76,7 +76,7 @@ class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupB
 		
 		item.setCallbacks({click:itemSelectHandler});
 
-		setScale(getScale());
+		item.setScale(getScale());
 
 		addChild(cast( item, DisplayObject ));
 		
