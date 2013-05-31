@@ -42,6 +42,15 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase
 		else dispatchEvent(new Event(DatasEvent.DATA_CHANGE));
 	}
 	
+	override public function setScale(value:Float):Void 
+	{
+		super.setScale(value);
+		
+		for ( item in items ) {
+			item.setScale(getScale());
+		}
+	}
+	
 	public function addItem(item:IUiBase):Void
 	{
 		SystemUtils.print(item, PrintConst.UIS);
