@@ -90,6 +90,7 @@ class UninteractiveUiS extends Sprite, implements IUiBase
 				graphics.texture = bgTexture;
 			else if( defaultTexture != null )
 				graphics.texture = defaultTexture;
+			graphics.scaleX = graphics.scaleY = getScale();
 		}
 	}
 	
