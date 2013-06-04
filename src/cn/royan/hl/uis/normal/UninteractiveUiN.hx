@@ -48,6 +48,8 @@ class UninteractiveUiN extends Sprite, implements IUiBase
 	
 	var background:Bitmap;
 	
+	var styleName:String;
+	
 	//Constructor
 	public function new(texture:Sparrow = null)
 	{
@@ -209,6 +211,11 @@ class UninteractiveUiN extends Sprite, implements IUiBase
 	public function getScale():Float
 	{
 		return scale;
+	}
+	
+	public function setStyleName(value:String):Void
+	{
+		styleName = value;
 	}
 	
 	public function getDispatcher():EventDispatcher

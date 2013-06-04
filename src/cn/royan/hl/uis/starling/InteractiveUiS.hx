@@ -66,6 +66,8 @@ class InteractiveUiS extends Sprite, implements IUiBase
 	var evtListenerType:Array<String>;
 	var evtListenerDirectory:Array<Dynamic>;
 	
+	var styleName:String;
+	
 	public var graphics:Image;
 	
 	//Constructor
@@ -241,6 +243,11 @@ class InteractiveUiS extends Sprite, implements IUiBase
 	public function getScale():Float
 	{
 		return scale;
+	}
+	
+	public function setStyleName(value:String):Void
+	{
+		styleName = value;
 	}
 	
 	public function getDispatcher():EventDispatcher

@@ -112,6 +112,11 @@ interface IUiBase implements IDisposeBase
 	function getScale():Float;
 	
 	/**
+	 * 设置样式名称
+	 * @param 	value
+	 */
+	function setStyleName(value:String):Void;
+	/**
 	 * 获取事件发送者
 	 * @return
 	 */

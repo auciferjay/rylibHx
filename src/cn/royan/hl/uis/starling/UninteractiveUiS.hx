@@ -44,6 +44,8 @@ class UninteractiveUiS extends Sprite, implements IUiBase
 	var excludes:Array<String>;
 	var includes:Array<String>;
 	
+	var styleName:String;
+	
 	public var graphics:Image;
 	
 	var isInit:Bool;
@@ -220,6 +222,11 @@ class UninteractiveUiS extends Sprite, implements IUiBase
 	public function getScale():Float
 	{
 		return scale;
+	}
+	
+	public function setStyleName(value:String):Void
+	{
+		styleName = value;
 	}
 	
 	public function getDispatcher():EventDispatcher

@@ -1,0 +1,9 @@
+IUiBase{background-color:[0xFFFFFF,0xFFFF00,0xFF0000];background-alpha:[1,.5,0];background-image:"";border:1px 0xFFFFFF 1 10 10;width:10px;height:10px;top:0px;left:0px;}
+IUiContainerBase{}
+IUiContainerAlignBase{valign:0;halign:0;calign:0;margin:0px 0px 0px 0px;gap:0px 0px;}
+IUiContainerGroupBase{}
+IUiItemGroupBase{}
+IUiItemPlayBase{}
+IUiScrollBarBase{thumb-image:"";max-image:"";min-image:"";background-image:"";}
+IUiScrollPaneBase{}
+IUiText{color:#000;font-size:12px;}

@@ -7,6 +7,7 @@ import cn.royan.hl.bases.Dictionary;
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.systems.DeviceCapabilities;
 import cn.royan.hl.uis.sparrow.Sparrow;
+import cn.royan.hl.uis.style.StyleManager;
 import cn.royan.hl.utils.BitmapDataUtils;
 import cn.royan.hl.utils.SystemUtils;
 
@@ -64,6 +65,8 @@ class InteractiveUiN extends Sprite, implements IUiBase
 	var evtListenerDirectory:Array<Dynamic>;
 	
 	var background:Bitmap;
+	
+	var styleName:String;
 
 	//Constructor
 	public function new(texture:Sparrow = null)
@@ -90,6 +93,8 @@ class InteractiveUiN extends Sprite, implements IUiBase
 		
 		background = new Bitmap();
 		addChild(background);
+		
+		//StyleManager.getCSS("default").getStyle("IUiBase");
 		
 		if (texture != null) {
 			bgTexture = texture;
@@ -246,6 +251,11 @@ class InteractiveUiN extends Sprite, implements IUiBase
 	public function getScale():Float
 	{
 		return scale;
+	}
+	
+	public function setStyleName(value:String):Void
+	{
+		styleName = value;
 	}
 	
 	public function getDispatcher():EventDispatcher
