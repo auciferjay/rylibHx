@@ -19,6 +19,7 @@ import flash.events.MouseEvent;
 class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements IUiItemGroupBase
 {
 	//properties
+	var isCenter:Bool;
 	var btnLabel:String;
 	var btnLabelText:UiNText;
 	var textColors:Array<Dynamic>;
@@ -69,6 +70,7 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 	
 	public function autoCenter():Void
 	{
+		isCenter = true;
 		btnLabelText.autoSize(UiNText.TEXT_AUTOSIZE_LEFT);
 		btnLabelText.setPosition((getRange().width - btnLabelText.getRange().width)/2, (getRange().height - btnLabelText.getRange().height)/2);
 	}
@@ -92,7 +94,11 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 	override public function setSize(cWidth:Float, cHeight:Float):Void
 	{
 		super.setSize(cWidth, cHeight);
-		btnLabelText.setSize(cWidth, cHeight);
+		if ( isCenter ) {
+			autoCenter();
+		}else {
+			btnLabelText.setSize(cWidth, cHeight);
+		}
 	}
 	
 	override public function setScale(value:Float):Void 

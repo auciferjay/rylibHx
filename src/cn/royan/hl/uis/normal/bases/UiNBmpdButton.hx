@@ -131,6 +131,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 	function mouseMoveHandler(evt:MouseEvent):Void
 	{
 		SystemUtils.print(evt, PrintConst.UIS);
+		if ( currentStatus == null ) return;
 		#if neko
 		buttonMode = currentStatus.bitmapData.getPixel32(Std.int(evt.localX), Std.int(evt.localY)).a != 0x00;
 		#else
