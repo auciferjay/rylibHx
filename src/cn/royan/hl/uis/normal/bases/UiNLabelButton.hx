@@ -33,6 +33,9 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 		
 		super(texture, frames);
 		
+		containerWidth = 100;
+		containerHeight = 20;
+		
 		bgTextures = [];
 		
 		btnLabel = label;

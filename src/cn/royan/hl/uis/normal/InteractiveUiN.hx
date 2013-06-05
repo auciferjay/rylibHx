@@ -83,13 +83,12 @@ class InteractiveUiN extends Sprite, implements IUiBase
 		borderRy	= 0;
 		
 		status = UiConst.INTERACTIVE_STATUS_NORMAL;
-		StyleManager.getCSS(UiConst.DEFAULT_CSS).getStyle("IUiBase");
+		
 		background = new Bitmap();
 		addChild(background);
 		
 		if (texture != null) {
 			bgTexture = texture;
-			
 			setSize(Std.int(bgTexture.regin.width), Std.int(bgTexture.regin.height));
 		}
 		

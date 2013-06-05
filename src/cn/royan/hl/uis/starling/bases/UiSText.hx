@@ -28,6 +28,9 @@ class UiSText extends InteractiveUiS, implements IUiTextBase
 		
 		inputText = new TextField(100, 20, label, fontN, fontSize, fontC, fontB);
 		addChild( inputText );
+		
+		containerWidth = 100;
+		containerHeight = 20;
 	}
 	
 	override public function setSize(w:Float, h:Float):Void

@@ -3,6 +3,7 @@ package cn.royan.hl.uis.normal.exts;
 import cn.royan.hl.uis.normal.bases.UiNContainerAlign;
 import cn.royan.hl.uis.normal.bases.UiNBmpdMovieClip;
 
+import starling.textures.Texture;
 import flash.display.BitmapData;
 
 /**
@@ -15,7 +16,7 @@ class UiNExtBmpNumberText extends UiNContainerAlign
 	private var isAlwaysShow:Bool;
 	private var num:Int;
 		
-	public function new(texture:BitmapData, length:Int = 1)
+	public function new(texture:Array<Texture>, length:Int = 1)
 	{
 		super();
 		
