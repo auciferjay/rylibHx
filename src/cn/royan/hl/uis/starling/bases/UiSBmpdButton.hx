@@ -1,6 +1,7 @@
 package cn.royan.hl.uis.starling.bases;
 
 import cn.royan.hl.consts.PrintConst;
+import cn.royan.hl.consts.UiConst;
 import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.uis.starling.InteractiveUiS;
 import cn.royan.hl.utils.BitmapDataUtils;
@@ -90,11 +91,11 @@ class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 		bgColors = color;
 		bgAlphas = alpha;
 		
-		while ( bgColors.length < InteractiveUiS.STATUS_LEN ) {
+		while ( bgColors.length < UiConst.STATUS_LEN ) {
 			bgColors.push( bgColors[bgColors.length - 1] );
 		}
 		
-		while ( bgAlphas.length < InteractiveUiS.STATUS_LEN ) {
+		while ( bgAlphas.length < UiConst.STATUS_LEN ) {
 			bgAlphas.push( bgAlphas[bgAlphas.length - 1] );
 		}
 		
@@ -117,7 +118,7 @@ class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 	public function setSelected(value:Bool):Void
 	{
 		selected = value;
-		status = selected?InteractiveUiS.INTERACTIVE_STATUS_SELECTED:InteractiveUiS.INTERACTIVE_STATUS_NORMAL;
+		status = selected?UiConst.INTERACTIVE_STATUS_SELECTED:UiConst.INTERACTIVE_STATUS_NORMAL;
 		draw();
 	}
 	

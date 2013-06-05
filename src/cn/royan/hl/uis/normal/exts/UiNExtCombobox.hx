@@ -1,5 +1,6 @@
 package cn.royan.hl.uis.normal.exts;
 
+import cn.royan.hl.consts.UiConst;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.uis.normal.bases.UiNContainerGroup;
@@ -44,7 +45,7 @@ class UiNExtCombobox extends InteractiveUiN
 		
 		line = 4;
 		
-		listView = new UiNScrollPane(group, UiNScrollPane.SCROLL_TYPE_VERICAL_ONLY);
+		listView = new UiNScrollPane(group, UiConst.SCROLL_TYPE_VERICAL_ONLY);
 		//addChild(listView);
 	}
 	

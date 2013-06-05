@@ -1,5 +1,6 @@
 package cn.royan.hl.uis.normal.bases;
 
+import cn.royan.hl.consts.UiConst;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiScrollBarBase;
 import cn.royan.hl.uis.normal.InteractiveUiN;
@@ -14,9 +15,6 @@ import flash.geom.Rectangle;
  */
 class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 {
-	public static inline var SCROLLBAR_TYPE_HORIZONTAL:Int 	= 0;
-	public static inline var SCROLLBAR_TYPE_VERICAL:Int 	= 1;
-	
 	var min:UiNLabelButton;
 	var max:UiNLabelButton;
 	var thumb:UiNLabelButton;
@@ -26,7 +24,7 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 	
 	var scrollerType:Int;
 	
-	public function new(type:Int = SCROLLBAR_TYPE_HORIZONTAL) 
+	public function new(type:Int = UiConst.SCROLLBAR_TYPE_HORIZONTAL) 
 	{
 		super();
 		
@@ -75,11 +73,11 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 	function minEnterHandler(evt:Event):Void
 	{
 		switch( scrollerType ) {
-			case SCROLLBAR_TYPE_HORIZONTAL:
+			case UiConst.SCROLLBAR_TYPE_HORIZONTAL:
 				if ( thumb.getRange().x > rect.x ) {
 					thumb.setPosition(thumb.getRange().x - 1, thumb.getRange().y);
 				}
-			case SCROLLBAR_TYPE_VERICAL:
+			case UiConst.SCROLLBAR_TYPE_VERICAL:
 				if ( thumb.getRange().y > rect.y ) {
 					thumb.setPosition(thumb.getRange().x, thumb.getRange().y - 1);
 				}
@@ -107,11 +105,11 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 	function maxEnterHandler(evt:Event):Void
 	{
 		switch( scrollerType ) {
-			case SCROLLBAR_TYPE_HORIZONTAL:
+			case UiConst.SCROLLBAR_TYPE_HORIZONTAL:
 				if ( thumb.getRange().x < rect.width + rect.x ) {
 					thumb.setPosition(thumb.getRange().x + 1, thumb.getRange().y);
 				}
-			case SCROLLBAR_TYPE_VERICAL:
+			case UiConst.SCROLLBAR_TYPE_VERICAL:
 				if ( thumb.getRange().y < rect.height + rect.y ) {
 					thumb.setPosition(thumb.getRange().x, thumb.getRange().y + 1);
 				}
@@ -132,13 +130,13 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 	function backgroundClickHandler(evt:MouseEvent):Void
 	{
 		switch( scrollerType ) {
-			case SCROLLBAR_TYPE_HORIZONTAL:
+			case UiConst.SCROLLBAR_TYPE_HORIZONTAL:
 				if ( evt.localX > rect.width ) {
 					thumb.setPosition(Std.int(rect.x + rect.width), thumb.getRange().y);
 				}else {
 					thumb.setPosition(Std.int(evt.localX + rect.x), thumb.getRange().y);
 				}
-			case SCROLLBAR_TYPE_VERICAL:
+			case UiConst.SCROLLBAR_TYPE_VERICAL:
 				if ( evt.localY > rect.height ) {
 					thumb.setPosition(thumb.getRange().x, Std.int(rect.y + rect.height));
 				}else {
@@ -179,7 +177,7 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 		super.setSize(w, h);
 		
 		switch( scrollerType ) {
-			case SCROLLBAR_TYPE_HORIZONTAL:
+			case UiConst.SCROLLBAR_TYPE_HORIZONTAL:
 				min.setSize(h, h);
 				max.setSize(h, h);
 				bar.setSize(w - 2 * h, h);
@@ -191,7 +189,7 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 				rect.y = 0;
 				
 				thumb.setPosition(h, 0);
-			case SCROLLBAR_TYPE_VERICAL:
+			case UiConst.SCROLLBAR_TYPE_VERICAL:
 				min.setSize(w, w);
 				max.setSize(w, w);
 				bar.setSize(w, h - 2 * w);
@@ -209,9 +207,9 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 	public function setValue(value:Int):Void
 	{
 		switch( scrollerType ) {
-			case SCROLLBAR_TYPE_HORIZONTAL:
+			case UiConst.SCROLLBAR_TYPE_HORIZONTAL:
 				thumb.x = value / 100 * rect.width + rect.x;
-			case SCROLLBAR_TYPE_VERICAL:
+			case UiConst.SCROLLBAR_TYPE_VERICAL:
 				thumb.y = value / 100 * rect.height + rect.y;
 		}
 	}
@@ -219,9 +217,9 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 	public function getValue():Int
 	{
 		switch( scrollerType ) {
-			case SCROLLBAR_TYPE_HORIZONTAL:
+			case UiConst.SCROLLBAR_TYPE_HORIZONTAL:
 				return Std.int((thumb.x - rect.x) / rect.width * 100);
-			case SCROLLBAR_TYPE_VERICAL:
+			case UiConst.SCROLLBAR_TYPE_VERICAL:
 				return Std.int((thumb.y - rect.y) / rect.height * 100);
 		}
 		return 0;
@@ -232,9 +230,9 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 		scrollerType = type;
 		
 		switch( scrollerType ) {
-			case SCROLLBAR_TYPE_HORIZONTAL:
+			case UiConst.SCROLLBAR_TYPE_HORIZONTAL:
 				thumb.setPosition(containerHeight, 0);
-			case SCROLLBAR_TYPE_VERICAL:
+			case UiConst.SCROLLBAR_TYPE_VERICAL:
 				thumb.setPosition(0, containerWidth);
 		}
 		

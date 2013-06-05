@@ -1,5 +1,6 @@
 package cn.royan.hl.uis.starling.bases;
 
+import cn.royan.hl.consts.UiConst;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiContainerAlignBase;
 
@@ -30,18 +31,6 @@ private typedef ContainerRowConfig = {
 
 class UiSContainerAlign extends UiSContainer, implements IUiContainerAlignBase
 {
-	static public inline var CONTAINER_HORIZONTAL_LEFT:Int 		= 0;
-	static public inline var CONTAINER_HORIZONTAL_CENTER:Int 	= 1;
-	static public inline var CONTAINER_HORIZONTAL_RIGHT:Int 	= 2;
-	
-	static public inline var CONTAINER_VERTICAL_TOP:Int			= 0;
-	static public inline var CONTAINER_VERTICAL_MIDDLE:Int 		= 1;
-	static public inline var CONTAINER_VERTICAL_BOTTOM:Int 		= 2;
-	
-	static public inline var CONTAINER_CONTENT_ALIGN_TOP:Int	= 0;
-	static public inline var CONTAINER_CONTENT_ALIGN_MIDDLE:Int	= 1;
-	static public inline var CONTAINER_CONTENT_ALIGN_BOTTOM:Int	= 2;
-	
 	var horizontalAlign:Int;
 	var verticalAlign:Int;
 	var contentAlign:Int;
@@ -54,7 +43,7 @@ class UiSContainerAlign extends UiSContainer, implements IUiContainerAlignBase
 	
 	var moveProp:Dynamic->Void;
 	
-	public function new(texture:Texture = null) 
+	public function new(texture:Texture = null)
 	{
 		super(texture);
 	}
@@ -174,9 +163,9 @@ class UiSContainerAlign extends UiSContainer, implements IUiContainerAlignBase
 		var offsetY:Float;
 		
 		switch( verticalAlign ) {
-			case CONTAINER_VERTICAL_BOTTOM:
+			case UiConst.CONTAINER_VERTICAL_BOTTOM:
 				offsetY = containerHeight - marginB - itemsHeight;
-			case CONTAINER_VERTICAL_MIDDLE:
+			case UiConst.CONTAINER_VERTICAL_MIDDLE:
 				offsetY = Std.int( (containerHeight - itemsHeight) / 2 );
 			default:
 				offsetY = marginT;
@@ -185,9 +174,9 @@ class UiSContainerAlign extends UiSContainer, implements IUiContainerAlignBase
 		var z:Int = 0;
 		for ( i in 0...rows.length ) {
 			switch( horizontalAlign ) {
-				case CONTAINER_HORIZONTAL_RIGHT:
+				case UiConst.CONTAINER_HORIZONTAL_RIGHT:
 					offsetX = containerWidth - marginR - rows[i].width;
-				case CONTAINER_HORIZONTAL_CENTER:
+				case UiConst.CONTAINER_HORIZONTAL_CENTER:
 					offsetX = (containerWidth - rows[i].width) / 2;
 				default:
 					offsetX = marginL;
@@ -200,9 +189,9 @@ class UiSContainerAlign extends UiSContainer, implements IUiContainerAlignBase
 				}
 				
 				switch( contentAlign ) {
-					case CONTAINER_CONTENT_ALIGN_MIDDLE:
+					case UiConst.CONTAINER_CONTENT_ALIGN_MIDDLE:
 						items[z].setPosition( offsetX, offsetY + (rows[i].height - items[z].getRange().height)/2 );
-					case CONTAINER_CONTENT_ALIGN_BOTTOM:
+					case UiConst.CONTAINER_CONTENT_ALIGN_BOTTOM:
 						items[z].setPosition( offsetX, offsetY + rows[i].height - items[z].getRange().height );
 					default:
 						items[z].setPosition( offsetX, offsetY );

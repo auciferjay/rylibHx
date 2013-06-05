@@ -1,5 +1,6 @@
 package cn.royan.hl.uis.starling.bases;
 
+import cn.royan.hl.consts.UiConst;
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.uis.IUiTextBase;
 import cn.royan.hl.uis.starling.InteractiveUiS;
@@ -16,18 +17,6 @@ import starling.utils.HAlign;
  */
 class UiSText extends InteractiveUiS, implements IUiTextBase
 {
-	static public inline var TEXT_ALIGN_LEFT:Int 	= 0;
-	static public inline var TEXT_ALIGN_CENTER:Int 	= 1;
-	static public inline var TEXT_ALIGN_RIGHT:Int	= 2;
-	
-	static public inline var TEXT_AUTOSIZE_NONE:Int = 0;
-	static public inline var TEXT_AUTOSIZE_LEFT:Int = 1;
-	static public inline var TEXT_AUTOSIZE_CENTER:Int = 2;
-	static public inline var TEXT_AUTOSIZE_RIGHT:Int = 3;
-	
-	static public inline var TEXT_TYPE_INPUT:Int = 0;
-	static public inline var TEXT_TYPE_PASSWORD:Int = 1;
-	
 	var inputText:TextField;
 	var fontSize:Float;
 	
@@ -41,7 +30,7 @@ class UiSText extends InteractiveUiS, implements IUiTextBase
 		addChild( inputText );
 	}
 	
-	override public function setSize(w:Float, h:Float):Void 
+	override public function setSize(w:Float, h:Float):Void
 	{
 		super.setSize(w, h);
 		
@@ -105,9 +94,9 @@ class UiSText extends InteractiveUiS, implements IUiTextBase
 	public function setTextAlign(value:Int):Void
 	{
 		inputText.hAlign = switch(value) {
-				case TEXT_ALIGN_CENTER:
+				case UiConst.TEXT_ALIGN_CENTER:
 					HAlign.CENTER;
-				case TEXT_ALIGN_RIGHT:
+				case UiConst.TEXT_ALIGN_RIGHT:
 					HAlign.RIGHT;
 				default:
 					HAlign.LEFT;

@@ -1,6 +1,7 @@
 package cn.royan.hl.uis.normal.bases;
 
 import cn.royan.hl.consts.PrintConst;
+import cn.royan.hl.consts.UiConst;
 import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.uis.normal.InteractiveUiN;
 import cn.royan.hl.uis.sparrow.Sparrow;
@@ -48,7 +49,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 			return;
 		}
 		
-		while ( bgTextures.length < InteractiveUiN.STATUS_LEN ) {
+		while ( bgTextures.length < UiConst.STATUS_LEN ) {
 			bgTextures.push(bgTextures[bgTextures.length - 1]);
 		}
 		
@@ -167,19 +168,19 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 		bgColors = color;
 		bgAlphas = alpha;
 		
-		while ( bgColors.length < InteractiveUiN.STATUS_LEN ) {
+		while ( bgColors.length < UiConst.STATUS_LEN ) {
 			bgColors.push( bgColors[bgColors.length - 1] );
 		}
 		
-		while ( bgAlphas.length < InteractiveUiN.STATUS_LEN ) {
+		while ( bgAlphas.length < UiConst.STATUS_LEN ) {
 			bgAlphas.push( bgAlphas[bgAlphas.length - 1] );
 		}
 		
 		if ( containerWidth > 0 && containerHeight > 0 ) {
 			defaultTexture = Sparrow.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
-									bgColors, bgAlphas, InteractiveUiN.STATUS_LEN, borderColor, borderThick, borderAlpha, borderRx, borderRy));
+									bgColors, bgAlphas, UiConst.STATUS_LEN, borderColor, borderThick, borderAlpha, borderRx, borderRy));
 			
-			drawTextures(defaultTexture, InteractiveUiN.STATUS_LEN);
+			drawTextures(defaultTexture, UiConst.STATUS_LEN);
 			
 			if ( currentStatus == null ) {
 				currentStatus = new Bitmap(new BitmapData(Std.int(containerWidth), Std.int(containerHeight), true, #if neko {rgb:0,a:0} #else 0x00000000 #end));
@@ -195,7 +196,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 	public function setSelected(value:Bool):Void
 	{
 		selected = value;
-		status = selected?InteractiveUiN.INTERACTIVE_STATUS_SELECTED:InteractiveUiN.INTERACTIVE_STATUS_NORMAL;
+		status = selected?UiConst.INTERACTIVE_STATUS_SELECTED:UiConst.INTERACTIVE_STATUS_NORMAL;
 		draw();
 	}
 	
@@ -216,7 +217,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 		
 		drawTextures(bgTexture, frames);
 		
-		while ( bgTextures.length < InteractiveUiN.STATUS_LEN ) {
+		while ( bgTextures.length < UiConst.STATUS_LEN ) {
 			bgTextures.push(bgTextures[bgTextures.length - 1]);
 		}
 		

@@ -1,5 +1,6 @@
 package cn.royan.hl.uis.normal.bases;
 
+import cn.royan.hl.consts.UiConst;
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.uis.IUiTextBase;
 import cn.royan.hl.uis.normal.InteractiveUiN;
@@ -17,18 +18,6 @@ import flash.text.TextFieldAutoSize;
  */
 class UiNText extends InteractiveUiN, implements IUiTextBase
 {
-	static public inline var TEXT_ALIGN_LEFT:Int 	= 0;
-	static public inline var TEXT_ALIGN_CENTER:Int 	= 1;
-	static public inline var TEXT_ALIGN_RIGHT:Int	= 2;
-	
-	static public inline var TEXT_AUTOSIZE_NONE:Int = 0;
-	static public inline var TEXT_AUTOSIZE_LEFT:Int = 1;
-	static public inline var TEXT_AUTOSIZE_CENTER:Int = 2;
-	static public inline var TEXT_AUTOSIZE_RIGHT:Int = 3;
-	
-	static public inline var TEXT_TYPE_INPUT:Int = 0;
-	static public inline var TEXT_TYPE_PASSWORD:Int = 1;
-	
 	var inputText:TextField;
 	var defaultSize:Float;
 	
@@ -92,9 +81,9 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 	public function setType(type:Int):Void
 	{
 		switch( type ) {
-			case TEXT_TYPE_INPUT:
+			case UiConst.TEXT_TYPE_INPUT:
 				inputText.type = TextFieldType.INPUT;
-			case TEXT_TYPE_PASSWORD:
+			case UiConst.TEXT_TYPE_PASSWORD:
 				inputText.type = TextFieldType.INPUT;
 				inputText.displayAsPassword = true;
 		}
@@ -106,13 +95,13 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 	public function autoSize(value:Int):Void
 	{
 		switch( value ) {
-			case TEXT_AUTOSIZE_NONE:
+			case UiConst.TEXT_AUTOSIZE_NONE:
 				inputText.autoSize = TextFieldAutoSize.NONE;
-			case TEXT_AUTOSIZE_LEFT:
+			case UiConst.TEXT_AUTOSIZE_LEFT:
 				inputText.autoSize = TextFieldAutoSize.LEFT;
-			case TEXT_AUTOSIZE_CENTER:
+			case UiConst.TEXT_AUTOSIZE_CENTER:
 				inputText.autoSize = TextFieldAutoSize.CENTER;
-			case TEXT_AUTOSIZE_RIGHT:
+			case UiConst.TEXT_AUTOSIZE_RIGHT:
 				inputText.autoSize = TextFieldAutoSize.RIGHT;
 		}
 		setSize(Std.int(inputText.textWidth), Std.int(inputText.textHeight));
@@ -152,9 +141,9 @@ class UiNText extends InteractiveUiN, implements IUiTextBase
 	{
 		var format:TextFormat = inputText.defaultTextFormat;
 			format.align = switch(value) {
-				case TEXT_ALIGN_CENTER:
+				case UiConst.TEXT_ALIGN_CENTER:
 					TextFormatAlign.CENTER;
-				case TEXT_ALIGN_RIGHT:
+				case UiConst.TEXT_ALIGN_RIGHT:
 					TextFormatAlign.RIGHT;
 				default:
 					TextFormatAlign.LEFT;

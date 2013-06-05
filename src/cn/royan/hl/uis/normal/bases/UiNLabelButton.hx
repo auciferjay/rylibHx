@@ -1,5 +1,6 @@
 package cn.royan.hl.uis.normal.bases;
 
+import cn.royan.hl.consts.UiConst;
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.interfaces.uis.IUiTextBase;
@@ -56,7 +57,7 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 	{
 		if( isInGroup ){
 			selected = !selected;
-			status = selected?InteractiveUiN.INTERACTIVE_STATUS_SELECTED:status;
+			status = selected?UiConst.INTERACTIVE_STATUS_SELECTED:status;
 			
 			draw();
 		}
@@ -71,7 +72,7 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 	public function autoCenter():Void
 	{
 		isCenter = true;
-		btnLabelText.autoSize(UiNText.TEXT_AUTOSIZE_LEFT);
+		btnLabelText.autoSize(UiConst.TEXT_AUTOSIZE_LEFT);
 		btnLabelText.setPosition((getRange().width - btnLabelText.getRange().width)/2, (getRange().height - btnLabelText.getRange().height)/2);
 	}
 	

@@ -1,5 +1,6 @@
 package cn.royan.hl.uis.starling.bases;
 
+import cn.royan.hl.consts.UiConst;
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
 import cn.royan.hl.interfaces.uis.IUiTextBase;
@@ -54,7 +55,7 @@ class UiSLabelButton extends UiSBmpdButton, implements IUiTextBase, implements I
 	{
 		if( isInGroup ){
 			selected = !selected;
-			status = selected?InteractiveUiS.INTERACTIVE_STATUS_SELECTED:status;
+			status = selected?UiConst.INTERACTIVE_STATUS_SELECTED:status;
 			
 			draw();
 		}

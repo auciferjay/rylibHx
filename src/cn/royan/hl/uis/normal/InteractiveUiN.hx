@@ -1,6 +1,7 @@
 package cn.royan.hl.uis.normal;
 
 import cn.royan.hl.consts.PrintConst;
+import cn.royan.hl.consts.UiConst;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.bases.Dictionary;
@@ -25,13 +26,6 @@ import flash.events.EventDispatcher;
  */
 class InteractiveUiN extends Sprite, implements IUiBase
 {
-	static public inline var INTERACTIVE_STATUS_NORMAL:Int 		= 0;
-	static public inline var INTERACTIVE_STATUS_OVER:Int 		= 1;
-	static public inline var INTERACTIVE_STATUS_DOWN:Int 		= 2;
-	static public inline var INTERACTIVE_STATUS_SELECTED:Int 	= 3;
-	static public inline var INTERACTIVE_STATUS_DISABLE:Int 	= 4;
-	
-	static public inline var STATUS_LEN:Int = 5;
 	//properties
 	var originalDPI:Int;
 	var scale:Float;
@@ -89,12 +83,10 @@ class InteractiveUiN extends Sprite, implements IUiBase
 		borderRx	= 0;
 		borderRy	= 0;
 		
-		status = INTERACTIVE_STATUS_NORMAL;
+		status = UiConst.INTERACTIVE_STATUS_NORMAL;
 		
 		background = new Bitmap();
 		addChild(background);
-		
-		//StyleManager.getCSS("default").getStyle("IUiBase");
 		
 		if (texture != null) {
 			bgTexture = texture;
@@ -211,7 +203,7 @@ class InteractiveUiN extends Sprite, implements IUiBase
 	
 	public function setEnabled(value:Bool):Void
 	{
-		status = value?INTERACTIVE_STATUS_NORMAL:INTERACTIVE_STATUS_DISABLE;
+		status = value?UiConst.INTERACTIVE_STATUS_NORMAL:UiConst.INTERACTIVE_STATUS_DISABLE;
 		mouseChildren = value;
 		mouseEnabled = value;
 		draw();
@@ -219,7 +211,7 @@ class InteractiveUiN extends Sprite, implements IUiBase
 	
 	public function getEnabled():Bool
 	{
-		return status != INTERACTIVE_STATUS_DISABLE;
+		return status != UiConst.INTERACTIVE_STATUS_DISABLE;
 	}
 	
 	public function setTexture(texture:Dynamic, frames:Int = 1):Void
@@ -359,7 +351,7 @@ class InteractiveUiN extends Sprite, implements IUiBase
 	function mouseOverHandler(evt:MouseEvent):Void
 	{
 		SystemUtils.print(evt, PrintConst.UIS);
-		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
+		if( mouseEnabled ) status = selected?UiConst.INTERACTIVE_STATUS_SELECTED:UiConst.INTERACTIVE_STATUS_OVER;
 		if( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.over != null ) callbacks.over(this);
 	}
@@ -367,7 +359,7 @@ class InteractiveUiN extends Sprite, implements IUiBase
 	function mouseOutHandler(evt:MouseEvent):Void
 	{
 		SystemUtils.print(evt, PrintConst.UIS);
-		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_NORMAL;
+		if( mouseEnabled ) status = selected?UiConst.INTERACTIVE_STATUS_SELECTED:UiConst.INTERACTIVE_STATUS_NORMAL;
 		if( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.out != null ) callbacks.out(this);
 	}
@@ -375,7 +367,7 @@ class InteractiveUiN extends Sprite, implements IUiBase
 	function mouseDownHandler(evt:MouseEvent):Void
 	{
 		SystemUtils.print(evt, PrintConst.UIS);
-		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_DOWN;
+		if( mouseEnabled ) status = selected?UiConst.INTERACTIVE_STATUS_SELECTED:UiConst.INTERACTIVE_STATUS_DOWN;
 		if( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.down != null ) callbacks.down(this);
 	}
@@ -383,7 +375,7 @@ class InteractiveUiN extends Sprite, implements IUiBase
 	function mouseUpHandler(evt:MouseEvent):Void
 	{
 		SystemUtils.print(evt, PrintConst.UIS);
-		if( mouseEnabled ) status = selected?INTERACTIVE_STATUS_SELECTED:INTERACTIVE_STATUS_OVER;
+		if( mouseEnabled ) status = selected?UiConst.INTERACTIVE_STATUS_SELECTED:UiConst.INTERACTIVE_STATUS_OVER;
 		if( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.up != null ) callbacks.up(this);
 	}
