@@ -2,6 +2,7 @@ package cn.royan.hl.interfaces.uis;
 
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.IDisposeBase;
+import cn.royan.hl.uis.style.Style;
 
 import flash.geom.Rectangle;
 import flash.events.EventDispatcher;
@@ -115,7 +116,7 @@ interface IUiBase implements IDisposeBase
 	 * 设置样式名称
 	 * @param 	value
 	 */
-	function setStyleName(value:String):Void;
+	function setStyle(value:Style):Void;
 	/**
 	 * 获取事件发送者
 	 * @return

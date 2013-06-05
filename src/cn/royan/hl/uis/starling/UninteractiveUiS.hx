@@ -3,6 +3,7 @@ package cn.royan.hl.uis.starling;
 import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.uis.IUiBase;
+import cn.royan.hl.uis.style.Style;
 import cn.royan.hl.utils.BitmapDataUtils;
 import cn.royan.hl.utils.SystemUtils;
 
@@ -43,9 +44,7 @@ class UninteractiveUiS extends Sprite, implements IUiBase
 	
 	var excludes:Array<String>;
 	var includes:Array<String>;
-	
-	var styleName:String;
-	
+
 	public var graphics:Image;
 	
 	var isInit:Bool;
@@ -224,9 +223,9 @@ class UninteractiveUiS extends Sprite, implements IUiBase
 		return scale;
 	}
 	
-	public function setStyleName(value:String):Void
+	public function setStyle(value:Style):Void
 	{
-		styleName = value;
+		
 	}
 	
 	public function getDispatcher():EventDispatcher

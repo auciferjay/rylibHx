@@ -5,6 +5,7 @@ import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.consts.UiConst;
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.uis.IUiBase;
+import cn.royan.hl.uis.style.Style;
 import cn.royan.hl.utils.BitmapDataUtils;
 import cn.royan.hl.utils.SystemUtils;
 
@@ -59,9 +60,7 @@ class InteractiveUiS extends Sprite, implements IUiBase
 
 	var evtListenerType:Array<String>;
 	var evtListenerDirectory:Array<Dynamic>;
-	
-	var styleName:String;
-	
+
 	public var graphics:Image;
 	
 	//Constructor
@@ -239,9 +238,9 @@ class InteractiveUiS extends Sprite, implements IUiBase
 		return scale;
 	}
 	
-	public function setStyleName(value:String):Void
+	public function setStyle(value:Style):Void
 	{
-		styleName = value;
+		
 	}
 	
 	public function getDispatcher():EventDispatcher
