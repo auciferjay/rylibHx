@@ -39,7 +39,7 @@ class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupB
 	}
 	
 	//Public methods
-	public function addGroupItem(item:IUiItemGroupBase, key:Dynamic = null):Void
+	public function addGroupItem(item:IUiItemGroupBase, key:Dynamic = null):IUiItemGroupBase
 	{
 		item.setInGroup(true);
 		
@@ -56,9 +56,11 @@ class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupB
 		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
 		else dispatchEvent(new Event(DatasEvent.DATA_CHANGE));
+		
+		return item;
 	}
 	
-	public function addGroupItemAt(item:IUiItemGroupBase, index:Int, key:Dynamic = null):Void
+	public function addGroupItemAt(item:IUiItemGroupBase, index:Int, key:Dynamic = null):IUiItemGroupBase
 	{
 		item.setInGroup(true);
 		
@@ -84,9 +86,11 @@ class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupB
 		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
 		else dispatchEvent(new Event(DatasEvent.DATA_CHANGE));
+		
+		return item;
 	}
 	
-	public function removeGroupItem(item:IUiItemGroupBase):Void
+	public function removeGroupItem(item:IUiItemGroupBase):IUiItemGroupBase
 	{
 		var index:Int = SystemUtils.arrayIndexOf(items, item);
 		if ( index != -1 ) {
@@ -100,16 +104,20 @@ class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupB
 		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
 		else dispatchEvent(new Event(DatasEvent.DATA_CHANGE));
+		
+		return item;
 	}
 	
-	public function removeGroupItemAt(index:Int):Void
+	public function removeGroupItemAt(index:Int):IUiItemGroupBase
 	{
 		var prev:Array<IUiBase> = items.slice(0, index);
 		var next:Array<IUiBase> = items.slice(index);
 		
-		removeItem(prev.pop());
+		var item:IUiItemGroupBase = removeGroupItem(cast(prev.pop(), IUiItemGroupBase));
 		
 		items = prev.concat(next);
+		
+		return item;
 	}
 	
 	public function removeAllGroupItems():Void
@@ -268,13 +276,13 @@ class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupB
 		}
 	}
 	
-	override public function addItem(item:IUiBase):Void {}
+	override public function addItem(item:IUiBase):IUiBase { return null; }
 	
-	override public function addItemAt(item:IUiBase, index:Int):Void {}
+	override public function addItemAt(item:IUiBase, index:Int):IUiBase { return null; }
 	
-	override public function removeItem(item:IUiBase):Void {}
+	override public function removeItem(item:IUiBase):IUiBase { return null; }
 	
-	override public function removeItemAt(index:Int):Void {}
+	override public function removeItemAt(index:Int):IUiBase { return null; }
 	
 	override public function removeAllItems():Void {}
 }

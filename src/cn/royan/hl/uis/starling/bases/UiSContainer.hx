@@ -51,7 +51,7 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase
 		}
 	}
 	
-	public function addItem(item:IUiBase):Void
+	public function addItem(item:IUiBase):IUiBase
 	{
 		SystemUtils.print(item, PrintConst.UIS);
 		items.push(item);
@@ -68,9 +68,11 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase
 		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
 		else dispatchEvent(new Event(DatasEvent.DATA_CHANGE));
+		
+		return item;
 	}
 	
-	public function addItemAt(item:IUiBase, index:Int):Void
+	public function addItemAt(item:IUiBase, index:Int):IUiBase
 	{
 		SystemUtils.print(item+":"+index, PrintConst.UIS);
 		var prev:Array<IUiBase> = items.slice(0, index);
@@ -92,9 +94,11 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase
 		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
 		else dispatchEvent(new Event(DatasEvent.DATA_CHANGE));
+		
+		return item;
 	}
 	
-	public function removeItem(item:IUiBase):Void
+	public function removeItem(item:IUiBase):IUiBase
 	{
 		SystemUtils.print(item, PrintConst.UIS);
 		items.remove(item);
@@ -109,17 +113,21 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase
 		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
 		else dispatchEvent(new Event(DatasEvent.DATA_CHANGE));
+		
+		return item;
 	}
 	
-	public function removeItemAt(index:Int):Void
+	public function removeItemAt(index:Int):IUiBase
 	{
 		SystemUtils.print(index, PrintConst.UIS);
 		var prev:Array<IUiBase> = items.slice(0, index);
 		var next:Array<IUiBase> = items.slice(index);
 		
-		removeItem(next.shift());
+		var item:IUiBase = removeItem(next.shift());
 		
 		items = prev.concat(next);
+		
+		return item;
 	}
 	
 	public function removeAllItems():Void

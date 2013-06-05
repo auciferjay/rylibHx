@@ -15,7 +15,7 @@ interface IUiContainerGroupBase implements IUiContainerAlignBase
 	 * @param	item
 	 * @param	key
 	 */
-	function addGroupItem(item:IUiItemGroupBase, key:Dynamic = null):Void;
+	function addGroupItem(item:IUiItemGroupBase, key:Dynamic = null):IUiItemGroupBase;
 	
 	/**
 	 * 添加显示项及健值
@@ -23,19 +23,19 @@ interface IUiContainerGroupBase implements IUiContainerAlignBase
 	 * @param	index
 	 * @param	key
 	 */
-	function addGroupItemAt(item:IUiItemGroupBase, index:Int, key:Dynamic = null):Void;
+	function addGroupItemAt(item:IUiItemGroupBase, index:Int, key:Dynamic = null):IUiItemGroupBase;
 	
 	/**
 	 * 移除显示项
 	 * @param	item
 	 */
-	function removeGroupItem(item:IUiItemGroupBase):Void;
+	function removeGroupItem(item:IUiItemGroupBase):IUiItemGroupBase;
 	
 	/**
 	 * 移除显示项
 	 * @param	index
 	 */
-	function removeGroupItemAt(index:Int):Void;
+	function removeGroupItemAt(index:Int):IUiItemGroupBase;
 	
 	/**
 	 * 清空显示项

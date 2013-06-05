@@ -12,26 +12,26 @@ interface IUiContainerBase implements IUiBase
 	 * 添加显示项
 	 * @param	item
 	 */
-	function addItem(item:IUiBase):Void;
+	function addItem(item:IUiBase):IUiBase;
 	
 	/**
 	 * 添加显示项
 	 * @param	item
 	 * @param	index
 	 */
-	function addItemAt(item:IUiBase, index:Int):Void;
+	function addItemAt(item:IUiBase, index:Int):IUiBase;
 	
 	/**
 	 * 移除显示想
 	 * @param	item
 	 */
-	function removeItem(item:IUiBase):Void;
+	function removeItem(item:IUiBase):IUiBase;
 	
 	/**
 	 * 移除显示项
 	 * @param	index
 	 */
-	function removeItemAt(index:Int):Void;
+	function removeItemAt(index:Int):IUiBase;
 	
 	/**
 	 * 清空显示项

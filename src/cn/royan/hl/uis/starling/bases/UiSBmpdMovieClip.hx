@@ -45,7 +45,7 @@ class UiSBmpdMovieClip extends InteractiveUiS, implements IUiItemPlayBase
 		
 		setSize(Std.int(bgTextures[0].frame != null ? bgTextures[0].frame.width : bgTextures[0].width ), 
 				Std.int(bgTextures[0].frame != null ? bgTextures[0].frame.height : bgTextures[0].height ));
-				
+		
 		currentFrame = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), [0x00000], [0], 1)));
 		if ( bgTextures[current - 1] != null ) {
 			currentFrame.texture = bgTextures[status];
