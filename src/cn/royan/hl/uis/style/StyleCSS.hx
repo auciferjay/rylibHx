@@ -31,11 +31,10 @@ class StyleCSS
 			var name:String = value.substring(position, start);
 			var property:String = value.substring(start + 1, end);
 			
-			Reflect.setField(styles, name, new Style(css, property));
-			
+			SystemUtils.print(name + " {", PrintConst.UIS);
+			Reflect.setField(styles, name, new Style(this, property));
+			SystemUtils.print("}", PrintConst.UIS);
 			position = end + 1;
-			
-			SystemUtils.print(name + ":" + property, PrintConst.UIS);
 		}
 	}
 	

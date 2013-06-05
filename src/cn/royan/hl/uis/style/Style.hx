@@ -8,11 +8,11 @@ import cn.royan.hl.utils.SystemUtils;
  */
 class Style implements Dynamic
 {
-	var css:String;
+	var document:StyleCSS;
 	
-	public function new(name:String, property:String) 
+	public function new(name:StyleCSS, property:String) 
 	{
-		css = name;
+		document = name;
 		
 		parseAtlasCss(property);
 	}
@@ -27,11 +27,11 @@ class Style implements Dynamic
 			var value:String = property.substring(start + 1, end);
 			
 			if ( name == "@extends" ) {
-				copyFrom(StyleManager.getCSS(css).getStyle(value));
 				SystemUtils.print("copyFrom:" + value, PrintConst.UIS);
+				copyFrom(document.getStyle(value));
 			}else {
-				Reflect.setField(this, name, value);
 				SystemUtils.print(name + ":" + value, PrintConst.UIS);
+				Reflect.setField(this, name, value);
 			}
 			
 			position = end + 1;
@@ -41,8 +41,10 @@ class Style implements Dynamic
 	public function copyFrom(source:Style):Void
 	{
 		for ( field in Reflect.fields(source) ) {
-			if ( !Reflect.isFunction( Reflect.field(source, field) ) )
+			if ( !Reflect.isFunction( Reflect.field(source, field) ) ) {
 				Reflect.setField( this, field, Reflect.field(source, field) );
+				SystemUtils.print(field + ":" + Reflect.field(source, field), PrintConst.UIS);
+			}
 		}
 	}
 }
