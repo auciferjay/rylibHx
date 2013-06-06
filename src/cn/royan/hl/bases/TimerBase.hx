@@ -76,7 +76,11 @@ class TimerBase implements IDisposeBase
 	public function excute():Void
 	{
 		jumped++;
-
+		if ( loopLimit != 0 && jumped > loopLimit ) {
+			stop();
+			return;
+		}
+		
 		current = delay;
 		callFun();
 	}
@@ -89,9 +93,6 @@ class TimerBase implements IDisposeBase
 
 		last = Std.int( Timer.stamp() * 1000 );
 		var total:Int = Std.int( (last - begin) / delay );
-		if ( loopLimit != 0 && total >= loopLimit ) {
-			stop();
-		}
 		return total - jumped;
 	}
 	

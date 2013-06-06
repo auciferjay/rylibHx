@@ -16,22 +16,15 @@ class UiSWindow extends UiSContainer
 		
 		super(texture);
 		
+		header.setSize(getRange().width, header.getRange().height);
 		header.setCallbacks( { move:moveHandler } );
+		header.buttonMode = false;
 		addItem(header);
 	}
 	
-	override public function setSize(w:Float, h:Float):Void 
+	public function setHeaderHeight(value:Int):Void
 	{
-		super.setSize(w, h);
-		
-		header.setSize(w, header.getRange().height);
-	}
-	
-	override public function setScale(value:Float):Void 
-	{
-		super.setScale(value);
-		
-		header.setScale(value);
+		header.setSize(getRange().width, value);
 	}
 	
 	function moveHandler(obj:UiSLabelButton, touch:Touch):Void

@@ -8,8 +8,6 @@ import cn.royan.hl.utils.BitmapDataUtils;
 import cn.royan.hl.utils.SystemUtils;
 
 import flash.geom.Rectangle;
-import flash.ui.Mouse;
-import flash.ui.MouseCursor;
 
 import starling.display.Image;
 import starling.events.Event;
@@ -33,6 +31,8 @@ class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 		super();
 		
 		bgTextures = [];
+		
+		buttonMode = true;
 		
 		setMouseRender(true);
 		
@@ -61,18 +61,6 @@ class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 	public function setInGroup(value:Bool):Void
 	{
 		isInGroup = value;
-	}
-	
-	override private function mouseOverHandler(touch:Touch):Void 
-	{
-		super.mouseOverHandler(touch);
-		Mouse.cursor = MouseCursor.BUTTON;
-	}
-	
-	override private function mouseOutHandler():Void 
-	{
-		super.mouseOutHandler();
-		Mouse.cursor = MouseCursor.AUTO;
 	}
 	
 	//Public methods

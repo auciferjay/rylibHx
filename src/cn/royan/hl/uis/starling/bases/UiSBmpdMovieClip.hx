@@ -80,7 +80,9 @@ class UiSBmpdMovieClip extends InteractiveUiS, implements IUiItemPlayBase
 		loop = false;
 		current = frame;
 		
-		currentFrame.texture = bgTextures[current - 1];
+		if ( bgTextures[current - 1] != null ) {
+			currentFrame.texture = bgTextures[current - 1];
+		}
 		currentFrame.scaleX = currentFrame.scaleY = getScale();
 		
 		timer.stop();
@@ -96,7 +98,9 @@ class UiSBmpdMovieClip extends InteractiveUiS, implements IUiItemPlayBase
 		current = from;
 		toFrame = to;
 		
-		currentFrame.texture = bgTextures[current - 1];
+		if ( bgTextures[current - 1] != null ) {
+			currentFrame.texture = bgTextures[current - 1];
+		}
 		currentFrame.scaleX = currentFrame.scaleY = getScale();
 		
 		timer.start();
@@ -147,7 +151,9 @@ class UiSBmpdMovieClip extends InteractiveUiS, implements IUiItemPlayBase
 			}
 		}
 		
-		currentFrame.texture = bgTextures[current - 1];
+		if ( bgTextures[current - 1] != null ) {
+			currentFrame.texture = bgTextures[current - 1];
+		}
 		currentFrame.scaleX = currentFrame.scaleY = getScale();
 		
 		if( current == toFrame && !loop ){

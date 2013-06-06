@@ -10,6 +10,8 @@ import cn.royan.hl.utils.BitmapDataUtils;
 import cn.royan.hl.utils.SystemUtils;
 
 import flash.geom.Rectangle;
+import flash.ui.Mouse;
+import flash.ui.MouseCursor;
 import flash.display.BitmapData;
 import flash.events.EventDispatcher;
 
@@ -62,6 +64,7 @@ class InteractiveUiS extends Sprite, implements IUiBase
 	var evtListenerDirectory:Array<Dynamic>;
 
 	public var graphics:Image;
+	public var buttonMode:Bool;
 	
 	//Constructor
 	public function new(texture:Texture = null)
@@ -306,9 +309,11 @@ class InteractiveUiS extends Sprite, implements IUiBase
 	{
         if ( !mouseEnabled ) return;
 		
-		if (evt.getTouch(this, TouchPhase.HOVER) != null) {
+		if ( evt.getTouch(this, TouchPhase.HOVER) != null/* && 
+			!bounds.contains(evt.getTouch(this, TouchPhase.HOVER).previousGlobalX, evt.getTouch(this, TouchPhase.HOVER).previousGlobalY) &&
+			bounds.contains(evt.getTouch(this, TouchPhase.HOVER).globalX, evt.getTouch(this, TouchPhase.HOVER).globalY)*/) {
 			mouseOverHandler(evt.getTouch(this, TouchPhase.HOVER));
-        } else {
+        } else if (	evt.getTouch(this, TouchPhase.HOVER) == null ){
 			mouseOutHandler();
         }
 		
@@ -333,6 +338,9 @@ class InteractiveUiS extends Sprite, implements IUiBase
 		if ( mouseEnabled ) status = selected?UiConst.INTERACTIVE_STATUS_SELECTED:UiConst.INTERACTIVE_STATUS_OVER;
 		if ( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.over != null ) callbacks.over(this, touch);
+		
+		if ( buttonMode )
+			Mouse.cursor = MouseCursor.BUTTON;
 	}
 	
 	function mouseOutHandler():Void
@@ -341,6 +349,8 @@ class InteractiveUiS extends Sprite, implements IUiBase
 		if ( mouseEnabled ) status = selected?UiConst.INTERACTIVE_STATUS_SELECTED:UiConst.INTERACTIVE_STATUS_NORMAL;
 		if ( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.out != null ) callbacks.out(this);
+		
+		Mouse.cursor = MouseCursor.AUTO;
 	}
 	
 	function mouseDownHandler(touch:Touch):Void
