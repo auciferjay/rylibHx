@@ -5,6 +5,7 @@ import cn.royan.hl.utils.SystemUtils;
 
 /**
  * ...
+ * 对象池类
  * @author RoYan
  */
 class PoolMap 
@@ -35,7 +36,13 @@ class PoolMap
 		}
 		return __weakMap.getValue(waterDrop.key);
 	}
-		
+	
+	/**
+	 * 获取类实例
+	 * @param	type			类
+	 * @param	?parameters		带入参数
+	 * @return
+	 */
 	public static function getInstanceByType( type:Class<Dynamic>, ?parameters:Array<Dynamic>):Dynamic
 	{
 		SystemUtils.print(type+":"+parameters, PrintConst.BASES);
@@ -53,7 +60,12 @@ class PoolMap
 		}
 		return null;
 	}
-		
+	
+	/**
+	 * 销毁对象
+	 * @param	object		待销毁对象
+	 * @param	type		对象类型
+	 */
 	public static function disposeInstance( object:Dynamic, type:Class<Dynamic> = null ):Void
 	{
 		SystemUtils.print(object+":"+type, PrintConst.BASES);

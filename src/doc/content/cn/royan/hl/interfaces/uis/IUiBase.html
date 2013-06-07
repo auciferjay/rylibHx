@@ -1,0 +1,32 @@
+<html><body><a href="#" onclick="javascript:history.back(-1); return false" class="index">Back</a> | <a href="../../../../../../index.html" class="index">Index</a><div class="classname"><span class="kwd">interface </span>cn.royan.hl.interfaces.uis.IUiBase</div><div class="implements">implements <a href="../../../../../cn/royan/hl/interfaces/IDisposeBase.html" class="type">cn.royan.hl.interfaces.IDisposeBase</a></div><div class="classdoc"> ...
+  基础显示接口，所有显示类继承此接口，继承自可销毁接口
+  <p>IUiBase->IDisposeBase</p>
+  @author RoYan</div><dl><dt><span class="kwd">function </span>draw() : <a href="../../../../../Void.html" class="type">Void</a></dt><dd> 画布刷新</dd><dt><span class="kwd">function </span>getAlphas() : <a href="../../../../../Array.html" class="type">Array</a>&lt;<a href="../../../../../Dynamic.html" class="type">Dynamic</a>&gt;</dt><dd> 获取背景透明度
+	  @return <code>1, .5, 0</code>/<code>[1, .5, 0],[1, .5, 0]</code></dd><dt><span class="kwd">function </span>getColors() : <a href="../../../../../Array.html" class="type">Array</a>&lt;<a href="../../../../../Dynamic.html" class="type">Dynamic</a>&gt;</dt><dd> 获取背景颜色
+	  @return <code>0xFFFFFF, 0xFFFF00, 0xFF0000</code>/<code>[0xFFFFFF, 0xFFFF00, 0xFF0000],[0xFFFFFF, 0xFFFF00, 0xFF0000]</code></dd><dt><span class="kwd">function </span>getDefaultTexture() : <a href="../../../../../Dynamic.html" class="type">Dynamic</a></dt><dd> 获取默认材质
+	  @return Sparrow/Texture(Starling)</dd><dt><span class="kwd">function </span>getDispatcher() : <a href="../../../../../flash/events/EventDispatcher.html" class="type">flash.events.EventDispatcher</a></dt><dd> 获取事件发送者
+	  @return</dd><dt><span class="kwd">function </span>getExclude() : <a href="../../../../../Array.html" class="type">Array</a>&lt;<a href="../../../../../String.html" class="type">String</a>&gt;</dt><dd> 获取容器状态对应隐藏列表
+	  @return</dd><dt><span class="kwd">function </span>getInclude() : <a href="../../../../../Array.html" class="type">Array</a>&lt;<a href="../../../../../String.html" class="type">String</a>&gt;</dt><dd> 获取容器状态对应显示列表
+	  @return</dd><dt><span class="kwd">function </span>getRange() : <a href="../../../../../cn/royan/hl/geom/Range.html" class="type">cn.royan.hl.geom.Range</a></dt><dd> 获取范围
+	  @return	{width:..., height:..., x:..., y:...}</dd><dt><span class="kwd">function </span>getScale() : <a href="../../../../../Float.html" class="type">Float</a></dt><dd> 获取缩放比列
+	  @return</dd><dt><span class="kwd">function </span>getTexture() : <a href="../../../../../Dynamic.html" class="type">Dynamic</a></dt><dd> 获取当前材质
+	  @return</dd><dt><span class="kwd">function </span>setBorder(thick : <a href="../../../../../Int.html" class="type">Int</a>, color : <a href="../../../../../Int.html" class="type">Int</a>, alpha : <a href="../../../../../Float.html" class="type">Float</a>, ?rx : <a href="../../../../../Int.html" class="type">Int</a>, ?ry : <a href="../../../../../Int.html" class="type">Int</a>) : <a href="../../../../../Void.html" class="type">Void</a></dt><dd> 设置边框样式
+	  @param	thick 	粗细度
+	  @param	color 	颜色值
+	  @param	alpha 	透明度
+	  @param	rx		x轴半径
+	  @param	ry		y轴半径</dd><dt><span class="kwd">function </span>setCallbacks(value : <a href="../../../../../Dynamic.html" class="type">Dynamic</a>) : <a href="../../../../../Void.html" class="type">Void</a></dt><dd> 设置毁掉函数
+	  @param	value {click:..., up:..., down:..., over:..., out:...}</dd><dt><span class="kwd">function </span>setColorsAndAplhas(color : <a href="../../../../../Array.html" class="type">Array</a>&lt;<a href="../../../../../Dynamic.html" class="type">Dynamic</a>&gt;, alpha : <a href="../../../../../Array.html" class="type">Array</a>&lt;<a href="../../../../../Dynamic.html" class="type">Dynamic</a>&gt;) : <a href="../../../../../Void.html" class="type">Void</a></dt><dd> 设置背景颜色以及对应透明度
+	  @param	color 	<code>0xFFFFFF, 0xFFFF00, 0xFF0000</code>/<code>[0xFFFFFF, 0xFFFF00, 0xFF0000],[0xFFFFFF, 0xFFFF00, 0xFF0000]</code>
+	  @param	alpha 	<code>1, .5, 0</code>/<code>[1, .5, 0],[1, .5, 0]</code></dd><dt><span class="kwd">function </span>setExclude(args : <a href="../../../../../Array.html" class="type">Array</a>&lt;<a href="../../../../../String.html" class="type">String</a>&gt;) : <a href="../../../../../Void.html" class="type">Void</a></dt><dd> 设置容器状态对应隐藏列表
+	  @param	args</dd><dt><span class="kwd">function </span>setInclude(args : <a href="../../../../../Array.html" class="type">Array</a>&lt;<a href="../../../../../String.html" class="type">String</a>&gt;) : <a href="../../../../../Void.html" class="type">Void</a></dt><dd> 设置容器状态对应显示列表
+	  @param	args</dd><dt><span class="kwd">function </span>setPosition(cX : <a href="../../../../../Float.html" class="type">Float</a>, cY : <a href="../../../../../Float.html" class="type">Float</a>) : <a href="../../../../../Void.html" class="type">Void</a></dt><dd> 设置位置
+	  @param	cX
+	  @param	cY</dd><dt><span class="kwd">function </span>setRange(value : <a href="../../../../../cn/royan/hl/geom/Range.html" class="type">cn.royan.hl.geom.Range</a>) : <a href="../../../../../Void.html" class="type">Void</a></dt><dd> 设置范围
+	  @param	value	{width:..., height:..., x:..., y:...}</dd><dt><span class="kwd">function </span>setScale(value : <a href="../../../../../Float.html" class="type">Float</a>) : <a href="../../../../../Void.html" class="type">Void</a></dt><dd> 设置缩放比例
+	  @param	value</dd><dt><span class="kwd">function </span>setSize(cWidth : <a href="../../../../../Float.html" class="type">Float</a>, cHeight : <a href="../../../../../Float.html" class="type">Float</a>) : <a href="../../../../../Void.html" class="type">Void</a></dt><dd> 设置尺寸
+	  @param	cWidth
+	  @param	cHeight</dd><dt><span class="kwd">function </span>setStyle(value : <a href="../../../../../cn/royan/hl/uis/style/Style.html" class="type">cn.royan.hl.uis.style.Style</a>) : <a href="../../../../../Void.html" class="type">Void</a></dt><dd> 设置样式名称
+	  @param 	value</dd><dt><span class="kwd">function </span>setTexture(texture : <a href="../../../../../Dynamic.html" class="type">Dynamic</a>, ?frames : <a href="../../../../../Int.html" class="type">Int</a>) : <a href="../../../../../Void.html" class="type">Void</a></dt><dd> 设置材质
+	  @param	texture		Sparrow/Texture(Starling)
+	  @param	frames</dd></dl><a href="#" onclick="javascript:history.back(-1); return false" class="index">Back</a> | <a href="../../../../../../index.html" class="index">Index</a></body></html>

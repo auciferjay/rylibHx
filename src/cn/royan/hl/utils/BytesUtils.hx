@@ -4,11 +4,16 @@ import flash.utils.ByteArray;
 
 /**
  * ...
+ * 数据工具类
  * @author RoYan
  */
 class BytesUtils 
 {
-
+	/**
+	 * 数据类型
+	 * @param	bytes
+	 * @return
+	 */
 	public static function getType(bytes:ByteArray):String
 	{
 		if( isPNG(bytes) ){
@@ -38,6 +43,11 @@ class BytesUtils
 		return "Other";
 	}
 	
+	/**
+	 * 是否为PNG
+	 * @param	bytes
+	 * @return
+	 */
 	public static function isPNG(bytes:ByteArray):Bool
 	{
 		bytes.position = 0;
@@ -65,6 +75,11 @@ class BytesUtils
 		return true;
 	}
 	
+	/**
+	 * 是否为JPEG
+	 * @param	bytes
+	 * @return
+	 */
 	public static function isJPEG(bytes:ByteArray):Bool
 	{
 		bytes.position = 0;
@@ -104,6 +119,11 @@ class BytesUtils
 		return true;
 	}
 	
+	/**
+	 * 是否为SWF
+	 * @param	bytes
+	 * @return
+	 */
 	public static function isSWF(bytes:ByteArray):Bool
 	{
 		bytes.position = 0;
@@ -112,6 +132,11 @@ class BytesUtils
 		return header == "CWS" || header == "FWS";
 	}
 	
+	/**
+	 * 是否为XML
+	 * @param	bytes
+	 * @return
+	 */
 	public static function isXML(bytes:ByteArray):Bool
 	{
 		bytes.position = 0;
@@ -120,6 +145,11 @@ class BytesUtils
 		return header == "<?xml";
 	}
 	
+	/**
+	 * 是否为GIF
+	 * @param	bytes
+	 * @return
+	 */
 	public static function isGIF(bytes:ByteArray):Bool
 	{
 		if ( bytes.readUnsignedByte() != 0x47 ) {
@@ -149,6 +179,11 @@ class BytesUtils
 		return true;
 	}
 	
+	/**
+	 * 是否BMP
+	 * @param	bytes
+	 * @return
+	 */
 	public static function isBMP(bytes:ByteArray):Bool
 	{
 		if ( bytes.readUnsignedByte() != 0x42 ) {
@@ -163,6 +198,11 @@ class BytesUtils
 		return true;
 	}
 	
+	/**
+	 * 是否为FLV
+	 * @param	bytes
+	 * @return
+	 */
 	public static function isFLV(bytes:ByteArray):Bool
 	{
 		bytes.position = 0;
@@ -171,6 +211,11 @@ class BytesUtils
 		return header == "FLV";
 	}
 	
+	/**
+	 * 是否为MP3
+	 * @param	bytes
+	 * @return
+	 */
 	public static function isMP3(bytes:ByteArray):Bool
 	{
 		bytes.position = 0;
@@ -179,6 +224,11 @@ class BytesUtils
 		return header == "ID3";
 	}
 	
+	/**
+	 * 是否进行了编码
+	 * @param	bytes
+	 * @return
+	 */
 	public static function isEncrypt(bytes:ByteArray):Bool
 	{
 		bytes.position = 0;
@@ -193,6 +243,12 @@ class BytesUtils
 		return isEnc;
 	}
 	
+	/**
+	 * 进行解码
+	 * @param	bytes
+	 * @param	key
+	 * @return
+	 */
 	public static function simpleDecode(bytes:ByteArray, key:String):ByteArray
 	{
 		if (!isEncrypt(bytes)) {

@@ -64,7 +64,12 @@ class TakeService extends DispatcherBase, implements IServiceBase
 				}
 			}
 	}
-		
+	
+	/**
+	 * 设置请求
+	 * @param	url	
+	 * @param	extra
+	 */
 	public function sendRequest(url:String='', extra:Dynamic=null):Void
 	{
 		SystemUtils.print(url+":"+extra, PrintConst.SERVICES);
@@ -72,16 +77,10 @@ class TakeService extends DispatcherBase, implements IServiceBase
 		if( urlvariable != null ) urlrequest.data = urlvariable;
 		urlrequest.method = extra == URLRequestMethod.POST?extra:URLRequestMethod.GET;
 	}
-		
-	/**
-	 * {done:Function,doing:Function,error:Function}
-	 * 
-	 */
-	public function setCallbacks(value:Dynamic):Void
-	{
-		callbacks = value;
-	}
 	
+	/**
+	 * 开始请求
+	 */
 	public function connect():Void
 	{
 		close();
@@ -134,6 +133,9 @@ class TakeService extends DispatcherBase, implements IServiceBase
 		#end
 	}
 	
+	/**
+	 * 关闭请求
+	 */
 	public function close():Void
 	{
 		if ( getIsServicing() ) {
@@ -142,7 +144,40 @@ class TakeService extends DispatcherBase, implements IServiceBase
 		
 		isLoading = false;
 	}
+		
+	/**
+	 * 设置毁掉函数
+	 * @param	value	{done:..., doing:..., create:..., error:..., destroy:...}
+	 */
+	public function setCallbacks(value:Dynamic):Void
+	{
+		callbacks = value;
+	}
 	
+	/**
+	 * 获取回应值
+	 * @return
+	 */
+	public function getData():Dynamic
+	{
+		if (BytesUtils.isSWF(BytesUtils.simpleDecode(serviceData, "gameuzgame"))) {
+			return swfLoader;
+		}
+		return weakMap.getValue(urlrequest.url);//serviceData;
+	}
+	
+	/**
+	 * 获取交互状态
+	 * @return
+	 */
+	public function getIsServicing():Bool
+	{
+		return urlstream != null && isLoading;
+	}
+	
+	/**
+	 * 销毁
+	 */
 	public function dispose():Void
 	{
 		if ( urlstream != null ) {
@@ -162,19 +197,6 @@ class TakeService extends DispatcherBase, implements IServiceBase
 		isLoading = false;
 		
 		removeAllEventListeners();
-	}
-	
-	public function getData():Dynamic
-	{
-		//if (BytesUtils.isSWF(BytesUtils.simpleDecode(serviceData, "gameuzgame"))) {
-		//	return swfLoader;
-		//}
-		return weakMap.getValue(urlrequest.url);//serviceData;
-	}
-	
-	public function getIsServicing():Bool
-	{
-		return urlstream != null && isLoading;
 	}
 	
 	function onComplete(evt:Event):Void

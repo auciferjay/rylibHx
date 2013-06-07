@@ -75,7 +75,12 @@ class SoktService extends DispatcherBase, implements IServiceBase
 		headerSize = 1;
 		#end
 	}
-
+	
+	/**
+	 * 设置请求，未连接时(url:port)，连接后(null, bytes)
+	 * @param	url	
+	 * @param	extra
+	 */
 	public function sendRequest(url:String='', extra:Dynamic=null):Void
 	{
 		SystemUtils.print(url, PrintConst.SERVICES);
@@ -94,11 +99,9 @@ class SoktService extends DispatcherBase, implements IServiceBase
 		}
 	}
 
-	public function setCallbacks(value:Dynamic):Void
-	{
-		callbacks = value;
-	}
-
+	/**
+	 * 开始请求
+	 */
 	public function connect():Void
 	{
 		#if !js
@@ -135,21 +138,44 @@ class SoktService extends DispatcherBase, implements IServiceBase
 		#end
 	}
 
+	/**
+	 * 关闭请求
+	 */
 	public function close():Void
 	{
 		socket.close();
 	}
 
+	/**
+	 * 设置毁掉函数
+	 * @param	value	{done:..., doing:..., create:..., error:..., destroy:...}
+	 */
+	public function setCallbacks(value:Dynamic):Void
+	{
+		callbacks = value;
+	}
+	
+	/**
+	 * 获取回应值
+	 * @return
+	 */
 	public function getData():Dynamic
 	{
 		return null;
 	}
 
+	/**
+	 * 获取交互状态
+	 * @return
+	 */
 	public function getIsServicing():Bool
 	{
 		return isServicing;
 	}
 
+	/**
+	 * 销毁
+	 */
 	public function dispose():Void
 	{
 		if( getIsServicing() ) socket.close();

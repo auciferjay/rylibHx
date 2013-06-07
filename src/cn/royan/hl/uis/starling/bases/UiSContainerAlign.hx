@@ -11,12 +11,12 @@ import starling.textures.Texture;
  * ...
  * @author RoYan
  */
-typedef ContainerGap = {
+private typedef ContainerGap = {
 	var x:Int;
 	var y:Int;
 }
 
-typedef ContainerMargin = {
+private typedef ContainerMargin = {
 	var top:Int;
 	var bottom:Int;
 	var left:Int;

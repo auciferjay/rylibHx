@@ -9,10 +9,25 @@ import flash.geom.Matrix;
 
 /**
  * ...
+ * 图像工具类
  * @author RoYan
  */
 class BitmapDataUtils
 {
+	/**
+	 * 创建图像
+	 * @param	width
+	 * @param	height
+	 * @param	colors
+	 * @param	alphas
+	 * @param	length
+	 * @param	border
+	 * @param	thick
+	 * @param	alpha
+	 * @param	rx
+	 * @param	ry
+	 * @return
+	 */
 	static public function fromColors(width:Int, height:Int, colors:Array<Dynamic>, alphas:Array<Dynamic>, length:Int = 1, border:Int = 0x000000, thick:Int = 0, alpha:Float = 0.0, rx:Int = 0, ry:Int = 0):BitmapData
 	{
 		SystemUtils.print(width+":"+height+":"+colors+":"+alphas+","+length, PrintConst.UTILS);
@@ -75,6 +90,11 @@ class BitmapDataUtils
 		return bitmapdata;
 	}
 	
+	/**
+	 * 获取可视对象的图像
+	 * @param	displayObject
+	 * @return
+	 */
 	static public function fromDisplayObject(displayObject:DisplayObject):BitmapData
 	{
 		var bitmapdata:BitmapData = new BitmapData(Std.int(displayObject.width), Std.int(displayObject.height), true, #if neko {rgb:0,a:0} #else 0x00000000 #end);

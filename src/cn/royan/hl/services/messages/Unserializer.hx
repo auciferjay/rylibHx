@@ -5,6 +5,7 @@ import haxe.io.Bytes;
 
 /**
  * ...
+ * 反序列化
  * @author RoYan
  */
 class Unserializer 
@@ -12,7 +13,7 @@ class Unserializer
 	public function new() {
 	}
 	/**
-	 * 
+	 * 对数据进行反序列化
 	 * @param	v
 	 * 
 	 * TNull 	0

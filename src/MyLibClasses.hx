@@ -69,7 +69,7 @@ import flash.Lib;
 class MyLibClasses 
 {
 
-	public function new() 
+	static public function main() 
 	{
 		
 	}

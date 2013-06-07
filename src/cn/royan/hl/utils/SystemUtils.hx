@@ -14,6 +14,7 @@ import flash.Lib;
 
 /**
  * ...
+ * 系统工具类
  * @author RoYan
  */
 class SystemUtils 
@@ -23,6 +24,12 @@ class SystemUtils
 	
 	static public var showDebug:Int = -1;
 	
+	/**
+	 * 打印调试代码
+	 * @param	v
+	 * @param	level
+	 * @param	?info
+	 */
 	static public function print(v:Dynamic, level:Int=0,?info:PosInfos):Void
 	{
 		if ( showDebug == level || showDebug == 0 || level == 0) {
@@ -35,6 +42,12 @@ class SystemUtils
 		}
 	}
 	
+	/**
+	 * 查找索引
+	 * @param	array
+	 * @param	value
+	 * @return
+	 */
 	static public function arrayIndexOf(array:Array<Dynamic>, value:Dynamic):Int
 	{
 		for ( i in 0...array.length ) {
@@ -44,6 +57,12 @@ class SystemUtils
 		return -1;
 	}
 	
+	/**
+	 * 替换
+	 * @param	orgin
+	 * @param	args
+	 * @return
+	 */
 	static public function replace(orgin:String, args:Array<Dynamic>):String
 	{
 		for( i in 0...args.length ){
@@ -51,7 +70,11 @@ class SystemUtils
 		}
 		return orgin;
 	}
-		
+	
+	/**
+	 * 创建唯一值
+	 * @return
+	 */
 	static public function createUniqueID():String
 	{
 		return random(8) + '-' + random(4) + '-' + random(4) + '-' + random(4) + '-' + random(12);
@@ -72,7 +95,12 @@ class SystemUtils
 		
 		return uid.toString();
 	}
-		
+	
+	/**
+	 * 读取对象
+	 * @param	object
+	 * @param	index
+	 */
 	public static function readObject(object:Dynamic, index:Int = 0):Void
 	{
 		for ( prop in Reflect.fields(object) ) {
@@ -88,6 +116,10 @@ class SystemUtils
 	}
 	#if flash
 	static var __loaderContext:LoaderContext;
+	/**
+	 * 获取加载配置
+	 * @return
+	 */
 	public static function getLoaderContext():LoaderContext
 	{
 		if ( __loaderContext == null ) {
@@ -103,6 +135,12 @@ class SystemUtils
 		return __loaderContext;
 	}
 	
+	/**
+	 * 创建对象
+	 * @param	className
+	 * @param	?parameters
+	 * @return
+	 */
 	public static function getInstanceByClassName(className:String, ?parameters:Array<Dynamic>):Dynamic
 	{
 		var InstanceClass:Class<Dynamic> = Type.resolveClass(className);
@@ -112,11 +150,18 @@ class SystemUtils
 		return PoolMap.getInstanceByType(InstanceClass);
 	}
 	
+	/**
+	 * 复制
+	 * @param	value
+	 */
 	public static function copyToClipboard(value:String):Void
 	{
 		flash.system.System.setClipboard(value);
 	}
 	
+	/**
+	 * 内存回收
+	 */
 	public static function gc():Void
 	{
 		try

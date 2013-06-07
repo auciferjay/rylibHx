@@ -11,6 +11,7 @@ import flash.utils.TypedDictionary;
 
 /**
  * ...
+ * 弱引用池
  * @author RoYan
  */
 class WeakMap
@@ -25,6 +26,10 @@ class WeakMap
 	var keys:Array<String>;
 	var length:Int;
 
+	/**
+	 * 获取单例
+	 * @return
+	 */
 	public static function getInstance():WeakMap
 	{
 		if ( __instance == null ) __instance = new WeakMap();
@@ -41,17 +46,29 @@ class WeakMap
 		keys = [];
 		length = 0;
 	}
-
+	
+	/**
+	 * 获取键值数量
+	 * @return
+	 */
 	public function getLength():Int
 	{
 		return length;
 	}
-
+	
+	/**
+	 * 获取键值列表
+	 * @return
+	 */
 	public function getAllKeys():Array<String>
 	{
 		return keys;
 	}
 
+	/**
+	 * 获取对象列表
+	 * @return
+	 */
 	public function getValues():Array<Dynamic>
 	{
 		var result:Array<Dynamic> = [];
@@ -60,7 +77,12 @@ class WeakMap
 		}
 		return result;
 	}
-
+	
+	/**
+	 * 判断是否包含对象
+	 * @param	value
+	 * @return
+	 */
 	public function containValue(value:Dynamic):Bool
 	{
 		for (item in map) {
@@ -71,6 +93,11 @@ class WeakMap
 		return false;
 	}
 
+	/**
+	 * 判断是否包含键值
+	 * @param	key
+	 * @return
+	 */
 	public function containKey(key:String):Bool
 	{
 		for( item in keys) {
@@ -81,6 +108,11 @@ class WeakMap
 		return false;
 	}
 
+	/**
+	 * 设置对象
+	 * @param	key		键值
+	 * @param	value	对象
+	 */
 	public function set(key:String, value:Dynamic):Void
 	{
 		//如果键存在，删除键
@@ -118,6 +150,11 @@ class WeakMap
 			keys.push(key);
 	}
 
+	/**
+	 * 获取对象
+	 * @param	key
+	 * @return
+	 */
 	public function getValue(key:String):Dynamic
 	{
 		// i 为值
@@ -140,6 +177,11 @@ class WeakMap
 		return null;
 	}
 
+	/**
+	 * 获取对象对应的所有键值
+	 * @param	value
+	 * @return
+	 */
 	public function getKeys(value:Dynamic):Array<Dynamic>
 	{
 		#if flash
@@ -149,6 +191,10 @@ class WeakMap
 		#end
 	}
 
+	/**
+	 * 清楚键值
+	 * @param	key
+	 */
 	public function clear(key:String):Void
 	{
 		var value:Dynamic = getValue(key);

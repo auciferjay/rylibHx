@@ -17,6 +17,7 @@ import haxe.Timer;
 
 /**
  * ...
+ * 资源导入类
  * @author RoYan
  */
 class ResourceLoader extends DispatcherBase, implements IDisposeBase
@@ -39,6 +40,14 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 		var root:DisplayObjectContainer;
 		var loader:UiNLoader;
 		
+		/**
+		 * 创建单例
+		 * @param	key			配置文件名
+		 * @param	container	容器
+		 * @param	version		版本
+		 * @param	type		配置文件类型
+		 * @return
+		 */
 		public static function getInstance(key:String, container:DisplayObjectContainer, version:String="1.0", type:Int = ConfigFile.CONFIG_FILE_TYPE_XML):ResourceLoader
 		{
 			if( Reflect.field(__loaderMap,key) == null )
@@ -75,6 +84,9 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 			#end
 		}
 		
+		/**
+		 * 开始加载
+		 */
 		public function load():Void
 		{
 			currentPath = moduleKey + ConfigFile.getExtension(configType);
@@ -82,37 +94,63 @@ class ResourceLoader extends DispatcherBase, implements IDisposeBase
 			takeService.connect();
 		}
 		
+		/**
+		 * 销毁
+		 */
 		public function dispose():Void
 		{
 			PoolMap.disposeInstance(configFile);
 			callbacks = null;
 		}
 		
+		/**
+		 * 设置配置文件类型
+		 * @param	value
+		 */
 		public function setConfigType(value:Int):Void
 		{
 			configType = value;
 		}
 		
+		/**
+		 * 获取配置信息
+		 * @return
+		 */
 		public function getConfigFile():ConfigFile
 		{
 			return configFile;
 		}
 		
+		/**
+		 * 获取资源
+		 * @param	path	资源路径
+		 * @return
+		 */
 		public function getResourceByPath(path:String):Dynamic
 		{
 			return __weakMap.getValue(path + uid);
 		}
 		
+		/**
+		 * 设置回调函数
+		 * @param	value
+		 */
 		public function setCallbacks(value:Dynamic):Void
 		{
 			callbacks = value;
 		}
 		
+		/**
+		 * 额外内容完成
+		 */
 		public function extraComplete():Void
 		{
 			loader.loaderComplete();
 		}
 		
+		/**
+		 * 内部初始化完成（删除加载动画）
+		 */
 		public function containerInitComplete():Void
 		{
 			if( root.contains(loader) ) root.removeChild(loader);

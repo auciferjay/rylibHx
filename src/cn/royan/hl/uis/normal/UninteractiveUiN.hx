@@ -162,9 +162,8 @@ class UninteractiveUiN extends Sprite, implements IUiBase
 	public function setPosition(cx:Float, cy:Float):Void
 	{
 		SystemUtils.print(cx+":"+cy, PrintConst.UIS);
-		
-		positionX = cx;
-		positionY = cy;
+		positionX = cast Math.floor(cx);
+		positionY = cast Math.floor(cy);
 		
 		x = positionX * (Std.is(parent, IUiBase)?getScale():1);
 		y = positionY * (Std.is(parent, IUiBase)?getScale():1);

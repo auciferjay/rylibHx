@@ -2,6 +2,7 @@ package cn.royan.hl.geom;
 
 /**
  * ...
+ * 范围
  * @author RoYan
  */
 typedef Range = {

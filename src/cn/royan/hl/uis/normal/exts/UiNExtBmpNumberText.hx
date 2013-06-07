@@ -42,11 +42,12 @@ class UiNExtBmpNumberText extends UiNContainerAlign
 		var i:Int = str.length;
 		var j:Int = 1;
 		
+		num = value;
+		
 		if ( isAlwaysShow ) {
 			for( i in 0...items.length ){
 				cast(getItemAt(i), UiNBmpdMovieClip).jumpTo(1);
 			}
-			num = value;
 			
 			while( i >= 0 || j <= Math.min(items.length, str.length) ){
 				cast(getItemAt(items.length - j), UiNBmpdMovieClip).visible = true;

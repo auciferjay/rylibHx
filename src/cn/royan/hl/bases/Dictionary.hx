@@ -2,6 +2,7 @@ package cn.royan.hl.bases;
 
 /**
  * ...
+ * Flash环境下为Dictionary，其他环境下为Dynamic<Dynamic>
  * @author RoYan
  */
 #if flash

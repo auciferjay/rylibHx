@@ -3,6 +3,7 @@ package cn.royan.hl.uis.sparrow;
 import cn.royan.hl.bases.Dictionary;
 import cn.royan.hl.interfaces.IDisposeBase;
 import cn.royan.hl.utils.SystemUtils;
+
 import flash.display.BitmapData;
 import flash.geom.Rectangle;
 

@@ -12,6 +12,8 @@ import haxe.io.Input;
 
 /**
  * ...
+ * Socket服务基础信息类，继承与Bytes
+ * <p>SocketServiceMessage->Bytes</p>
  * @author RoYan
  */
 class SocketServiceMessage extends Bytes, implements IServiceMessageBase
@@ -32,12 +34,20 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 		#end
 	}
 
+	/**
+	 * 设置键值
+	 * @param	value
+	 */
 	public function writeMessageType(value:Int):Void
 	{
 		type = value;
 		set(0, type);
 	}
 
+	/**
+	 * 设置信息长度
+	 * @param	value
+	 */
 	public function writeMessageLen(value:Int):Void
 	{
 		len = value;
@@ -54,6 +64,10 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 		set(2, len & 0xFF);
 	}
 
+	/**
+	 * 设置信息数据
+	 * @param	value
+	 */
 	public function writeMessageData(value:BytesData):Void
 	{
 		data = Bytes.ofData(value);
@@ -66,7 +80,11 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 		blit(3, data, 0, len);
 		#end
 	}
-
+	
+	/**
+	 * 从原始数据中获取信息
+	 * @param	input
+	 */
 	public function writeMessageFromBytes(input:Bytes):Void
 	{
 		if ( type == 0 )
@@ -100,7 +118,12 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 			}
 		}
 	}
-
+	
+	/**
+	 * 从原始数据中获取信息
+	 * @param	input
+	 * @return
+	 */
 	static public function fromBytes(input:Bytes):SocketServiceMessage 
 	{
 		var type:Int = input.get(0);
@@ -110,7 +133,11 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 			message.writeMessageFromBytes(input);
 		return message;
 	}
-
+	
+	/**
+	 * 获取键值
+	 * @return
+	 */
 	public function readMessageType():Int
 	{
 		if ( type == 0 )
@@ -118,6 +145,10 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 		return type;
 	}
 
+	/**
+	 * 获取信息长度
+	 * @return
+	 */
 	public function readMessageLen():Int
 	{
 		if ( len == 0 ) 
@@ -125,6 +156,10 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 		return len;
 	}
 
+	/**
+	 * 获取信息数据
+	 * @return
+	 */
 	public function readMessageData():BytesData
 	{
 		if ( data == null )
@@ -132,6 +167,9 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 		return data.getData();
 	}
 
+	/**
+	 * 序列化
+	 */
 	public function serialize():Void
 	{
 		var serializer:Serializer = new Serializer();
@@ -161,6 +199,9 @@ class SocketServiceMessage extends Bytes, implements IServiceMessageBase
 		return fields;
 	}
 
+	/**
+	 * 销毁
+	 */
 	public function dispose():Void
 	{
 		type = 0;

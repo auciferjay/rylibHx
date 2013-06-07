@@ -7,6 +7,7 @@ import Type.ValueType;
 
 /**
  * ...
+ * 序列化
  * @author RoYan
  */
 class Serializer 
@@ -16,8 +17,9 @@ class Serializer
 	{
 		bytesOutput = new BytesOutput();
 	}
+	
 	/**
-	 * 
+	 * 对对象进行序列化
 	 * @param	v
 	 * 
 	 * TNull 	0

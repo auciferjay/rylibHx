@@ -7,6 +7,8 @@ import flash.events.EventDispatcher;
 
 /**
  * ...
+ * 基础事件驱动类，继承于EventDispatcher
+ * <p>DispatcherBase->EventDispatcher</p>
  * @author RoYan
  */
 class DispatcherBase extends EventDispatcher
@@ -14,6 +16,14 @@ class DispatcherBase extends EventDispatcher
 	var evtListenerType:Array<String>;
 	var evtListenerDirectory:Array<Dictionary>;
 	
+	/**
+	 * 添加监听事件
+	 * @param	type
+	 * @param	listener
+	 * @param	useCapture
+	 * @param	priority
+	 * @param	useWeakReference
+	 */
 	override public function addEventListener(type:String, listener:Dynamic->Void, useCapture:Bool=false, priority:Int=0, useWeakReference:Bool=false):Void
 	{
 		SystemUtils.print(type+":"+listener, PrintConst.BASES);
@@ -27,7 +37,13 @@ class DispatcherBase extends EventDispatcher
 		evtListenerType.push( type );
 		super.addEventListener(type, listener, useCapture, priority, useWeakReference);
 	}
-
+	
+	/**
+	 * 移除监听事件
+	 * @param	type
+	 * @param	listener
+	 * @param	useCapture
+	 */
 	override public function removeEventListener(type:String, listener:Dynamic->Void, useCapture:Bool=false):Void
 	{
 		SystemUtils.print(type+":"+listener, PrintConst.BASES);
@@ -51,7 +67,10 @@ class DispatcherBase extends EventDispatcher
 			}
 		}
 	}
-
+	
+	/**
+	 * 删除所有监听事件
+	 */
 	public function removeAllEventListeners():Void
 	{
 		if ( evtListenerType == null || evtListenerType.length == 0)

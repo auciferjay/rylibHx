@@ -9,17 +9,34 @@ import flash.errors.Error;
 
 /**
  * ...
+ * 配置文件类
  * @author RoYan
  */
 class ConfigFile implements IDisposeBase
 {
+	/**
+	 * JSON格式
+	 */
 	static public inline var CONFIG_FILE_TYPE_JSON:Int 	= 0;
+	
+	/**
+	 * XML格式
+	 */
 	static public inline var CONFIG_FILE_TYPE_XML:Int 	= 1;
-	static public inline var CONFIG_FILE_TYPE_TEXT:Int 	= 2;
+	
+	/**
+	 * TXT格式
+	 */
+	static public inline var CONFIG_FILE_TYPE_TXT:Int 	= 2;
 	
 	var type:Int;
 	var configData:Dynamic;
 	
+	/**
+	 * 创建配置文件
+	 * @param	data	配置数据
+	 * @param	type	配置文件格式
+	 */
 	public function new(data:String, type:Int=CONFIG_FILE_TYPE_JSON)
 	{
 		this.type = type;
@@ -31,16 +48,23 @@ class ConfigFile implements IDisposeBase
 				parseJsonToObject(data);
 			case ConfigFile.CONFIG_FILE_TYPE_XML:
 				parseXMLToObject(data);
-			case ConfigFile.CONFIG_FILE_TYPE_TEXT:
+			case ConfigFile.CONFIG_FILE_TYPE_TXT:
 				parseTxtToObject(data);
 		}
 	}
 	
+	/**
+	 * 获取配置信息
+	 * @return
+	 */
 	public function getValue():Dynamic
 	{
 		return configData;
 	}
 	
+	/**
+	 * 销毁
+	 */
 	public function dispose():Void
 	{
 		configData = null;
@@ -97,6 +121,11 @@ class ConfigFile implements IDisposeBase
 		}
 	}
 	
+	/**
+	 * 获取后缀名
+	 * @param	configType
+	 * @return
+	 */
 	static public function getExtension(configType:Int):String
 	{
 		switch( configType ){
@@ -104,7 +133,7 @@ class ConfigFile implements IDisposeBase
 				return ".json";
 			case ConfigFile.CONFIG_FILE_TYPE_XML:
 				return ".xml";
-			case ConfigFile.CONFIG_FILE_TYPE_TEXT:
+			case ConfigFile.CONFIG_FILE_TYPE_TXT:
 				return ".txt";
 		}
 		return ".json";
