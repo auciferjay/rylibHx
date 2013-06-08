@@ -20,8 +20,13 @@ class StyleManager
 	
 	static public function getCSS(type:String):StyleCSS
 	{
+		if (Reflect.field(gameStyles, type) == null) {
+			return null;
+		}
+		
 		if (Reflect.field(gameCSSs, type) == null)
 		{
+			SystemUtils.print(type);
 			Reflect.setField(gameCSSs, type, new StyleCSS( type, Reflect.field(gameStyles, type) ) );
 		}
 		return Reflect.field(gameCSSs, type);

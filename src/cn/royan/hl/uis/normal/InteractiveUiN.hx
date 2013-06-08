@@ -8,6 +8,7 @@ import cn.royan.hl.bases.Dictionary;
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.systems.DeviceCapabilities;
 import cn.royan.hl.uis.sparrow.Sparrow;
+import cn.royan.hl.uis.sparrow.SparrowManager;
 import cn.royan.hl.uis.style.Style;
 import cn.royan.hl.uis.style.StyleManager;
 import cn.royan.hl.utils.BitmapDataUtils;
@@ -46,7 +47,8 @@ class InteractiveUiN extends Sprite, implements IUiBase
 	var isMouseRender:Bool;
 	var status:Int;
 	var selected:Bool;
-	var isOnStage:Bool;
+	
+	var isChanged:Bool;
 	
 	var containerWidth:Float;
 	var containerHeight:Float;
@@ -92,15 +94,32 @@ class InteractiveUiN extends Sprite, implements IUiBase
 			setSize(Std.int(bgTexture.regin.width), Std.int(bgTexture.regin.height));
 		}
 		
-		isOnStage = false;
+		if ( StyleManager.getCSS(UiConst.DEFAULT_CSS) != null ) {
+			setStyle( StyleManager.getCSS(UiConst.DEFAULT_CSS).getStyle("IUiBase") );
+		}
 		
 		addEventListener( Event.ADDED_TO_STAGE, addToStageHandler );
+		addEventListener( Event.RENDER, renderHandler );
+	}
+	
+	function viewChanged():Void
+	{
+		isChanged = true;
+		invalidate();
+	}
+	
+	function invalidate():Void
+	{
+		if ( stage != null ) {
+			stage.invalidate();
+		}
 	}
 	
 	//Public methods
 	public function draw():Void
 	{
-		if ( !isOnStage ) return; 
+		SystemUtils.print(this + ":draw", PrintConst.UIS);
+		//if ( !isOnStage ) return; 
 		graphics.clear();
 		
 		if( containerWidth > 0 && containerHeight > 0 ){
@@ -137,7 +156,7 @@ class InteractiveUiN extends Sprite, implements IUiBase
 		if( containerWidth > 0 && containerHeight > 0 )
 			defaultTexture = getDefaultTexture();
 		
-		draw();
+		viewChanged();
 	}
 	
 	public function getColors():Array<Dynamic>
@@ -175,7 +194,7 @@ class InteractiveUiN extends Sprite, implements IUiBase
 		if( bgTexture == null && bgColors != null && bgAlphas != null )
 			defaultTexture = getDefaultTexture();
 		
-		draw();
+		viewChanged();
 	}
 
 	public function setPosition(cx:Float, cy:Float):Void
@@ -186,6 +205,8 @@ class InteractiveUiN extends Sprite, implements IUiBase
 		
 		x = positionX * (Std.is(parent, IUiBase)?getScale():1);
 		y = positionY * (Std.is(parent, IUiBase)?getScale():1);
+		
+		viewChanged();
 	}
 	
 	public function setRange(value:Range):Void
@@ -204,7 +225,7 @@ class InteractiveUiN extends Sprite, implements IUiBase
 		status = value?UiConst.INTERACTIVE_STATUS_NORMAL:UiConst.INTERACTIVE_STATUS_DISABLE;
 		mouseChildren = value;
 		mouseEnabled = value;
-		draw();
+		viewChanged();
 	}
 	
 	public function getEnabled():Bool
@@ -235,7 +256,7 @@ class InteractiveUiN extends Sprite, implements IUiBase
 		x = positionX * (Std.is(parent, IUiBase)?getScale():1);
 		y = positionY * (Std.is(parent, IUiBase)?getScale():1);
 		
-		draw();
+		viewChanged();
 	}
 	
 	public function getScale():Float
@@ -245,7 +266,17 @@ class InteractiveUiN extends Sprite, implements IUiBase
 	
 	public function setStyle(value:Style):Void
 	{
+		if ( value == null ) return;
 		
+		if ( Reflect.field(value,"background-image") != null && Reflect.field(value,"background-image") != "" ) {
+			bgTexture = SparrowManager.getAtlas(UiConst.DEFAULT_CSS).getSparrow(Reflect.field(value,"background-image"));
+		}
+		
+		setBorder(Reflect.field(value,"border"), Reflect.field(value,"border-color"),
+				  Reflect.field(value,"border-alpha"), Reflect.field(value,"border-radius-x"), Reflect.field(value,"border-radius-y"));
+		setColorsAndAplhas(Reflect.field(value,"background-color"), Reflect.field(value,"background-alpha"));
+		setSize(Std.parseFloat(Reflect.field(value,"width")), Reflect.field(value,"height"));
+		setPosition(Std.parseFloat(Reflect.field(value, "top")), Reflect.field(value, "left"));
 	}
 	
 	public function getDispatcher():EventDispatcher
@@ -350,7 +381,7 @@ class InteractiveUiN extends Sprite, implements IUiBase
 	{
 		SystemUtils.print(evt, PrintConst.UIS);
 		if( mouseEnabled ) status = selected?UiConst.INTERACTIVE_STATUS_SELECTED:UiConst.INTERACTIVE_STATUS_OVER;
-		if( isMouseRender ) draw();
+		if( isMouseRender ) viewChanged();
 		if ( callbacks != null && callbacks.over != null ) callbacks.over(this);
 	}
 	
@@ -358,7 +389,7 @@ class InteractiveUiN extends Sprite, implements IUiBase
 	{
 		SystemUtils.print(evt, PrintConst.UIS);
 		if( mouseEnabled ) status = selected?UiConst.INTERACTIVE_STATUS_SELECTED:UiConst.INTERACTIVE_STATUS_NORMAL;
-		if( isMouseRender ) draw();
+		if( isMouseRender ) viewChanged();
 		if ( callbacks != null && callbacks.out != null ) callbacks.out(this);
 	}
 	
@@ -366,7 +397,7 @@ class InteractiveUiN extends Sprite, implements IUiBase
 	{
 		SystemUtils.print(evt, PrintConst.UIS);
 		if( mouseEnabled ) status = selected?UiConst.INTERACTIVE_STATUS_SELECTED:UiConst.INTERACTIVE_STATUS_DOWN;
-		if( isMouseRender ) draw();
+		if( isMouseRender ) viewChanged();
 		if ( callbacks != null && callbacks.down != null ) callbacks.down(this);
 	}
 	
@@ -374,7 +405,7 @@ class InteractiveUiN extends Sprite, implements IUiBase
 	{
 		SystemUtils.print(evt, PrintConst.UIS);
 		if( mouseEnabled ) status = selected?UiConst.INTERACTIVE_STATUS_SELECTED:UiConst.INTERACTIVE_STATUS_OVER;
-		if( isMouseRender ) draw();
+		if( isMouseRender ) viewChanged();
 		if ( callbacks != null && callbacks.up != null ) callbacks.up(this);
 	}
 	
@@ -399,19 +430,24 @@ class InteractiveUiN extends Sprite, implements IUiBase
 		
 		addEventListener(Event.REMOVED_FROM_STAGE, removeFromStageHandler);
 		
-		isOnStage = true;
-		
-		draw();
+		viewChanged();
+	}
+	
+	function renderHandler(evt:Event):Void
+	{
+		if ( isChanged )
+			draw();
 	}
 	
 	function removeFromStageHandler(evt:Event):Void
 	{
-		isOnStage = false;
+		//isOnStage = false;
 		
 		#if flash
 		removeAllEventListeners();
 		#end
 		
+		addEventListener(Event.RENDER, renderHandler);
 		addEventListener(Event.ADDED_TO_STAGE, addToStageHandler);
 	}
 	//Private methods

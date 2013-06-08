@@ -105,7 +105,7 @@ class UiNScrollPane extends InteractiveUiN, implements IUiScrollPaneBase
 				hScrollBar.setPosition(0, cHeight - 10);
 		}
 		
-		draw();
+		viewChanged();
 	}
 	
 	public function setType(type:Int):Void
@@ -145,7 +145,7 @@ class UiNScrollPane extends InteractiveUiN, implements IUiScrollPaneBase
 				}
 		}
 		
-		draw();
+		viewChanged();
 	}
 	
 	function hChangeHandler(evt:DatasEvent):Void

@@ -54,7 +54,7 @@ class UiNContainerAlign extends UiNContainer, implements IUiContainerAlignBase
 	override public function draw():Void 
 	{
 		super.draw();
-		if ( !isOnStage ) return;
+		//if ( !isOnStage ) return;
 		
 		fillRow();
 		drawRow();

@@ -143,7 +143,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 	//Public methods
 	override public function draw():Void
 	{
-		if ( !isOnStage ) return;
+		//if ( !isOnStage ) return;
 		if ( status < bgTextures.length && currentStatus != null ) {
 			SystemUtils.print(status, PrintConst.UIS);
 
@@ -190,14 +190,14 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 			}
 		}
 		
-		draw();
+		viewChanged();
 	}
 	
 	public function setSelected(value:Bool):Void
 	{
 		selected = value;
 		status = selected?UiConst.INTERACTIVE_STATUS_SELECTED:UiConst.INTERACTIVE_STATUS_NORMAL;
-		draw();
+		viewChanged();
 	}
 	
 	public function getSelected():Bool
@@ -228,7 +228,7 @@ class UiNBmpdButton extends InteractiveUiN, implements IUiItemGroupBase
 			addChildAt(currentStatus, 0);
 		}
 		
-		draw();
+		viewChanged();
 	}
 	
 	override public function dispose():Void

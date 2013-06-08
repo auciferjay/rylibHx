@@ -31,11 +31,33 @@ class Style implements Dynamic
 				copyFrom(document.getStyle(value));
 			}else {
 				SystemUtils.print(name + ":" + value, PrintConst.UIS);
-				Reflect.setField(this, name, value);
+				Reflect.setField(this, name, decode(value));
 			}
 			
 			position = end + 1;
 		}
+	}
+	
+	function decode(str:String):Dynamic
+	{
+		if ( str.charAt(0) == "[" && str.charAt(str.length - 1) == "]" ) {
+			var list:Array<Float> = [];
+			str = str.substring(1, str.length - 1);
+			for ( item in str.split(",") ) {
+				list.push(decode(item));
+			}
+			return list;
+		}
+		
+		if ( str.substr(0, 2) == "0x" ) {
+			return Std.parseInt(str);
+		}
+		
+		if ( str.charAt(0) == "\"" && str.charAt(str.length - 1) == "\"" ) {
+			return str.substring(1, str.length - 1);
+		}
+		
+		return Std.parseFloat(str);
 	}
 	
 	public function copyFrom(source:Style):Void

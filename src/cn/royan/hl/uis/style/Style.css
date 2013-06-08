@@ -3,7 +3,10 @@ IUiBase
     background-color:[0xFFFFFF, 0xFFFF00, 0xFF0000];
 	background-alpha:[1, .5, 0];
 	background-image:"";
-	border:1px 0xFFFFFF 1 10 10;
+	border:1px;
+	border-color:0xFFFFFF;
+	border-alpha:1;
+	border-radius:10px 10px;
 	width:10px;
 	height:10px;
 	top:0px;

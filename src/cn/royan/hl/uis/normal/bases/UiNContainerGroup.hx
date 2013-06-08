@@ -50,10 +50,11 @@ class UiNContainerGroup extends UiNContainerAlign, implements IUiContainerGroupB
 		item.getDispatcher().addEventListener(MouseEvent.CLICK, itemSelectHandler);
 		
 		setScale(getScale());
-
-		addChild(cast( item, DisplayObject ));
 		
-		draw();
+		adds.push(item);
+		//addChild(cast( item, DisplayObject ));
+		
+		viewChanged();
 		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
@@ -82,9 +83,10 @@ class UiNContainerGroup extends UiNContainerAlign, implements IUiContainerGroupB
 
 		setScale(getScale());
 
-		addChild(cast( item, DisplayObject ));
+		adds.push(item);
+		//addChild(cast( item, DisplayObject ));
 		
-		draw();
+		viewChanged();
 		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
@@ -102,9 +104,10 @@ class UiNContainerGroup extends UiNContainerAlign, implements IUiContainerGroupB
 		items.remove(item);
 		
 		item.getDispatcher().removeEventListener(MouseEvent.CLICK, itemSelectHandler);
-		removeChild(cast(item, DisplayObject));
+		dels.push(item);
+		//removeChild(cast(item, DisplayObject));
 		
-		draw();
+		viewChanged();
 		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
@@ -127,11 +130,15 @@ class UiNContainerGroup extends UiNContainerAlign, implements IUiContainerGroupB
 	
 	public function removeAllGroupItems():Void
 	{
-		while ( items.length > 0 ) {
-			var item:IUiBase = items.shift();
-				item.getDispatcher().removeEventListener(MouseEvent.CLICK, itemSelectHandler);
-			removeItem(item);
-		}
+		dels = items.concat([]);
+		items = [];
+		//while ( items.length > 0 ) {
+		//	var item:IUiBase = items.shift();
+		//		item.getDispatcher().removeEventListener(MouseEvent.CLICK, itemSelectHandler);
+		//	removeItem(item);
+		//}
+		
+		viewChanged();
 		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));

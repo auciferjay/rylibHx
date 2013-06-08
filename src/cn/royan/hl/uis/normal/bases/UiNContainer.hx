@@ -6,6 +6,7 @@ import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiContainerBase;
 import cn.royan.hl.uis.normal.InteractiveUiN;
 import cn.royan.hl.uis.sparrow.Sparrow;
+import cn.royan.hl.uis.style.Style;
 import cn.royan.hl.utils.SystemUtils;
 
 import flash.events.Event;
@@ -25,12 +26,18 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase
 	var showProp:Dynamic->Void;
 	var hideProp:Dynamic->Dynamic->Void;
 	
+	var adds:Array<IUiBase>;
+	var dels:Array<IUiBase>;
+	
 	public function new(texture:Sparrow = null)
 	{
 		super(texture);
 		
 		items = [];
 		states = [];
+		
+		adds = [];
+		dels = [];
 	}
 	
 	override private function addToStageHandler(evt:Event = null):Void 
@@ -41,6 +48,29 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
 	}
 	
+	override public function draw():Void 
+	{
+		super.draw();
+		
+		while ( adds.length > 0 ) {
+			var item:IUiBase = adds.shift();
+			addChildAt( cast(item, DisplayObject), SystemUtils.arrayIndexOf(items, item) );
+			
+			if ( showProp != null ) {
+				showProp( item );
+			}
+		}
+		
+		while ( dels.length > 0 ) {
+			var item:IUiBase = dels.shift();
+			if ( hideProp != null ) {
+				hideProp( item, callback( removeChild, cast(item, DisplayObject) ) );
+			}else {
+				removeChild(cast(item, DisplayObject));
+			}
+		}
+	}
+	
 	public function addItem(item:IUiBase):IUiBase
 	{
 		SystemUtils.print(item, PrintConst.UIS);
@@ -48,13 +78,14 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase
 		
 		item.setScale(getScale());
 		
-		addChild(cast( item, DisplayObject ));
+		adds.push(item);
+		//addChild(cast( item, DisplayObject ));
 		
-		draw();
+		viewChanged();
 		
-		if ( showProp != null ) {
-			showProp( item );
-		}
+		//if ( showProp != null ) {
+		//	showProp( item );
+		//}
 		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
@@ -74,13 +105,14 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase
 		
 		item.setScale(getScale());
 		
-		addChildAt(cast( item, DisplayObject ), index);
+		adds.push(item);
+		//addChildAt(cast( item, DisplayObject ), index);
 		
-		draw();
+		viewChanged();
 		
-		if ( showProp != null ) {
-			showProp( item );
-		}
+		//if ( showProp != null ) {
+		//	showProp( item );
+		//}
 		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
@@ -94,13 +126,14 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase
 		
 		items.remove(item);
 		
-		if ( hideProp != null ) {
-			hideProp( item, callback( removeChild, cast(item, DisplayObject) ) );
-		}else {
-			removeChild(cast(item, DisplayObject));
-		}
+		dels.push(item);
+		//if ( hideProp != null ) {
+		//	hideProp( item, callback( removeChild, cast(item, DisplayObject) ) );
+		//}else {
+		//	removeChild(cast(item, DisplayObject));
+		//}
 		
-		draw();
+		viewChanged();
 		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
@@ -123,16 +156,18 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase
 	
 	public function removeAllItems():Void
 	{
-		while ( items.length > 0 ) {
-			var item:IUiBase = items.shift();
-			if ( hideProp != null ) {
-				hideProp( item, callback( removeChild, cast(item, DisplayObject) ) );
-			}else {
-				removeChild(cast(item, DisplayObject));
-			}
-		}
+		dels = items.concat([]);
+		items = [];
+		//while ( items.length > 0 ) {
+			//var item:IUiBase = items.shift();
+			//if ( hideProp != null ) {
+			//	hideProp( item, callback( removeChild, cast(item, DisplayObject) ) );
+			//}else {
+			//	removeChild(cast(item, DisplayObject));
+			//}
+		//}
 		
-		draw();
+		viewChanged();
 		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CHANGE));
@@ -163,6 +198,11 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase
 		for ( item in items ) {
 			item.setScale(getScale());
 		}
+	}
+	
+	override public function setStyle(value:Style):Void 
+	{
+		//super.setStyle(value);
 	}
 	
 	public function setState(value:String):Void

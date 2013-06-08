@@ -236,7 +236,7 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 				thumb.setPosition(0, containerWidth);
 		}
 		
-		draw();
+		viewChanged();
 	}
 	
 	public function setThumbTexture(texture:Dynamic):Void

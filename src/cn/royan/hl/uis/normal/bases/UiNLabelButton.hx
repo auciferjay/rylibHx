@@ -51,7 +51,7 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 	//Public methods
 	override public function draw():Void
 	{
-		if ( !isOnStage ) return;
+		//if ( !isOnStage ) return;
 		super.draw();
 		btnLabelText.setTextColor(textColors[status]);
 	}
@@ -62,7 +62,7 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 			selected = !selected;
 			status = selected?UiConst.INTERACTIVE_STATUS_SELECTED:status;
 			
-			draw();
+			viewChanged();
 		}
 		super.mouseClickHandler(evt);
 	}
@@ -92,7 +92,7 @@ class UiNLabelButton extends UiNBmpdButton, implements IUiTextBase, implements I
 	public function setTextColors(value:Array<Dynamic>):Void
 	{
 		textColors = value.concat([]);
-		draw();
+		viewChanged();
 	}
 	
 	override public function setSize(cWidth:Float, cHeight:Float):Void
