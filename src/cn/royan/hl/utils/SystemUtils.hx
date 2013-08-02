@@ -125,9 +125,9 @@ class SystemUtils
 		if ( __loaderContext == null ) {
 			__loaderContext = new LoaderContext(false);
 			/* 加载到子域(模块) */
-			__loaderContext.applicationDomain = new ApplicationDomain(ApplicationDomain.currentDomain);
+			//__loaderContext.applicationDomain = new ApplicationDomain(ApplicationDomain.currentDomain);
 			/* 加载到同域(共享库) */
-			//__loaderContext.applicationDomain = ApplicationDomain.currentDomain;
+			__loaderContext.applicationDomain = ApplicationDomain.currentDomain;
 			/* 加载到新域(独立运行的程序或模块) */
 			//__loaderContext.applicationDomain = new ApplicationDomain();
 		}

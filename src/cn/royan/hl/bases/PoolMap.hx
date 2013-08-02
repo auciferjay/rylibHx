@@ -3,6 +3,11 @@ package cn.royan.hl.bases;
 import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.utils.SystemUtils;
 
+#if !flash
+import nme.ObjectHash;
+#else
+import flash.utils.TypedDictionary;
+#end
 /**
  * ...
  * 对象池类
@@ -12,29 +17,38 @@ class PoolMap
 {
 	public static var maxValue:Int = 10;
 	
-	private static var __weakMap:WeakMap = WeakMap.getInstance();
-	private static var pools:Dictionary = #if flash new Dictionary(); #else {}; #end
+	private static var weakMap:WeakMap = WeakMap.getInstance();
+	#if !flash
+	private static var pools:ObjectHash<Dynamic, Array<String>> = new ObjectHash < Dynamic, Array<String> > ();
+	#else
+	private static var pools:TypedDictionary<Dynamic, Array<String>> = new TypedDictionary < Dynamic, Array<String> > (true);
+	#end
 	
 	private static function getPool( type:Class<Dynamic> ):Array<Dynamic>
 	{
-		SystemUtils.print(type, PrintConst.BASES);
-		for ( t in Reflect.fields(pools) ) {
-			if ( Type.getClassName(type) == t )
-				return Reflect.field(pools, Type.getClassName(type));
-		}
-		Reflect.setField(pools,Type.getClassName(type),[]);
-		return Reflect.field(pools, Type.getClassName(type));
+		for (item in pools.keys())
+			if ( item == type )
+				#if flash
+				return untyped pools[item];
+				#else
+				return pools.get(item);
+				#end
+		
+		#if flash
+		untyped pools[type] = [];
+		return untyped pools[type];
+		#else
+		pools.set(type, []);
+		return pools.get(type);
+		#end
 	}
 		
 	private static function createInstanceByType(type:Class<Dynamic>, parameters:Array<Dynamic>):Dynamic
 	{
-		SystemUtils.print(type+":"+parameters, PrintConst.BASES);
+		SystemUtils.print(type + ":" + parameters, PrintConst.BASES);
 		var waterDrop:WaterDrop = new WaterDrop(type, parameters);
-		if ( __weakMap.getValue(waterDrop.key) == null ) {
-			__weakMap.set(waterDrop.key, waterDrop.target);
-			return waterDrop.target;
-		}
-		return __weakMap.getValue(waterDrop.key);
+			weakMap.set(waterDrop.key, waterDrop.target);
+		return waterDrop.target;
 	}
 	
 	/**
@@ -53,6 +67,7 @@ class PoolMap
 				return createInstanceByType( type, parameters );
 		} else {
 			var pool:Array<Dynamic> = getPool( type );
+			SystemUtils.print("pool:"+pool);
 			if( pool.length > 0 )
 				return pool.pop();
 			else
@@ -74,7 +89,7 @@ class PoolMap
 			type = Type.resolveClass( typeName );
 		}
 		
-		var keys:Array<Dynamic> = __weakMap.getKeys(object);
+		var keys:Array<Dynamic> = weakMap.getKeys(object);
 		var pool:Array<Dynamic>;
 		
 		if ( keys == null ) keys = [];
@@ -88,7 +103,7 @@ class PoolMap
 		}else{
 			var params:Array<String> = Std.string(keys[0]).split("|");
 			if( params[params.length - 1] != "0" ){
-				__weakMap.clear(keys[0]);
+				weakMap.clear(keys[0]);
 				object = null;
 			}else{
 				pool = getPool( type );
@@ -121,7 +136,7 @@ class WaterDrop
 	
 	function createInstanceByType(type:Class<Dynamic>, parameters:Array<Dynamic>):Dynamic
 	{
-		SystemUtils.print(type+":"+parameters, PrintConst.BASES);
-		return Type.createInstance(type, parameters!=null?parameters:[]);
+		SystemUtils.print("create:"+type, PrintConst.BASES);
+		return Type.createInstance(type, parameters!=null?parameters:new Array());
 	}
 }

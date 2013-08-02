@@ -235,7 +235,7 @@ class TakeService extends DispatcherBase, implements IServiceBase
 	
 	function loaderOnComplete(evt:Event):Void
 	{
-		SystemUtils.print("[Class TakeService]:DISPLAYLoadOnComplete", PrintConst.SERVICES);
+		SystemUtils.print("[Class TakeService]:DISPLAY LoadOnComplete", PrintConst.SERVICES);
 		switch( BytesUtils.getType(serviceData) ) {
 			case "SWF":
 				weakMap.set( urlrequest.url, swfLoader );
