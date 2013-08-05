@@ -45,12 +45,14 @@ class TakeService extends DispatcherBase, implements IServiceBase
 	
 	var swfLoader:Loader;
 	var isLoading:Bool;
+	var isCache:Bool;
 	
-	public function new( param:Dynamic = null )
+	public function new( param:Dynamic = null, cache:Bool = false )
 	{
 		super();
 		
 		weakMap = WeakMap.getInstance();
+		isCache = cache;
 		
 		if( param != null )
 			if ( Std.is(param, URLVariables) ) {
@@ -63,6 +65,10 @@ class TakeService extends DispatcherBase, implements IServiceBase
 					Reflect.setField(urlvariable, key, Reflect.field(param, key));
 				}
 			}
+			
+		if ( isCache ) {
+			urlvariable.cache = Std.int( Math.random() * 10000 );
+		}
 	}
 	
 	/**
@@ -160,7 +166,7 @@ class TakeService extends DispatcherBase, implements IServiceBase
 	 */
 	public function getData():Dynamic
 	{
-		if (BytesUtils.isSWF(BytesUtils.simpleDecode(serviceData, "gameuzgame"))) {
+		if (serviceData != null && BytesUtils.isSWF(BytesUtils.simpleDecode(serviceData, "gameuzgame"))) {
 			return swfLoader;
 		}
 		return weakMap.getValue(urlrequest.url);//serviceData;
