@@ -83,7 +83,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	 */
 	public function sendRequest(url:String='', extra:Dynamic=null):Void
 	{
-		SystemUtils.print(url, PrintConst.SERVICES);
+		SystemUtils.print("sendRequest:"+url, PrintConst.SERVICES);
 		if( getIsServicing() ){
 			#if flash
 			socket.writeBytes( cast(extra) );
@@ -106,7 +106,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	{
 		#if !js
 			socket = new Socket();
-			#if !flash
+			#if !(flash || swc)
 				socket.connect(new Host(host), port);
 				clientInfos = {
 					buf:Bytes.alloc( bufferSize ),
@@ -196,38 +196,38 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	#if flash
 	function onConnect(evt:Event):Void
 	{
+		isServicing = true;
+		
 		SystemUtils.print("[Class SoktService]:onConnect", PrintConst.SERVICES);
 		if( callbacks != null && callbacks.create != null ) callbacks.create();
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_CREATE));
-
-		isServicing = true;
 	}
 
 	function onClose(evt:Event):Void
 	{
+		isServicing = false;
+		
 		SystemUtils.print("[Class SoktService]:onClose", PrintConst.SERVICES);
 		if( callbacks != null && callbacks.destory != null ) callbacks.destory();
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DESTROY));
-
-		isServicing = false;
 	}
 
 	function onIOError(evt:IOErrorEvent):Void
 	{
+		isServicing = false;
+		
 		SystemUtils.print("[Class SoktService]:onIOError:"+evt, PrintConst.SERVICES);
 		if( callbacks != null && callbacks.error != null ) callbacks.error(evt.type);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_ERROR, evt.type));
-
-		isServicing = false;
 	}
 
 	function onSecurityError(evt:SecurityErrorEvent):Void
 	{
+		isServicing = false;
+		
 		SystemUtils.print("[Class SoktService]:onSecurityError:"+evt, PrintConst.SERVICES);
 		if( callbacks != null && callbacks.error != null ) callbacks.error(evt.type);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_ERROR, evt.type));
-
-		isServicing = false;
 	}
 
 	function onProgress(evt:ProgressEvent):Void
@@ -257,27 +257,27 @@ class SoktService extends DispatcherBase, implements IServiceBase
 
 	function jsOnClose():Void
 	{
+		isServicing = false;
+		
 		SystemUtils.print("[Class SoktService]:onClose", PrintConst.SERVICES);
 		if( callbacks != null && callbacks.destory != null ) callbacks.destory();
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DESTROY));
-
-		isServicing = false;
 	}
 
 	function jsOnConnect(b:Bool):Void
 	{
 		if ( b ) {
+			isServicing = true;
+			
 			SystemUtils.print("[Class SoktService]:onConnect", PrintConst.SERVICES);
 			if( callbacks != null && callbacks.create != null ) callbacks.create();
 			else dispatchEvent(new DatasEvent(DatasEvent.DATA_CREATE));
-
-			isServicing = true;
 		}else {
+			isServicing = false;
+			
 			SystemUtils.print("[Class SoktService]:onIOError", PrintConst.SERVICES);
 			if( callbacks != null && callbacks.error != null ) callbacks.error("");
 			else dispatchEvent(new DatasEvent(DatasEvent.DATA_ERROR));
-
-			isServicing = false;
 		}
 	}
 	#else
@@ -369,7 +369,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 
 	function onErrorHandler( e:Dynamic ):Void
 	{
-		SystemUtils.print(e, PrintConst.SERVICES);
+		SystemUtils.print("onError:"+e, PrintConst.SERVICES);
 		if( callbacks != null && callbacks.error != null ) callbacks.error(e);
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_ERROR, e));
 	}
