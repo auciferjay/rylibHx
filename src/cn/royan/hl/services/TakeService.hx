@@ -91,7 +91,7 @@ class TakeService extends DispatcherBase, implements IServiceBase
 	{
 		close();
 		
-		if ( weakMap.containKey(urlrequest.url) ) {
+		if ( !isCache && weakMap.containKey(urlrequest.url) && weakMap.getValue(urlrequest.url) != null ) {
 			if( callbacks != null && callbacks.done != null) callbacks.done( getData() );
 			else dispatchEvent(new DatasEvent(DatasEvent.DATA_DONE, getData()));
 			return;
