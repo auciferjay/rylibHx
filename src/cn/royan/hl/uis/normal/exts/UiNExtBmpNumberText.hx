@@ -2,8 +2,8 @@ package cn.royan.hl.uis.normal.exts;
 
 import cn.royan.hl.uis.normal.bases.UiNContainerAlign;
 import cn.royan.hl.uis.normal.bases.UiNBmpdMovieClip;
+import cn.royan.hl.uis.sparrow.Sparrow;
 
-import starling.textures.Texture;
 import flash.display.BitmapData;
 
 /**
@@ -17,7 +17,7 @@ class UiNExtBmpNumberText extends UiNContainerAlign
 	var num:Int;
 	var length:Int;
 		
-	public function new(texture:Array<Texture>, len:Int = 1)
+	public function new(texture:Array<Sparrow>, len:Int = 1)
 	{
 		super();
 		

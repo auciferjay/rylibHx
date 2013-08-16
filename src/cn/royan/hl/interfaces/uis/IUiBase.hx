@@ -117,6 +117,7 @@ interface IUiBase implements IDisposeBase
 	 * @param 	value
 	 */
 	function setStyle(value:Style):Void;
+	
 	/**
 	 * 获取事件发送者
 	 * @return

@@ -20,6 +20,10 @@ import cn.royan.hl.uis.normal.exts.UiNExtBmpNumberText;
 import cn.royan.hl.uis.normal.exts.UiNExtCombobox;
 import cn.royan.hl.uis.normal.exts.UiNExtImageLoader;
 
+import cn.royan.hl.uis.graphs.UninteractiveUiG;
+import cn.royan.hl.uis.graphs.bases.UiGBmpdMovieClip;
+import cn.royan.hl.uis.graphs.bases.UiGContainer;
+
 import cn.royan.hl.uis.starling.InteractiveUiS;
 import cn.royan.hl.uis.starling.UninteractiveUiS;
 import cn.royan.hl.uis.starling.bases.UiSBmpdButton;
