@@ -1,12 +1,13 @@
 package cn.royan.hl.uis.graphs;
 
-import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.geom.Range;
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.interfaces.uis.IUiGraphBase;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.uis.style.Style;
 import cn.royan.hl.utils.BitmapDataUtils;
 import cn.royan.hl.utils.SystemUtils;
+import flash.display.Stage;
 
 import flash.geom.Rectangle;
 
@@ -16,8 +17,11 @@ import flash.geom.Rectangle;
  */
 class UninteractiveUiG implements IUiGraphBase
 {
+	
 	var updated:Bool;
 	var parent:IUiGraphBase;
+	
+	var stage:Stage;
 	
 	var range:Range;
 	
@@ -66,6 +70,14 @@ class UninteractiveUiG implements IUiGraphBase
 	}
 	
 	/**
+	 * 设置舞台
+	 */
+	public function setStage(value:Stage):Void
+	{
+		stage = value;
+	}
+	
+	/**
 	 * 设置父容器
 	 * @param	value
 	 */
@@ -91,8 +103,9 @@ class UninteractiveUiG implements IUiGraphBase
 	 */
 	public function draw():Void
 	{
-		bgTexture = Sparrow.fromBitmapData( BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
-											bgColors, bgAlphas, 1, borderColor, borderThick, borderAlpha, borderRx, borderRy) );
+		if( updated )
+			bgTexture = Sparrow.fromBitmapData( BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
+												bgColors, bgAlphas, 1, borderColor, borderThick, borderAlpha, borderRx, borderRy) );
 											
 		updated = false;
 	}
@@ -194,7 +207,8 @@ class UninteractiveUiG implements IUiGraphBase
 		range.x = cX;
 		range.y = cY;
 		
-		updateDisplayList();
+		if ( parent != null ) 
+			parent.updateDisplayList();
 	}
 	
 	/**

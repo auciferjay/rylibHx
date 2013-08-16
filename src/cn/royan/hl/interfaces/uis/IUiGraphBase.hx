@@ -5,6 +5,7 @@ import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.uis.style.Style;
 import cn.royan.hl.interfaces.IDisposeBase;
 
+import flash.display.Stage;
 import flash.geom.Rectangle;
 
 /**
@@ -13,6 +14,11 @@ import flash.geom.Rectangle;
  */
 interface IUiGraphBase implements IDisposeBase
 {
+	/**
+	 * 设置舞台
+	 */
+	function setStage(value:Stage):Void;
+	
 	/**
 	 * 设置父容器
 	 * @param	value

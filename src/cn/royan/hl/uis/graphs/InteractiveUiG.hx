@@ -1,12 +1,14 @@
 package cn.royan.hl.uis.graphs;
 
-import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.geom.Range;
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.interfaces.uis.IUiGraphBase;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.uis.style.Style;
 import cn.royan.hl.utils.BitmapDataUtils;
 import cn.royan.hl.utils.SystemUtils;
+import flash.display.Stage;
+import flash.events.TouchEvent;
 
 import flash.geom.Rectangle;
 
@@ -17,6 +19,7 @@ import flash.geom.Rectangle;
 class InteractiveUiG implements IUiGraphBase
 {
 	var bounds:Rectangle;
+	var stage:Stage;
 	
 	var updated:Bool;
 	var parent:IUiGraphBase;
@@ -72,6 +75,14 @@ class InteractiveUiG implements IUiGraphBase
 	}
 	
 	/**
+	 * 设置舞台
+	 */
+	public function setStage(value:Stage):Void
+	{
+		stage = value;
+	}
+	
+	/**
 	 * 设置父容器
 	 * @param	value
 	 */
@@ -97,8 +108,9 @@ class InteractiveUiG implements IUiGraphBase
 	 */
 	public function draw():Void
 	{
-		bgTexture = Sparrow.fromBitmapData( BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
-											bgColors, bgAlphas, 1, borderColor, borderThick, borderAlpha, borderRx, borderRy) );
+		if( updated )
+			bgTexture = Sparrow.fromBitmapData( BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
+												bgColors, bgAlphas, 1, borderColor, borderThick, borderAlpha, borderRx, borderRy) );
 											
 		updated = false;
 	}
@@ -203,8 +215,11 @@ class InteractiveUiG implements IUiGraphBase
 		range.x = cX;
 		range.y = cY;
 		
-		bounds.x = cX;
-		bounds.y = cY;
+		bounds.x = (parent!=null?parent.getBounds().x:0)+cX;
+		bounds.y = (parent!=null?parent.getBounds().y:0)+cY;
+		
+		if ( parent != null ) 
+			parent.updateDisplayList();
 	}
 	
 	/**

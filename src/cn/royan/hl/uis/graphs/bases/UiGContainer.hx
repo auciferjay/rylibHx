@@ -1,13 +1,13 @@
 package cn.royan.hl.uis.graphs.bases;
 
-import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.geom.Range;
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.interfaces.uis.IUiGraphBase;
 import cn.royan.hl.uis.graphs.InteractiveUiG;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.utils.SystemUtils;
-import flash.geom.Rectangle;
 
+import flash.geom.Rectangle;
 import flash.geom.Point;
 import flash.display.BitmapData;
 
@@ -35,6 +35,8 @@ class UiGContainer extends InteractiveUiG
 	
 	override public function draw():Void
 	{
+		if ( !updated ) return;
+		
 		var range:Range = { };
 		var width:Int 	= 0;
 		var height:Int 	= 0;
@@ -59,6 +61,7 @@ class UiGContainer extends InteractiveUiG
 		var point:Point = new Point();
 		for ( item in items ) {
 			if ( !item.getVisible() ) continue;
+			item.draw();
 			range = item.getRange();
 			point.x = range.x;
 			point.y = range.y;
