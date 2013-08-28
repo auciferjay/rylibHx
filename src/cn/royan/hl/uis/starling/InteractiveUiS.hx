@@ -167,7 +167,11 @@ class InteractiveUiS extends Sprite, implements IUiBase
 	
 	public function setCallbacks(value:Dynamic):Void
 	{
-		callbacks = value;
+		if ( callbacks == null ) callbacks = { };
+		var fields:Array<String> = Reflect.fields(value);
+		for ( field in fields ) {
+			Reflect.setField(callbacks, field, Reflect.field(value, field));
+		}
 	}
 	
 	public function setSize(w:Float, h:Float):Void

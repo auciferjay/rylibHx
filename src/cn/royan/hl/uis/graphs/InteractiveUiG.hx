@@ -121,7 +121,11 @@ class InteractiveUiG implements IUiGraphBase
 	 */
 	public function setCallbacks(value:Dynamic):Void
 	{
-		callbacks = value;
+		if ( callbacks == null ) callbacks = { };
+		var fields:Array<String> = Reflect.fields(value);
+		for ( field in fields ) {
+			Reflect.setField(callbacks, field, Reflect.field(value, field));
+		}
 	}
 	
 	/**
