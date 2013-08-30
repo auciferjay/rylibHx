@@ -27,6 +27,7 @@ import cn.royan.hl.uis.graphs.bases.UiGContainer;
 import cn.royan.hl.uis.starling.InteractiveUiS;
 import cn.royan.hl.uis.starling.UninteractiveUiS;
 import cn.royan.hl.uis.starling.bases.UiSBmpdButton;
+import cn.royan.hl.uis.starling.bases.UiSLabelButton;
 import cn.royan.hl.uis.starling.bases.UiSBmpdMovieClip;
 import cn.royan.hl.uis.starling.bases.UiSWindow;
 import cn.royan.hl.uis.starling.bases.UiSContainer;
@@ -35,6 +36,7 @@ import cn.royan.hl.uis.starling.bases.UiSContainerGroup;
 import cn.royan.hl.uis.starling.bases.UiSScrollBar;
 import cn.royan.hl.uis.starling.bases.UiSScrollPane;
 import cn.royan.hl.uis.starling.bases.UiSText;
+import cn.royan.hl.uis.starling.exts.UiSExtCombobox;
 import cn.royan.hl.uis.starling.exts.UiSExtBmpNumberText;
 import cn.royan.hl.uis.starling.exts.UiSExtImageLoader;
 

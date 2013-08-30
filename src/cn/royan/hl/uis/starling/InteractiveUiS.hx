@@ -134,13 +134,14 @@ class InteractiveUiS extends Sprite, implements IUiBase
 			bgColors.push(bgColors[bgColors.length - 1]);
 		}
 		
-		if( containerWidth > 0 && containerHeight > 0 )
+		if ( containerWidth > 0 && containerHeight > 0 ) {
 			defaultTexture = getDefaultTexture();
-		
-		if( graphics == null ){
-			graphics = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
-									[0x000000], [0x00], 1, borderColor, borderThick, borderAlpha, borderRx, borderRy)));
-			addChild( graphics );
+			
+			if( graphics == null ){
+				graphics = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
+										[0x000000], [0x00], 1, borderColor, borderThick, borderAlpha, borderRx, borderRy)));
+				addChild( graphics );
+			}
 		}
 
 		draw();
@@ -182,7 +183,13 @@ class InteractiveUiS extends Sprite, implements IUiBase
 		
 		if( bgTexture == null && bgColors != null && bgAlphas != null )
 			defaultTexture = getDefaultTexture();
-			
+		
+		if( containerWidth > 0 && containerHeight > 0 && graphics == null ){
+			graphics = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
+									[0x000000], [0x00], 1, borderColor, borderThick, borderAlpha, borderRx, borderRy)));
+			addChild( graphics );
+		}
+		
 		draw();
 	}
 

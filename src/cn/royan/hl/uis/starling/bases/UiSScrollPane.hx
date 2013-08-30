@@ -51,7 +51,7 @@ class UiSScrollPane extends InteractiveUiS, implements IUiScrollPaneBase
 		if ( hScrollBar != null ) hScrollBar.addEventListener(DatasEvent.DATA_CHANGE, hChangeHandler);
 	}
 	
-	function changeHandler(evt:DatasEvent = null):Void
+	function changeHandler(evt:Event = null):Void
 	{
 		if ( container.width > containerWidth && 
 			( scrollerType == UiConst.SCROLL_TYPE_HORIZONTAL_ONLY || scrollerType == UiConst.SCROLL_TYPE_HANDV ) ) {
@@ -131,12 +131,12 @@ class UiSScrollPane extends InteractiveUiS, implements IUiScrollPaneBase
 		draw();
 	}
 	
-	function hChangeHandler(evt:DatasEvent):Void
+	function hChangeHandler(evt:Event):Void
 	{
 		container.setPosition(-Std.int(hScrollBar.getValue() / 100 * (container.width - getRange().width)), container.getRange().y);
 	}
 	
-	function vChangeHandler(evt:DatasEvent):Void
+	function vChangeHandler(evt:Event):Void
 	{
 		container.setPosition(container.getRange().x, -Std.int(vScrollBar.getValue() / 100 * (container.height - getRange().height)));
 	}
