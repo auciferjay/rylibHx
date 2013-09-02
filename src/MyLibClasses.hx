@@ -20,7 +20,7 @@ import cn.royan.hl.uis.normal.exts.UiNExtBmpNumberText;
 import cn.royan.hl.uis.normal.exts.UiNExtCombobox;
 import cn.royan.hl.uis.normal.exts.UiNExtImageLoader;
 
-import cn.royan.hl.uis.graphs.UninteractiveUiG;
+import cn.royan.hl.uis.graphs.InteractiveUiG;
 import cn.royan.hl.uis.graphs.bases.UiGBmpdMovieClip;
 import cn.royan.hl.uis.graphs.bases.UiGContainer;
 

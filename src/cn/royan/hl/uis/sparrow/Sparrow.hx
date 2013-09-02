@@ -12,6 +12,9 @@ import flash.geom.Rectangle;
  */
 class Sparrow implements IDisposeBase
 {
+	public var regin:Rectangle;
+	public var frame:Rectangle;
+	
 	public function new(source:BitmapData, rect:Rectangle=null)
 	{
 		bitmapdata = source;
@@ -23,6 +26,8 @@ class Sparrow implements IDisposeBase
 	public function dispose():Void
 	{
 		bitmapdata.dispose();
+		regin = null;
+		frame = null;
 	}
 	
 	public var bitmapdata(getBitmapdata, null):BitmapData;
@@ -30,9 +35,6 @@ class Sparrow implements IDisposeBase
 	{
 		return bitmapdata;
 	}
-	
-	public var regin:Rectangle;
-	public var frame:Rectangle;
 	
 	static public function fromSparrow(texture:Sparrow, region:Rectangle=null, frame:Rectangle=null):Sparrow
 	{

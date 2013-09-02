@@ -39,13 +39,16 @@ class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 		if( Std.is( texture, Array ) ){
 			bgTextures = cast(texture);
 			
+			type = 1;
+			
 			setSize(Std.int(bgTextures[0].frame != null ? bgTextures[0].frame.width : bgTextures[0].width ), 
 					Std.int(bgTextures[0].frame != null ? bgTextures[0].frame.height : bgTextures[0].height ));
 
 			while ( bgTextures.length < 5 ) {
 				bgTextures.push(bgTextures[bgTextures.length - 1]);
 			}
-		}else{
+		}else {
+			type = -1;
 			//throw "texture is wrong type(Sparrow or Vector.<Sparrow>)";
 			return;
 		}
@@ -67,8 +70,18 @@ class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 	override public function draw():Void
 	{
 		if ( !isOnStage ) return;
-		if ( status < bgTextures.length && currentStatus != null ) {
-			currentStatus.texture = bgTextures[status];
+		if ( type == 0 ) {
+			if ( currentStatus != null ) {
+				removeChild(currentStatus);
+				currentStatus.dispose();
+			}
+			currentStatus = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
+									[0x0], [0], 1, borderColor, borderThick, borderAlpha, borderRx, borderRy)));
+			addChildAt(currentStatus, 0);
+		}
+		if(currentStatus != null){
+			if( bgTextures[status] != null )
+				currentStatus.texture = bgTextures[status];
 			currentStatus.scaleX = currentStatus.scaleY = getScale();
 		}
 	}
@@ -92,13 +105,7 @@ class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 									bgColors[i], bgAlphas[i], 1, borderColor, borderThick, borderAlpha, borderRx, borderRy));
 		}
 		
-		if ( currentStatus == null ) {
-			currentStatus = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
-									[0x00000], [0x00], 1, borderColor, borderThick, borderAlpha, borderRx, borderRy)));
-			if( bgTextures[status] != null )
-				currentStatus.texture = bgTextures[status];
-			addChildAt(currentStatus, 0);
-		}
+		type = 0;
 		
 		draw();
 	}

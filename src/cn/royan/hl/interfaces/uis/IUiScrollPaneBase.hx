@@ -12,7 +12,7 @@ interface IUiScrollPaneBase implements IUiBase
 	 * 设置滚动类型
 	 * @param	type	SCROLL_TYPE_NONE / SCROLL_TYPE_HORIZONTAL_ONLY / SCROLL_TYPE_VERICAL_ONLY / SCROLL_TYPE_HANDV
 	 */
-	function setType(type:Int):Void;
+	function setType(type:Int, content:Int):Void;
 	
 	/**
 	 * 设置Thumb材质

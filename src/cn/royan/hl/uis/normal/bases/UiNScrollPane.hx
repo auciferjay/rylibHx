@@ -29,7 +29,7 @@ class UiNScrollPane extends InteractiveUiN, implements IUiScrollPaneBase
 	var hScrollBar:UiNScrollBar;
 	var vScrollBar:UiNScrollBar;
 	
-	public function new(container:InteractiveUiN, type:Int = UiConst.SCROLL_TYPE_HANDV) 
+	public function new(container:InteractiveUiN, type:Int = UiConst.SCROLL_TYPE_HANDV, content:Int = UiConst.SCROLL_BOTH_THUMB_AND_BUTTON) 
 	{
 		super();
 		
@@ -47,7 +47,7 @@ class UiNScrollPane extends InteractiveUiN, implements IUiScrollPaneBase
 		nmeSurface.style.setProperty("overflow", "hidden", "");
 		#end
 		
-		setType(type);
+		setType(type, content);
 		
 		changeHandler();
 	}
@@ -108,7 +108,7 @@ class UiNScrollPane extends InteractiveUiN, implements IUiScrollPaneBase
 		viewChanged();
 	}
 	
-	public function setType(type:Int):Void
+	public function setType(type:Int, content:Int):Void
 	{
 		scrollerType = type;
 		
@@ -120,7 +120,7 @@ class UiNScrollPane extends InteractiveUiN, implements IUiScrollPaneBase
 					removeChild( hScrollBar );
 			case UiConst.SCROLL_TYPE_VERICAL_ONLY:
 				if ( vScrollBar == null ) {
-					vScrollBar = new UiNScrollBar(UiConst.SCROLLBAR_TYPE_VERICAL);
+					vScrollBar = new UiNScrollBar(UiConst.SCROLLBAR_TYPE_VERICAL, content);
 					vScrollBar.addEventListener(DatasEvent.DATA_CHANGE, vChangeHandler);
 				}
 					
@@ -128,7 +128,7 @@ class UiNScrollPane extends InteractiveUiN, implements IUiScrollPaneBase
 					removeChild( hScrollBar );
 			case UiConst.SCROLL_TYPE_HORIZONTAL_ONLY:
 				if ( hScrollBar == null ) {
-					hScrollBar = new UiNScrollBar(UiConst.SCROLLBAR_TYPE_HORIZONTAL);
+					hScrollBar = new UiNScrollBar(UiConst.SCROLLBAR_TYPE_HORIZONTAL, content);
 					hScrollBar.addEventListener(DatasEvent.DATA_CHANGE, hChangeHandler);
 				}
 				
@@ -136,11 +136,11 @@ class UiNScrollPane extends InteractiveUiN, implements IUiScrollPaneBase
 					removeChild( vScrollBar );
 			case UiConst.SCROLL_TYPE_HANDV:
 				if ( hScrollBar == null ) {
-					hScrollBar = new UiNScrollBar(UiConst.SCROLLBAR_TYPE_HORIZONTAL);
+					hScrollBar = new UiNScrollBar(UiConst.SCROLLBAR_TYPE_HORIZONTAL, content);
 					hScrollBar.addEventListener(DatasEvent.DATA_CHANGE, hChangeHandler);
 				}
 				if ( vScrollBar == null ) {
-					vScrollBar = new UiNScrollBar(UiConst.SCROLLBAR_TYPE_VERICAL);
+					vScrollBar = new UiNScrollBar(UiConst.SCROLLBAR_TYPE_VERICAL, content);
 					vScrollBar.addEventListener(DatasEvent.DATA_CHANGE, vChangeHandler);
 				}
 		}

@@ -63,6 +63,13 @@ class UiConst
 	public static inline var SCROLL_TYPE_HANDV:Int				= 3;
 	
 	/**
+	 * 滚动条显示内容
+	 */
+	public static inline var SCROLL_BOTH_THUMB_AND_BUTTON:Int	= 0;
+	public static inline var SCROLL_ONLY_THUMB:Int				= 1;
+	public static inline var SCROLL_ONLY_BUTTON:Int				= 2;
+	
+	/**
 	 * 文字对齐方式
 	 * 左对齐->居中->右对齐
 	 */

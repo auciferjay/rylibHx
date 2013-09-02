@@ -24,7 +24,7 @@ class UiNScrollBar extends UiNContainerAlign, implements IUiScrollBarBase
 	
 	var scrollerType:Int;
 	
-	public function new(type:Int = UiConst.SCROLLBAR_TYPE_HORIZONTAL) 
+	public function new(type:Int = UiConst.SCROLLBAR_TYPE_HORIZONTAL, content:Int = UiConst.SCROLL_BOTH_THUMB_AND_BUTTON) 
 	{
 		super();
 		

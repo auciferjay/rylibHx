@@ -38,10 +38,10 @@ class UiSLabelButton extends UiSBmpdButton, implements IUiTextBase, implements I
 		
 		btnLabelText = new UiSText();
 		btnLabelText.setText(label);
+		btnLabelText.touchable = false;
 		addChild(btnLabelText);
 		
-		containerWidth = 100;
-		containerHeight = 20;
+		setSize(100, 20);
 		
 		setMouseRender(true);
 	}

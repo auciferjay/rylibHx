@@ -54,6 +54,8 @@ class InteractiveUiG implements IUiGraphBase
 	
 	var callbacks:Dynamic;
 	
+	var type:Int;
+	
 	public function new(texture:Sparrow = null)
 	{
 		visible = true;
@@ -70,6 +72,7 @@ class InteractiveUiG implements IUiGraphBase
 		
 		if ( texture != null ) {
 			bgTexture = texture;
+			type = 1;
 			setSize(Std.int(bgTexture.regin.width), Std.int(bgTexture.regin.height));
 		}
 	}
@@ -108,10 +111,15 @@ class InteractiveUiG implements IUiGraphBase
 	 */
 	public function draw():Void
 	{
-		if( updated )
-			bgTexture = Sparrow.fromBitmapData( BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
-												bgColors, bgAlphas, 1, borderColor, borderThick, borderAlpha, borderRx, borderRy) );
-											
+		if ( updated ) {
+			if ( type == 0 ) {
+				if ( bgTexture != null ) bgTexture.dispose();
+				bgTexture = Sparrow.fromBitmapData( BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
+													bgColors, bgAlphas, 1, borderColor, borderThick, borderAlpha, borderRx, borderRy) );
+			} else {
+				
+			}
+		}
 		updated = false;
 	}
 	
@@ -146,6 +154,8 @@ class InteractiveUiG implements IUiGraphBase
 		while ( bgColors.length < bgAlphas.length ) {
 			bgColors.push(bgColors[bgColors.length - 1]);
 		}
+		
+		type = 0;
 		
 		updateDisplayList();
 	}
@@ -262,6 +272,8 @@ class InteractiveUiG implements IUiGraphBase
 	public function setTexture(texture:Dynamic, frames:Int = 1):Void
 	{
 		bgTexture = texture;
+		
+		type = 1;
 		
 		setSize(Std.int(bgTexture.regin.width), Std.int(bgTexture.regin.height));
 	}

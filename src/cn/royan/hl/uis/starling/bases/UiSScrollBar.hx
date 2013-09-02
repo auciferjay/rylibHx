@@ -25,27 +25,39 @@ class UiSScrollBar extends UiSContainerAlign, implements IUiScrollBarBase
 	var rect:Rectangle;
 	
 	var scrollerType:Int;
+	var scrollerCont:Int;
 	
-	public function new(type:Int = UiConst.SCROLLBAR_TYPE_HORIZONTAL) 
+	public function new(type:Int = UiConst.SCROLLBAR_TYPE_HORIZONTAL, content:Int = UiConst.SCROLL_BOTH_THUMB_AND_BUTTON) 
 	{
 		super();
 		
-		min = new UiSLabelButton("-");
-		min.setCallbacks({down:minMouseDownHandler, up:minMouseUpHandler});
-		addItem(min);
+		scrollerCont = content;
+		
+		setMouseRender(true);
+		
+		if ( content != UiConst.SCROLL_ONLY_THUMB ) {
+			min = new UiSLabelButton("-");
+			min.setCallbacks({down:minMouseDownHandler, up:minMouseUpHandler});
+			addItem(min);
+		}
 		
 		bar = new InteractiveUiS();
 		bar.setCallbacks({click:backgroundClickHandler});
 		bar.setColorsAndAplhas([0xCCCCCC], [1]);
 		addItem(bar);
 		
-		max = new UiSLabelButton("+");
-		max.setCallbacks({down:maxMouseDownHandler, up:maxMouseUpHandler});
-		addItem(max);
+		if ( content != UiConst.SCROLL_ONLY_THUMB ) {
+			max = new UiSLabelButton("+");
+			max.setCallbacks({down:maxMouseDownHandler, up:maxMouseUpHandler});
+			addItem(max);
+		}
 		
 		thumb = new UiSLabelButton("=");
-		thumb.setCallbacks({move:thumbMoveHandler});
-		addChild(thumb);
+		thumb.setColorsAndAplhas([[0x555555]], [[1]]);
+		thumb.setCallbacks( { move:thumbMoveHandler } );
+		if ( content != UiConst.SCROLL_ONLY_BUTTON ) {
+			addChild(thumb);
+		}
 		
 		rect = new Rectangle();
 		
@@ -130,9 +142,15 @@ class UiSScrollBar extends UiSContainerAlign, implements IUiScrollBarBase
 	{
 		switch( scrollerType ) {
 			case UiConst.SCROLLBAR_TYPE_HORIZONTAL:
-				thumb.setPosition(thumb.getRange().x + touch.getMovement(this).x, thumb.getRange().y);
+				if ( rect.x <= thumb.getRange().x + touch.getMovement(this).x &&
+					 rect.x + rect.width >= thumb.getRange().x + touch.getMovement(this).x ) {
+					thumb.setPosition(thumb.getRange().x + touch.getMovement(this).x, thumb.getRange().y);
+				}
 			case UiConst.SCROLLBAR_TYPE_VERICAL:
-				thumb.setPosition(thumb.getRange().x, thumb.getRange().y + touch.getMovement(this).y);
+				if ( rect.y <= thumb.getRange().y + touch.getMovement(this).y &&
+					 rect.y + rect.height >= thumb.getRange().y + touch.getMovement(this).y ) {
+					thumb.setPosition(thumb.getRange().x, thumb.getRange().y + touch.getMovement(this).y);
+				}
 				
 		}
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
@@ -145,29 +163,49 @@ class UiSScrollBar extends UiSContainerAlign, implements IUiScrollBarBase
 		
 		switch( scrollerType ) {
 			case UiConst.SCROLLBAR_TYPE_HORIZONTAL:
-				min.setSize(h, h);
-				max.setSize(h, h);
-				bar.setSize(w - 2 * h, h);
-				thumb.setSize(3 * h, h);
+				switch( scrollerCont ) {
+					case UiConst.SCROLL_BOTH_THUMB_AND_BUTTON, UiConst.SCROLL_ONLY_BUTTON:
+						min.setSize(h, h);
+						bar.setSize(w - 2 * h, h);
+						thumb.setSize(3 * h, h);
+						max.setSize(h, h);
+						
+						rect.width 	= w - 2 * h - thumb.getRange().width;
+						rect.x = h;
+					case UiConst.SCROLL_ONLY_THUMB:
+						bar.setSize(w, h);
+						thumb.setSize(3 * h, h);
+						
+						rect.width 	= w - thumb.getRange().width;
+						rect.x = 0;
+				}
 				
-				rect.width 	= w - 2 * h - thumb.getRange().width;
 				rect.height = 0;
-				rect.x = h;
 				rect.y = 0;
 				
-				thumb.setPosition(h, 0);
+				thumb.setPosition(rect.x, 0);
 			case UiConst.SCROLLBAR_TYPE_VERICAL:
-				min.setSize(w, w);
-				max.setSize(w, w);
-				bar.setSize(w, h - 2 * w);
-				thumb.setSize(w, 3 * w);
+				switch( scrollerCont ) {
+					case UiConst.SCROLL_BOTH_THUMB_AND_BUTTON, UiConst.SCROLL_ONLY_BUTTON:
+						min.setSize(w, w);
+						bar.setSize(w, h - 2* w);
+						thumb.setSize(w, 3 * w);
+						max.setSize(w, w);
+						
+						rect.height = h - 2 * w - thumb.getRange().height;
+						rect.y = w;
+					case UiConst.SCROLL_ONLY_THUMB:
+						bar.setSize(w, h - 2* w);
+						thumb.setSize(w, 3 * w);
+						
+						rect.height = h - thumb.getRange().height;
+						rect.y = 0;
+				}
 				
 				rect.width 	= 0;
-				rect.height = h - 2 * w - thumb.getRange().height;
 				rect.x = 0;
-				rect.y = w;
 				
-				thumb.setPosition(0, w);
+				thumb.setPosition(0, rect.y);
 		}
 	}
 	
@@ -203,7 +241,7 @@ class UiSScrollBar extends UiSContainerAlign, implements IUiScrollBarBase
 				thumb.setPosition(0, containerWidth);
 		}
 		
-		draw();
+		//draw();
 	}
 	
 	public function setThumbTexture(texture:Dynamic):Void

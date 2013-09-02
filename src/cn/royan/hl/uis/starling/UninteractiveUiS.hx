@@ -44,7 +44,9 @@ class UninteractiveUiS extends Sprite, implements IUiBase
 	
 	var excludes:Array<String>;
 	var includes:Array<String>;
-
+	
+	var type:Int;
+	
 	public var graphics:Image;
 	
 	var isInit:Bool;
@@ -64,6 +66,8 @@ class UninteractiveUiS extends Sprite, implements IUiBase
 
 		if (texture != null) {
 			bgTexture = texture;
+			
+			type = 1;
 			
 			setSize(Std.int(bgTexture.frame != null ? bgTexture.frame.width : bgTexture.width ), 
 					Std.int(bgTexture.frame != null ? bgTexture.frame.height : bgTexture.height ));
@@ -86,11 +90,16 @@ class UninteractiveUiS extends Sprite, implements IUiBase
 	{
 		if ( !isInit ) return;
 		if ( containerWidth > 0 && containerHeight > 0 ) {
-			SystemUtils.print(bgTexture+":"+defaultTexture, PrintConst.UIS);
-			if( bgTexture != null )
+			SystemUtils.print(bgTexture + ":" + defaultTexture, PrintConst.UIS);
+			
+			if ( type == 0 ) {
+				if ( graphics != null ) graphics.dispose();
+				graphics = new Image(getDefaultTexture());
+				graphics.touchable = false;
+				addChild( graphics );
+			} else {
 				graphics.texture = bgTexture;
-			else if( defaultTexture != null )
-				graphics.texture = defaultTexture;
+			}
 			graphics.scaleX = graphics.scaleY = getScale();
 		}
 	}
@@ -115,14 +124,7 @@ class UninteractiveUiS extends Sprite, implements IUiBase
 			bgColors.push(bgColors[bgColors.length - 1]);
 		}
 		
-		if ( containerWidth > 0 && containerHeight > 0 ) {
-			defaultTexture = getDefaultTexture();
-			if( graphics == null ){
-				graphics = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
-										[0x000000], [0x00], 1, borderColor, borderThick, borderAlpha, borderRx, borderRy)));
-				addChild( graphics );
-			}
-		}
+		type = 0;
 		
 		draw();
 	}
@@ -157,15 +159,6 @@ class UninteractiveUiS extends Sprite, implements IUiBase
 		containerWidth = w;
 		containerHeight = h;
 		
-		if( bgTexture == null && bgColors != null && bgAlphas != null )
-			defaultTexture = getDefaultTexture();
-		
-		if( containerHeight > 0 && containerWidth > 0 && graphics == null ){
-			graphics = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
-									[0x000000], [0x00], 1, borderColor, borderThick, borderAlpha, borderRx, borderRy)));
-			addChild( graphics );
-		}
-			
 		draw();
 	}
 
@@ -198,14 +191,9 @@ class UninteractiveUiS extends Sprite, implements IUiBase
 		}else {
 			bgTexture = texture;
 			
-			setSize(Std.int(bgTexture.width), Std.int(bgTexture.height));
+			type = 1;
 			
-			if ( containerHeight > 0 && containerWidth > 0 && graphics == null ) {
-				graphics = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
-								[0x000000], [0x00], 1, borderColor, borderThick, borderAlpha, borderRx, borderRy)));
-				graphics.touchable = false;
-				addChild( graphics );
-			}
+			setSize(Std.int(bgTexture.width), Std.int(bgTexture.height));
 		}
 	}
 	

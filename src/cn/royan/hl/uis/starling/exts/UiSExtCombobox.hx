@@ -1,5 +1,6 @@
 package cn.royan.hl.uis.starling.exts;
 
+import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.consts.UiConst;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiItemGroupBase;
@@ -8,6 +9,7 @@ import cn.royan.hl.uis.starling.bases.UiSLabelButton;
 import cn.royan.hl.uis.starling.bases.UiSScrollPane;
 import cn.royan.hl.uis.starling.InteractiveUiS;
 import cn.royan.hl.utils.SystemUtils;
+import starling.events.Touch;
 
 import starling.events.Event;
 
@@ -32,9 +34,10 @@ class UiSExtCombobox extends InteractiveUiS
 	{
 		super();
 		
+		//setMouseRender(true);
+		
 		title = new UiSLabelButton("Select");
 		title.setCallbacks({click:titleClickHandler});
-		title.setSize(50, 20);
 		addChild(title);
 		
 		group = new UiSContainerGroup();
@@ -49,9 +52,11 @@ class UiSExtCombobox extends InteractiveUiS
 		
 		listView = new UiSScrollPane(group, UiConst.SCROLL_TYPE_VERICAL_ONLY);
 		//addChild(listView);
+		
+		setSize(50, 20);
 	}
 	
-	function titleClickHandler(obj:UiSLabelButton):Void
+	function titleClickHandler(obj:UiSLabelButton, touch:Touch):Void
 	{
 		if ( contains(listView) )
 			removeChild(listView);
@@ -87,7 +92,9 @@ class UiSExtCombobox extends InteractiveUiS
 	
 	override public function setSize(w:Float, h:Float):Void 
 	{
-		super.setSize(w, h);
+		SystemUtils.print(w+":"+h, PrintConst.UIS);
+		containerWidth = w;
+		containerHeight = h;
 		
 		title.setSize(w, h);
 		group.setSize(w, h * line);

@@ -6,6 +6,8 @@ import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.interfaces.uis.IUiScrollPaneBase;
 import cn.royan.hl.uis.starling.InteractiveUiS;
 import cn.royan.hl.uis.starling.UninteractiveUiS;
+import cn.royan.hl.utils.SystemUtils;
+import starling.extensions.pixelmask.PixelMaskDisplayObject;
 
 import starling.events.Event;
 
@@ -17,6 +19,7 @@ import flash.geom.Rectangle;
  */
 class UiSScrollPane extends InteractiveUiS, implements IUiScrollPaneBase
 {
+	var maskedDisplayObject:PixelMaskDisplayObject;
 	var container:InteractiveUiS;
 	var containerMask:UninteractiveUiS;
 	var scrollerType:Int;
@@ -24,29 +27,33 @@ class UiSScrollPane extends InteractiveUiS, implements IUiScrollPaneBase
 	var hScrollBar:UiSScrollBar;
 	var vScrollBar:UiSScrollBar;
 	
-	public function new(container:InteractiveUiS, type:Int = UiConst.SCROLL_TYPE_HANDV)
+	public function new(container:InteractiveUiS, type:Int = UiConst.SCROLL_TYPE_HANDV, content:Int = UiConst.SCROLL_BOTH_THUMB_AND_BUTTON)
 	{
 		super();
 		
+		setMouseRender(true);
+		
 		this.container = container;
 		
-		container.addEventListener(DatasEvent.DATA_CHANGE, changeHandler);
-		addChild(container);
+		//addChild(container);
+		
+		maskedDisplayObject = new PixelMaskDisplayObject();
+		maskedDisplayObject.addChild(container);
+		addChild(maskedDisplayObject);
 		
 		containerMask = new UninteractiveUiS();
-		addChild(containerMask);
-		//container.mask = containerMask;
+		containerMask.setColorsAndAplhas([0],[1]);
+		containerMask.setSize(10, 10);
+		maskedDisplayObject.mask = containerMask;
 		
-		setType(type);
-		
-		changeHandler();
+		setType(type, content);
 	}
 	
 	override private function addToStageHandler(evt:Event = null):Void 
 	{
 		super.addToStageHandler(evt);
 		
-		changeHandler();
+		container.addEventListener(DatasEvent.DATA_CHANGE, changeHandler);
 		if( vScrollBar != null ) vScrollBar.addEventListener(DatasEvent.DATA_CHANGE, vChangeHandler);
 		if ( hScrollBar != null ) hScrollBar.addEventListener(DatasEvent.DATA_CHANGE, hChangeHandler);
 	}
@@ -70,8 +77,12 @@ class UiSScrollPane extends InteractiveUiS, implements IUiScrollPaneBase
 	
 	override public function setSize(cWidth:Float, cHeight:Float):Void
 	{
-		super.setSize(cWidth, cHeight);
+		//super.setSize(cWidth, cHeight);
+		containerWidth = cWidth;
+		containerHeight = cHeight;
+		
 		containerMask.setSize(cWidth, cHeight);
+		maskedDisplayObject.mask = containerMask;
 		switch(scrollerType){
 			case UiConst.SCROLL_TYPE_NONE:
 			case UiConst.SCROLL_TYPE_VERICAL_ONLY:
@@ -91,7 +102,7 @@ class UiSScrollPane extends InteractiveUiS, implements IUiScrollPaneBase
 		draw();
 	}
 	
-	public function setType(type:Int):Void
+	public function setType(type:Int, content:Int):Void
 	{
 		scrollerType = type;
 		
@@ -103,7 +114,7 @@ class UiSScrollPane extends InteractiveUiS, implements IUiScrollPaneBase
 					removeChild( hScrollBar );
 			case UiConst.SCROLL_TYPE_VERICAL_ONLY:
 				if ( vScrollBar == null ) {
-					vScrollBar = new UiSScrollBar(UiConst.SCROLLBAR_TYPE_VERICAL);
+					vScrollBar = new UiSScrollBar(UiConst.SCROLLBAR_TYPE_VERICAL, content);
 					vScrollBar.addEventListener(DatasEvent.DATA_CHANGE, vChangeHandler);
 				}
 					
@@ -111,7 +122,7 @@ class UiSScrollPane extends InteractiveUiS, implements IUiScrollPaneBase
 					removeChild( hScrollBar );
 			case UiConst.SCROLL_TYPE_HORIZONTAL_ONLY:
 				if ( hScrollBar == null ) {
-					hScrollBar = new UiSScrollBar(UiConst.SCROLLBAR_TYPE_HORIZONTAL);
+					hScrollBar = new UiSScrollBar(UiConst.SCROLLBAR_TYPE_HORIZONTAL, content);
 					hScrollBar.addEventListener(DatasEvent.DATA_CHANGE, hChangeHandler);
 				}
 				
@@ -119,11 +130,11 @@ class UiSScrollPane extends InteractiveUiS, implements IUiScrollPaneBase
 					removeChild( vScrollBar );
 			case UiConst.SCROLL_TYPE_HANDV:
 				if ( hScrollBar == null ) {
-					hScrollBar = new UiSScrollBar(UiConst.SCROLLBAR_TYPE_HORIZONTAL);
+					hScrollBar = new UiSScrollBar(UiConst.SCROLLBAR_TYPE_HORIZONTAL, content);
 					hScrollBar.addEventListener(DatasEvent.DATA_CHANGE, hChangeHandler);
 				}
 				if ( vScrollBar == null ) {
-					vScrollBar = new UiSScrollBar(UiConst.SCROLLBAR_TYPE_VERICAL);
+					vScrollBar = new UiSScrollBar(UiConst.SCROLLBAR_TYPE_VERICAL, content);
 					vScrollBar.addEventListener(DatasEvent.DATA_CHANGE, vChangeHandler);
 				}
 		}

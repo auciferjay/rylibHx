@@ -123,8 +123,7 @@ class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupB
 	public function removeAllGroupItems():Void
 	{
 		while ( items.length > 0 ) {
-			var item:IUiBase = items.shift();
-			removeItem(item);
+			removeGroupItem(cast(items.shift(), IUiItemGroupBase));
 		}
 		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
@@ -211,6 +210,7 @@ class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupB
 		var index:Int = SystemUtils.arrayIndexOf(values, key);
 		var giveUpIndex:Int = -1;
 		var current:IUiItemGroupBase = cast(items[SystemUtils.arrayIndexOf(items, obj)]);
+		
 		if ( index == -1 ) {
 			if ( isMulti ) {
 				if( maxLen <= values.length )
@@ -218,11 +218,12 @@ class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupB
 					giveUpKey = values[0];
 					giveUpIndex = SystemUtils.arrayIndexOf(keys, giveUpKey);
 					
-					if ( items[giveUpIndex] != null ) {
-						selects.shift();
-						values.shift();
+					if ( giveUpIndex > -1 && items[giveUpIndex] != null ) {
 						cast(items[giveUpIndex]).setSelected(false);
 					}
+					
+					selects.shift();
+					values.shift();
 				}
 				
 				values.push(key);
@@ -234,12 +235,9 @@ class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupB
 				giveUpKey = values[0];
 				giveUpIndex = SystemUtils.arrayIndexOf(keys, giveUpKey);
 				
-				if ( items[giveUpIndex] != null ) {
-					selects.shift();
-					values.shift();
+				if ( giveUpIndex > -1 && items[giveUpIndex] != null ) {
 					cast(items[giveUpIndex]).setSelected(false);
 				}
-				
 				values = [key];
 				selects = [current];
 				current.setSelected(true);
