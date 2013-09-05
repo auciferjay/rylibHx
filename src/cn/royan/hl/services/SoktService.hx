@@ -234,7 +234,7 @@ class SoktService extends DispatcherBase, implements IServiceBase
 	{
 		SystemUtils.print("[Class SoktService]:onProgress:" + socket.bytesAvailable, PrintConst.SERVICES);
 		var bytes:ByteArray = new ByteArray();
-		socket.writeBytes(bytes);
+		socket.readBytes(bytes);
 
 		if( callbacks != null && callbacks.doing != null ) callbacks.doing( bytes );
 		else dispatchEvent(new DatasEvent(DatasEvent.DATA_DOING, bytes));

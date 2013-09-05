@@ -30,9 +30,15 @@ class Sparrow implements IDisposeBase
 		frame = null;
 	}
 	
-	public var bitmapdata(getBitmapdata, null):BitmapData;
+	public var bitmapdata(getBitmapdata, setBitmapdata):BitmapData;
 	function getBitmapdata():BitmapData
 	{
+		return bitmapdata;
+	}
+	
+	function setBitmapdata(value:BitmapData):BitmapData
+	{
+		bitmapdata = value;
 		return bitmapdata;
 	}
 	

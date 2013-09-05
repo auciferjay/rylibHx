@@ -20,8 +20,11 @@ import cn.royan.hl.uis.normal.exts.UiNExtBmpNumberText;
 import cn.royan.hl.uis.normal.exts.UiNExtCombobox;
 import cn.royan.hl.uis.normal.exts.UiNExtImageLoader;
 
-import cn.royan.hl.uis.graphs.InteractiveUiG;
-import cn.royan.hl.uis.graphs.bases.UiGBmpdMovieClip;
+import cn.royan.hl.uis.graphs.UiGStage;
+import cn.royan.hl.uis.graphs.UiGShape;
+import cn.royan.hl.uis.graphs.UiGSprite;
+import cn.royan.hl.uis.graphs.UiGBmpdShape;
+import cn.royan.hl.uis.graphs.UiGBmpdSprite;
 import cn.royan.hl.uis.graphs.bases.UiGContainer;
 
 import cn.royan.hl.uis.starling.InteractiveUiS;

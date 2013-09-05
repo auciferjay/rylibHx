@@ -1,11 +1,11 @@
 package cn.royan.hl.interfaces.uis;
 
 import cn.royan.hl.geom.Range;
+import cn.royan.hl.uis.graphs.UiGStage;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.uis.style.Style;
 import cn.royan.hl.interfaces.IDisposeBase;
 
-import flash.display.Stage;
 import flash.geom.Rectangle;
 
 /**
@@ -17,7 +17,7 @@ interface IUiGraphBase implements IDisposeBase
 	/**
 	 * 设置舞台
 	 */
-	function setStage(value:Stage):Void;
+	function setStage(value:UiGStage):Void;
 	
 	/**
 	 * 设置父容器
@@ -28,48 +28,18 @@ interface IUiGraphBase implements IDisposeBase
 	/**
 	 * 更新显示
 	 */
-	function updateDisplayList():Void;
+	function updateDisplayList(item:IUiGraphBase = null):Void;
+	
+	/**
+	 * 是否更新
+	 */
+	function isUpdate():Bool;
 	
 	/**
 	 * 画布刷新
 	 */
 	function draw():Void;
-	
-	/**
-	 * 设置毁掉函数
-	 * @param	value {click:..., up:..., down:..., over:..., out:...}
-	 */
-	function setCallbacks(value:Dynamic):Void;
-	
-	/**
-	 * 设置背景颜色以及对应透明度
-	 * @param	color 	[0xFFFFFF, 0xFFFF00, 0xFF0000]/[[0xFFFFFF, 0xFFFF00, 0xFF0000],[0xFFFFFF, 0xFFFF00, 0xFF0000]]
-	 * @param	alpha 	[1, .5, 0]/[[1, .5, 0],[1, .5, 0]]
-	 */
-	function setColorsAndAplhas(color:Array<Dynamic>, alpha:Array<Dynamic>):Void;
-	
-	/**
-	 * 获取背景颜色
-	 * @return [0xFFFFFF, 0xFFFF00, 0xFF0000]/[[0xFFFFFF, 0xFFFF00, 0xFF0000],[0xFFFFFF, 0xFFFF00, 0xFF0000]]
-	 */
-	function getColors():Array<Dynamic>;
-	
-	/**
-	 * 获取背景透明度
-	 * @return [1, .5, 0]/[[1, .5, 0],[1, .5, 0]]
-	 */
-	function getAlphas():Array<Dynamic>;
-	
-	/**
-	 * 设置边框样式
-	 * @param	thick 	粗细度
-	 * @param	color 	颜色值
-	 * @param	alpha 	透明度
-	 * @param	rx		x轴半径
-	 * @param	ry		y轴半径
-	 */
-	function setBorder(thick:Int, color:Int, alpha:Float, rx:Int = 0, ry:Int = 0):Void;
-	
+
 	/**
 	 * 设置尺寸
 	 * @param	cWidth
@@ -85,29 +55,10 @@ interface IUiGraphBase implements IDisposeBase
 	function setPosition(cX:Float, cY:Float):Void;
 	
 	/**
-	 * 设置范围
-	 * @param	value	{width:..., height:..., x:..., y:...}
-	 */
-	function setRange(value:Range):Void;
-	
-	/**
-	 * 获取范围
-	 * @return	{width:..., height:..., x:..., y:...}
-	 */
-	function getRange():Range;
-	
-	/**
 	 * 获取感应范围
 	 * @return
 	 */
-	function getBounds():Rectangle;
-	
-	/**
-	 * 设置材质
-	 * @param	texture		Sparrow/Texture(Starling)
-	 * @param	frames
-	 */
-	function setTexture(texture:Sparrow, frames:Int = 1):Void;
+	function getBound():Rectangle;
 	
 	/**
 	 * 获取当前材质
@@ -155,13 +106,13 @@ interface IUiGraphBase implements IDisposeBase
 	 * 设置透明度
 	 * @param	value
 	 */
-	function setTotalAlpha(value:Float):Void;
+	function setAlpha(value:Float):Void;
 	
 	/**
 	 * 获取透明度
 	 * @return
 	 */
-	function getTotalAlpha():Float;
+	function getAlpha():Float;
 	
 	/**
 	 * 设置显示
@@ -174,12 +125,6 @@ interface IUiGraphBase implements IDisposeBase
 	 * @return
 	 */
 	function getVisible():Bool;
-	
-	/**
-	 * 设置样式名称
-	 * @param 	value
-	 */
-	function setStyle(value:Style):Void;
 	
 	/**
 	 * 设置容器状态对应隐藏列表

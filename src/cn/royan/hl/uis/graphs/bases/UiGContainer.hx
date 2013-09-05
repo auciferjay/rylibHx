@@ -1,11 +1,13 @@
 package cn.royan.hl.uis.graphs.bases;
 
+import cn.royan.hl.bases.PoolMap;
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.interfaces.uis.IUiGraphBase;
-import cn.royan.hl.uis.graphs.InteractiveUiG;
+import cn.royan.hl.uis.graphs.UiGSprite;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.utils.SystemUtils;
+import flash.sampler.NewObjectSample;
 
 import flash.geom.Rectangle;
 import flash.geom.Point;
@@ -15,60 +17,101 @@ import flash.display.BitmapData;
  * ...
  * @author RoYan
  */
-class UiGContainer extends InteractiveUiG
+class UiGContainer extends UiGSprite
 {
+	static var WIDTH:Int 	= 256;
+	static var HEIGHT:Int 	= 256;
+	
+	var current:String;
 	var states:Array<String>;
 	var items:Array<IUiGraphBase>;
 	var bitmapdata:BitmapData;
-	var current:String;
+	var blocks:Array<Rectangle>;
 	
 	public function new() 
 	{
 		super();
 		
-		states = [];
-		items = [];
-		
-		containerWidth 	= 0;
-		containerHeight = 0;
+		states 	= [];
+		items 	= [];
+		blocks 	= [];
+	}
+	
+	override public function updateDisplayList(item:IUiGraphBase = null):Void 
+	{
+		if ( item != null ) {
+			blocks.push(item.getBound().clone());
+		}
+		super.updateDisplayList();
 	}
 	
 	override public function draw():Void
 	{
 		if ( !updated ) return;
 		
-		var range:Range = { };
+		var range:Rectangle;
 		var width:Int 	= 0;
 		var height:Int 	= 0;
+		
 		for ( item in items ) {
-			range = item.getRange();
-			width = Std.int(Math.max(width, range.x + range.width));
-			height = Std.int(Math.max(height, range.y + range.height));
+			range = item.getBound();
+			width 	= Std.int(Math.max(width, range.x + range.width));
+			height 	= Std.int(Math.max(height, range.y + range.height));
 		}
 		
-		if ( width != containerWidth || height != containerHeight ) {
+		width 	= Std.int(Math.min(stage.getNativeStage().stageWidth, width));
+		height 	= Std.int(Math.min(stage.getNativeStage().stageHeight, height));
+		
+		if ( width > containerWidth || height > containerHeight ) {
 			if ( bitmapdata != null ) {
 				bitmapdata.dispose();
 			}
 			
-			containerWidth	= width;
-			containerHeight = height;
+			setSize(width, height);
 			bitmapdata = new BitmapData(containerWidth, containerHeight, true, 0x00FF);
-		} else {
-			bitmapdata.fillRect(new Rectangle(0,0,containerWidth, containerHeight), 0x00FFFFFF);
+			texture = Sparrow.fromBitmapData(bitmapdata);
+		}
+		
+		var rects:Array<Rectangle> = [];
+		var rect:Rectangle = new Rectangle(0, 0, WIDTH, HEIGHT);
+		for ( block in blocks ) {
+			var vx:Int = Math.ceil(block.width + block.x / WIDTH);
+			var vy:Int = Math.ceil(block.height + block.y / HEIGHT);
+			for ( i in 0...vx ) {
+				for ( j in 0...vy ) {
+					rect.x = Std.int(block.x / WIDTH) * WIDTH + i * WIDTH;
+					rect.y = Std.int(block.y / HEIGHT) * HEIGHT + j * HEIGHT;
+					
+					rects.push(rect.clone());
+					
+					bitmapdata.fillRect(rect, 0x00000000);
+				}
+			}
 		}
 		
 		var point:Point = new Point();
 		for ( item in items ) {
 			if ( !item.getVisible() ) continue;
 			item.draw();
-			range = item.getRange();
+			range = item.getBound();
 			point.x = range.x;
 			point.y = range.y;
-			bitmapdata.copyPixels(item.getTexture().bitmapdata, item.getTexture().regin, point, null, null, true);
+			
+			for ( rect in rects ) {
+				if ( range.intersects(rect) ) {
+					var drawRect:Rectangle = item.getTexture().regin.clone();
+						drawRect.width = rect.x + rect.width - point.x;
+						drawRect.height = rect.y + rect.height - point.y;
+						
+					bitmapdata.copyPixels(item.getTexture().bitmapdata, drawRect, point, null, null, true);
+					break;
+				}
+			}
 		}
 		
-		bgTexture = Sparrow.fromBitmapData(bitmapdata);
+		texture.bitmapdata = bitmapdata;
+		
+		blocks = [];
 		
 		updated = false;
 	}
@@ -81,6 +124,10 @@ class UiGContainer extends InteractiveUiG
 	{
 		items.push(item);
 		
+		item.setStage(stage);
+		item.setParent(this);
+		
+		updateDisplayList(item);
 		return item;
 	}
 	
@@ -95,9 +142,12 @@ class UiGContainer extends InteractiveUiG
 		var next:Array<IUiGraphBase> = items.slice(index);
 		
 		prev.push(item);
+		item.setStage(stage);
+		item.setParent(this);
 		
 		items = prev.concat(next);
 		
+		updateDisplayList(item);
 		return item;
 	}
 	
@@ -108,6 +158,11 @@ class UiGContainer extends InteractiveUiG
 	function removeItem(item:IUiGraphBase):IUiGraphBase
 	{
 		items.remove(item);
+		item.setStage(null);
+		item.setParent(null);
+		
+		PoolMap.disposeInstance(item);
+		updateDisplayList(item);
 		return item;
 	}
 	
@@ -124,6 +179,11 @@ class UiGContainer extends InteractiveUiG
 		
 		items = prev.concat(next);
 		
+		item.setStage(null);
+		item.setParent(null);
+		
+		PoolMap.disposeInstance(item);
+		updateDisplayList(item);
 		return item;
 	}
 	
@@ -132,7 +192,16 @@ class UiGContainer extends InteractiveUiG
 	 */
 	function removeAllItems():Void
 	{
-		items = [];
+		var item:IUiGraphBase;
+		while ( items.length > 0 ) {
+			item = items.shift();
+			item.setStage(null);
+			item.setParent(null);
+			
+			PoolMap.disposeInstance(item);
+		}
+		
+		updateDisplayList();
 	}
 	
 	/**
@@ -191,6 +260,8 @@ class UiGContainer extends InteractiveUiG
 				}
 			}
 		}
+		
+		updateDisplayList();
 	}
 	
 	public function getState():String
