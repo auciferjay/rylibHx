@@ -45,14 +45,14 @@ interface IUiGraphBase implements IDisposeBase
 	 * @param	cWidth
 	 * @param	cHeight
 	 */
-	function setSize(cWidth:Float, cHeight:Float):Void;
+	function setSize(cWidth:Int, cHeight:Int):Void;
 	
 	/**
 	 * 设置位置
 	 * @param	cX
 	 * @param	cY
 	 */
-	function setPosition(cX:Float, cY:Float):Void;
+	function setPosition(cX:Int, cY:Int):Void;
 	
 	/**
 	 * 获取感应范围

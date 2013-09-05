@@ -19,8 +19,8 @@ class UiGShape implements IUiGraphBase
 	var bound:Rectangle;
 	var containerWidth:Int;
 	var containerHeight:Int;
-	var positionX:Float;
-	var positionY:Float;
+	var positionX:Int;
+	var positionY:Int;
 	var scaleX:Float;
 	var scaleY:Float;
 	var rotation:Float;
@@ -105,12 +105,12 @@ class UiGShape implements IUiGraphBase
 	 * @param	cWidth
 	 * @param	cHeight
 	 */
-	public function setSize(cWidth:Float, cHeight:Float):Void
+	public function setSize(cWidth:Int, cHeight:Int):Void
 	{
 		updateDisplayList();
 		
-		containerWidth 	= cast(cWidth);
-		containerHeight	= cast(cHeight);
+		containerWidth 	= cWidth;
+		containerHeight	= cHeight;
 		
 		bound.width 	= containerWidth;
 		bound.height	= containerHeight;
@@ -121,12 +121,12 @@ class UiGShape implements IUiGraphBase
 	 * @param	cX
 	 * @param	cY
 	 */
-	public function setPosition(cX:Float, cY:Float):Void
+	public function setPosition(cX:Int, cY:Int):Void
 	{
 		updateDisplayList();
 		
-		positionX = cast(cX);
-		positionY = cast(cY);
+		positionX = cX;
+		positionY = cY;
 		
 		bound.x = positionX;
 		bound.y	= positionY;

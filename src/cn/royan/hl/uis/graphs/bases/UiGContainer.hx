@@ -75,16 +75,26 @@ class UiGContainer extends UiGSprite
 		var rects:Array<Rectangle> = [];
 		var rect:Rectangle = new Rectangle(0, 0, WIDTH, HEIGHT);
 		for ( block in blocks ) {
-			var vx:Int = Math.ceil(block.width + block.x / WIDTH);
-			var vy:Int = Math.ceil(block.height + block.y / HEIGHT);
+			var vx:Int = Math.ceil((block.x % WIDTH + block.width) / WIDTH);
+			var vy:Int = Math.ceil((block.y % HEIGHT + block.height) / HEIGHT);
+			
 			for ( i in 0...vx ) {
 				for ( j in 0...vy ) {
 					rect.x = Std.int(block.x / WIDTH) * WIDTH + i * WIDTH;
 					rect.y = Std.int(block.y / HEIGHT) * HEIGHT + j * HEIGHT;
 					
-					rects.push(rect.clone());
+					var isFind:Bool = false;
+					for ( z in rects ) {
+						if ( z.x == rect.x && z.y == rect.y ) {
+							isFind = true;
+							break;
+						}
+					}
 					
-					bitmapdata.fillRect(rect, 0x00000000);
+					if ( !isFind ) {
+						rects.push(rect.clone());
+						bitmapdata.fillRect(rect, cast(0xFFFFFFFF * Math.random()));
+					}
 				}
 			}
 		}
@@ -94,17 +104,45 @@ class UiGContainer extends UiGSprite
 			if ( !item.getVisible() ) continue;
 			item.draw();
 			range = item.getBound();
-			point.x = range.x;
-			point.y = range.y;
 			
 			for ( rect in rects ) {
-				if ( range.intersects(rect) ) {
-					var drawRect:Rectangle = item.getTexture().regin.clone();
-						drawRect.width = rect.x + rect.width - point.x;
-						drawRect.height = rect.y + rect.height - point.y;
-						
+				if ( rect.containsRect(range) ) {
+					point.x = range.x;
+					point.y = range.y;
+					
+					bitmapdata.copyPixels(item.getTexture().bitmapdata, item.getTexture().regin, point, null, null, true);
+				} else if ( rect.intersects(range) ) {
+					var drawRect:Rectangle = range.intersection(rect);
+					if ( drawRect.y != rect.y ) {
+						if ( drawRect.x != rect.x ) {
+							drawRect.x = 0;
+							drawRect.y = 0;
+							
+							point.x = range.x;
+							point.y = range.y;
+						} else {
+							drawRect.x = rect.x - range.x;
+							drawRect.y = 0;
+							
+							point.x = rect.x;
+							point.y = range.y;
+						}
+					} else {
+						if ( drawRect.x != rect.x ) {
+							drawRect.x = 0;
+							drawRect.y = rect.y - range.y;
+							
+							point.x = range.x;
+							point.y = rect.y;
+						} else {
+							drawRect.x = rect.x - range.x;
+							drawRect.y = rect.y - range.y;
+							
+							point.x = rect.x;
+							point.y = rect.y;
+						}
+					}
 					bitmapdata.copyPixels(item.getTexture().bitmapdata, drawRect, point, null, null, true);
-					break;
 				}
 			}
 		}
