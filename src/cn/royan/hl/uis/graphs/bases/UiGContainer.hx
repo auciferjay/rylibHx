@@ -103,40 +103,47 @@ class UiGContainer extends UiGSprite
 		for ( item in items ) {
 			if ( !item.getVisible() ) continue;
 			item.draw();
-			range = item.getBound();
+			range = item.getBound().clone();
+			var regin:Rectangle = item.getTexture().regin;
+			var frame:Rectangle = item.getTexture().frame != null?item.getTexture().frame:new Rectangle();
+			
+			range.x += -frame.x;
+			range.y += -frame.y;
+			range.width 	= regin.width;
+			range.height 	= regin.height;
 			
 			for ( rect in rects ) {
 				if ( rect.containsRect(range) ) {
 					point.x = range.x;
 					point.y = range.y;
 					
-					bitmapdata.copyPixels(item.getTexture().bitmapdata, item.getTexture().regin, point, null, null, true);
+					bitmapdata.copyPixels(item.getTexture().bitmapdata, regin, point, null, null, true);
 				} else if ( rect.intersects(range) ) {
 					var drawRect:Rectangle = range.intersection(rect);
 					if ( drawRect.y != rect.y ) {
 						if ( drawRect.x != rect.x ) {
-							drawRect.x = 0;
-							drawRect.y = 0;
+							drawRect.x = regin.x;
+							drawRect.y = regin.y;
 							
 							point.x = range.x;
 							point.y = range.y;
 						} else {
-							drawRect.x = rect.x - range.x;
-							drawRect.y = 0;
+							drawRect.x = regin.x + rect.x - range.x;
+							drawRect.y = regin.y;
 							
 							point.x = rect.x;
 							point.y = range.y;
 						}
 					} else {
 						if ( drawRect.x != rect.x ) {
-							drawRect.x = 0;
-							drawRect.y = rect.y - range.y;
+							drawRect.x = regin.x;
+							drawRect.y = regin.y + rect.y - range.y;
 							
 							point.x = range.x;
 							point.y = rect.y;
 						} else {
-							drawRect.x = rect.x - range.x;
-							drawRect.y = rect.y - range.y;
+							drawRect.x = regin.x + rect.x - range.x;
+							drawRect.y = regin.y + rect.y - range.y;
 							
 							point.x = rect.x;
 							point.y = rect.y;

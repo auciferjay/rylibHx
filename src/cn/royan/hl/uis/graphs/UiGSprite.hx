@@ -10,6 +10,8 @@ class UiGSprite extends UiGShape
 {
 	var buttonMode:Bool;
 	
+	var callbacks:Dynamic;
+	
 	public function new() 
 	{
 		super();

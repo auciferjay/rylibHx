@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://texturepacker.com-->
+<!-- $TexturePacker:SmartUpdate:92375d251bfc943ab9b4b08968345560$ -->
+<TextureAtlas imagePath="fish_9.png">
+    <SubTexture name="9_01" x="86" y="320" width="82" height="106" frameX="-17" frameY="-41" frameWidth="116" frameHeight="148"/>
+    <SubTexture name="9_02" x="100" y="215" width="90" height="104" frameX="-13" frameY="-42" frameWidth="116" frameHeight="148"/>
+    <SubTexture name="9_03" x="1" y="106" width="108" height="104" frameX="-4" frameY="-44" frameWidth="116" frameHeight="148"/>
+    <SubTexture name="9_04" x="1" y="1" width="114" height="104" frameX="0" frameY="-43" frameWidth="116" frameHeight="148"/>
+    <SubTexture name="9_05" x="116" y="1" width="110" height="104" frameX="-3" frameY="-43" frameWidth="116" frameHeight="148"/>
+    <SubTexture name="9_06" x="110" y="106" width="102" height="108" frameX="-8" frameY="-40" frameWidth="116" frameHeight="148"/>
+    <SubTexture name="9_07" x="1" y="211" width="98" height="108" frameX="-9" frameY="-40" frameWidth="116" frameHeight="148"/>
+    <SubTexture name="9_08" x="1" y="320" width="84" height="106" frameX="-15" frameY="-41" frameWidth="116" frameHeight="148"/>
+</TextureAtlas>

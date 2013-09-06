@@ -11,9 +11,11 @@ class UiGBmpdSprite extends UiGBmpdShape
 {
 	var buttonMode:Bool;
 	
-	public function new() 
+	var callbacks:Dynamic;
+	
+	public function new( sparrow:Sparrow ) 
 	{
-		super();
+		super( sparrow );
 	}
 	
 	override public function setStage(value:UiGStage):Void 

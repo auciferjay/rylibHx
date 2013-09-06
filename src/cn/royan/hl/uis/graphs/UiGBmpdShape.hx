@@ -32,7 +32,7 @@ class UiGBmpdShape implements IUiGraphBase
 	var excludes:Array<String>;
 	var includes:Array<String>;
 	
-	public function new() 
+	public function new( sparrow:Sparrow ) 
 	{
 		bound 			= new Rectangle();
 		containerWidth 	= 0;
@@ -44,12 +44,10 @@ class UiGBmpdShape implements IUiGraphBase
 		rotation		= 0;
 		alpha			= 1;
 		visible			= true;
-	}
-	
-	public function create(sparrow:Sparrow):Void
-	{
+		
 		texture = sparrow;
-		setSize(Std.int(texture.regin.width), Std.int(texture.regin.height));
+		if ( texture.frame != null ) setSize(Std.int(texture.frame.width), Std.int(texture.frame.height));
+		else setSize(Std.int(texture.regin.width), Std.int(texture.regin.height));
 	}
 	
 	/**
@@ -57,7 +55,7 @@ class UiGBmpdShape implements IUiGraphBase
 	 */
 	public function setStage(value:UiGStage):Void
 	{
-		//stage = value;
+		stage = value;
 	}
 	
 	/**

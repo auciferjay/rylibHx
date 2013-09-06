@@ -86,7 +86,14 @@ class SparrowAtlas implements IDisposeBase
 			if (name.indexOf(prefix) == 0)
 				result.push(name);
 		
-		//result.sort(Array.CASEINSENSITIVE);
+		result.sort(function(a:String, b:String):Int
+		{
+			a = a.toLowerCase();
+			b = b.toLowerCase();
+			if (a < b) return -1;
+			if (a > b) return 1;
+			return 0;
+		});
 		return result;
 	}
 	
