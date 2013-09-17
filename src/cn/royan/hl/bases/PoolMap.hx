@@ -57,7 +57,6 @@ class PoolMap
 	{
 		SystemUtils.print(type+":"+parameters, PrintConst.BASES);
 		var pool:Array<Dynamic> = getPool( type );
-		SystemUtils.print("pool:"+pool);
 		if( pool.length > 0 )
 			return pool.pop();
 		else

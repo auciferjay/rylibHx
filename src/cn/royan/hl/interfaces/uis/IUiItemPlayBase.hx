@@ -36,4 +36,29 @@ interface IUiItemPlayBase implements IUiBase
 	 * @param	to
 	 */
 	function goFromTo(from:Int, to:Int):Void;
+	
+	/**
+	 * 播放
+	 */
+	//function play():Void;
+	
+	/**
+	 * 停止
+	 */
+	//function stop():Void;
+	
+	/**
+	 * 暂停
+	 */
+	//function pause():Void;
+	
+	/**
+	 * 下一帧
+	 */
+	//function nextFrame():Void;
+	
+	/**
+	 * 上一帧
+	 */
+	//function prevFrame():Void;
 }

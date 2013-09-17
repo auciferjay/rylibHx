@@ -4,6 +4,7 @@ import cn.royan.hl.interfaces.uis.IUiGraphBase;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.uis.graphs.UiGStage;
 import cn.royan.hl.utils.BitmapDataUtils;
+import flash.geom.Point;
 
 import flash.geom.Rectangle;
 
@@ -130,6 +131,16 @@ class UiGShape implements IUiGraphBase
 		
 		bound.x = positionX;
 		bound.y	= positionY;
+	}
+	
+	/**
+	 * 碰撞
+	 * @param	point
+	 * @return
+	 */
+	public function hitTest(point:Point):Bool
+	{
+		return getBound().containsPoint(point);
 	}
 	
 	/**

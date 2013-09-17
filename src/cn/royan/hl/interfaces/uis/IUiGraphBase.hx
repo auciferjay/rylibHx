@@ -5,6 +5,7 @@ import cn.royan.hl.uis.graphs.UiGStage;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.uis.style.Style;
 import cn.royan.hl.interfaces.IDisposeBase;
+import flash.geom.Point;
 
 import flash.geom.Rectangle;
 
@@ -53,6 +54,13 @@ interface IUiGraphBase implements IDisposeBase
 	 * @param	cY
 	 */
 	function setPosition(cX:Int, cY:Int):Void;
+	
+	/**
+	 * 碰撞
+	 * @param	point
+	 * @return
+	 */
+	function hitTest(point:Point):Bool;
 	
 	/**
 	 * 获取感应范围

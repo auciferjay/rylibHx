@@ -3,6 +3,7 @@ package cn.royan.hl.uis.graphs.bases;
 import cn.royan.hl.bases.PoolMap;
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.consts.PrintConst;
+import cn.royan.hl.interfaces.uis.ITouchBase;
 import cn.royan.hl.interfaces.uis.IUiGraphBase;
 import cn.royan.hl.uis.graphs.UiGSprite;
 import cn.royan.hl.uis.sparrow.Sparrow;
@@ -161,6 +162,24 @@ class UiGContainer extends UiGSprite
 		updated = false;
 	}
 	
+	override public function touchTest(point:Point, mouseDown:Bool):Bool
+	{
+		items.reverse();
+		var dp:Point = new Point();
+		for ( item in items ) {
+			if ( Std.is( item, ITouchBase ) ) {
+				dp.x = getBound().x;
+				dp.y = getBound().y;
+				if ( cast(item, ITouchBase).touchTest(point.subtract(dp), mouseDown) ) {
+					items.reverse();
+					return true;
+				}
+			}
+		}
+		items.reverse();
+		return false;
+	}
+	
 	/**
 	 * 添加显示项
 	 * @param	item
@@ -181,7 +200,7 @@ class UiGContainer extends UiGSprite
 	 * @param	item
 	 * @param	index
 	 */
-	function addItemAt(item:IUiGraphBase, index:Int):IUiGraphBase
+	public function addItemAt(item:IUiGraphBase, index:Int):IUiGraphBase
 	{
 		var prev:Array<IUiGraphBase> = items.slice(0, index);
 		var next:Array<IUiGraphBase> = items.slice(index);
@@ -200,7 +219,7 @@ class UiGContainer extends UiGSprite
 	 * 移除显示想
 	 * @param	item
 	 */
-	function removeItem(item:IUiGraphBase):IUiGraphBase
+	public function removeItem(item:IUiGraphBase):IUiGraphBase
 	{
 		items.remove(item);
 		item.setStage(null);
@@ -215,7 +234,7 @@ class UiGContainer extends UiGSprite
 	 * 移除显示项
 	 * @param	index
 	 */
-	function removeItemAt(index:Int):IUiGraphBase
+	public function removeItemAt(index:Int):IUiGraphBase
 	{
 		var prev:Array<IUiGraphBase> = items.slice(0, index);
 		var next:Array<IUiGraphBase> = items.slice(index);
@@ -235,7 +254,7 @@ class UiGContainer extends UiGSprite
 	/**
 	 * 清空显示项
 	 */
-	function removeAllItems():Void
+	public function removeAllItems():Void
 	{
 		var item:IUiGraphBase;
 		while ( items.length > 0 ) {
@@ -254,7 +273,7 @@ class UiGContainer extends UiGSprite
 	 * @param	index
 	 * @return
 	 */
-	function getItemAt(index:Int):IUiGraphBase
+	public function getItemAt(index:Int):IUiGraphBase
 	{
 		return items[index];
 	}
@@ -264,7 +283,7 @@ class UiGContainer extends UiGSprite
 	 * @param	item
 	 * @return
 	 */
-	function getIndexByItem(item:IUiGraphBase):Int
+	public function getIndexByItem(item:IUiGraphBase):Int
 	{
 		for ( i in 0...items.length ) {
 			if ( items[i] == item ) return i;

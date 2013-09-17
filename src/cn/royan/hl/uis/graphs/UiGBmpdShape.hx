@@ -3,6 +3,7 @@ package cn.royan.hl.uis.graphs;
 import cn.royan.hl.interfaces.uis.IUiGraphBase;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.uis.graphs.UiGStage;
+import flash.geom.Point;
 
 import flash.geom.Rectangle;
 
@@ -120,6 +121,16 @@ class UiGBmpdShape implements IUiGraphBase
 		
 		bound.x = positionX;
 		bound.y	= positionY;
+	}
+	
+	/**
+	 * 碰撞
+	 * @param	point
+	 * @return
+	 */
+	public function hitTest(point:Point):Bool
+	{
+		return getBound().containsPoint(point);
 	}
 	
 	/**

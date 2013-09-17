@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://texturepacker.com-->
+<!-- $TexturePacker:SmartUpdate:51f1cf7bf37bb76c51fd7b026eb282d9$ -->
+<TextureAtlas imagePath="fish_3.png">
+    <SubTexture name="3_01" x="45" y="1" width="43" height="72" frameX="0" frameY="0" frameWidth="45" frameHeight="74"/>
+    <SubTexture name="3_02" x="1" y="147" width="43" height="72" frameX="0" frameY="0" frameWidth="45" frameHeight="74"/>
+    <SubTexture name="3_03" x="89" y="72" width="43" height="70" frameX="-2" frameY="-1" frameWidth="45" frameHeight="74"/>
+    <SubTexture name="3_04" x="177" y="1" width="43" height="70" frameX="-2" frameY="0" frameWidth="45" frameHeight="74"/>
+    <SubTexture name="3_05" x="131" y="143" width="41" height="70" frameX="-4" frameY="0" frameWidth="45" frameHeight="74"/>
+    <SubTexture name="3_06" x="133" y="1" width="43" height="70" frameX="-2" frameY="0" frameWidth="45" frameHeight="74"/>
+    <SubTexture name="3_07" x="89" y="1" width="43" height="70" frameX="-2" frameY="0" frameWidth="45" frameHeight="74"/>
+    <SubTexture name="3_08" x="89" y="143" width="41" height="70" frameX="-4" frameY="0" frameWidth="45" frameHeight="74"/>
+    <SubTexture name="3_09" x="45" y="145" width="43" height="70" frameX="-2" frameY="0" frameWidth="45" frameHeight="74"/>
+    <SubTexture name="3_10" x="45" y="74" width="43" height="70" frameX="-1" frameY="0" frameWidth="45" frameHeight="74"/>
+    <SubTexture name="3_11" x="1" y="74" width="43" height="72" frameX="0" frameY="0" frameWidth="45" frameHeight="74"/>
+    <SubTexture name="3_12" x="1" y="1" width="43" height="72" frameX="0" frameY="0" frameWidth="45" frameHeight="74"/>
+</TextureAtlas>
