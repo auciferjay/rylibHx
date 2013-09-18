@@ -5,8 +5,8 @@ import cn.royan.hl.uis.graphs.UiGStage;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.uis.style.Style;
 import cn.royan.hl.interfaces.IDisposeBase;
-import flash.geom.Point;
 
+import flash.geom.Point;
 import flash.geom.Rectangle;
 
 /**

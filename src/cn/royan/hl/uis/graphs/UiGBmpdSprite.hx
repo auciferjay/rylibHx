@@ -65,13 +65,31 @@ class UiGBmpdSprite extends UiGBmpdShape, implements ITouchBase
 	
 	private function checkTouchStats(value:Int):Void
 	{
-		if ( touchstats.length > 0 && touchstats[touchstats.length - 1] != value )
-			touchstats.push(value);
+		if ( touchstats.length > 0 && touchstats[touchstats.length - 1] == value )
+			return;
 		
+		touchstats.push(value);
+		var history:String = touchstats.join("");
+		var index:Int = -1;
+		switch( value ) {
+			case UiConst.TOUCHSTATS_IN_UP:
+				index = history.lastIndexOf("21");
+				if ( index != -1 )
+					SystemUtils.print("up");
+				index = history.lastIndexOf("121");
+				if ( index != -1 )
+					SystemUtils.print("click");
+			case UiConst.TOUCHSTATS_IN_DOWN:
+				index = history.lastIndexOf("12");
+				if ( index != -1 )
+					SystemUtils.print("down");
+			default:
+				index = history.lastIndexOf("123");
+				if ( index != -1 )
+					SystemUtils.print("release_out");
+		}
+			
 		if ( value == UiConst.TOUCHSTATS_OUT_DOWN || value == UiConst.TOUCHSTATS_OUT_UP ) {
-			
-			SystemUtils.print(touchstats);
-			
 			touchstats = [];
 		}
 	}
