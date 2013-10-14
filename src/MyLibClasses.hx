@@ -20,15 +20,16 @@ import cn.royan.hl.uis.normal.exts.UiNExtBmpNumberText;
 import cn.royan.hl.uis.normal.exts.UiNExtCombobox;
 import cn.royan.hl.uis.normal.exts.UiNExtImageLoader;
 
+import cn.royan.hl.uis.graphs.UiGText;
 import cn.royan.hl.uis.graphs.UiGStage;
 import cn.royan.hl.uis.graphs.UiGShape;
 import cn.royan.hl.uis.graphs.UiGSprite;
-import cn.royan.hl.uis.graphs.UiGBmpdShape;
-import cn.royan.hl.uis.graphs.UiGBmpdSprite;
-import cn.royan.hl.uis.graphs.bases.UiGBmpdButton;
-import cn.royan.hl.uis.graphs.bases.UiGBmpdLabelButton;
-import cn.royan.hl.uis.graphs.bases.UiGBmpdMovieClip;
-import cn.royan.hl.uis.graphs.bases.UiGContainer;
+import cn.royan.hl.uis.graphs.UiGGraphic;
+import cn.royan.hl.uis.graphs.UiGMovieClip;
+import cn.royan.hl.uis.graphs.UiGDisplayObject;
+import cn.royan.hl.uis.graphs.UiGDisplayObjectContainer;
+import cn.royan.hl.uis.graphs.components.UiGButton;
+import cn.royan.hl.uis.graphs.components.UiGContainer;
 
 import cn.royan.hl.uis.starling.InteractiveUiS;
 import cn.royan.hl.uis.starling.UninteractiveUiS;

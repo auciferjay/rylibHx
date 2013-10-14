@@ -1,76 +1,75 @@
 package cn.royan.hl.uis.graphs;
 
-import cn.royan.hl.consts.UiConst;
-import cn.royan.hl.interfaces.uis.ITouchBase;
-import cn.royan.hl.uis.graphs.UiGStage;
+import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.utils.SystemUtils;
-
+import flash.geom.Point;
+import flash.display.BitmapData;
 import flash.ui.Mouse;
 import flash.ui.MouseCursor;
-import flash.geom.Point;
 
 /**
  * ...
  * @author RoYan
  */
-class UiGSprite extends UiGShape, implements ITouchBase
+class UiGSprite extends UiGDisplayObjectContainer
 {
-	var buttonMode:Bool;
-	var touchabled:Bool;
+	public var buttonMode(getButtonMode, setButtonMode):Bool;
+	public var dropTarget(getDropTarget, never):UiGDisplayObject;
+	public var useHandCursor(default, setUseHandCursor):Bool;
 	
-	var touchstats:Array<Int>;
+	private var _cursorCallbackOut:Dynamic->Void;
+	private var _cursorCallbackOver:Dynamic->Void;
+	private var _dropTarget:UiGDisplayObject;
+	private var _buttonMode:Bool;
 	
-	var callbacks:Dynamic;
-	
-	public function new() 
+	public function new(texture:Sparrow = null) 
 	{
 		super();
 		
-		touchstats 	= [];
+		_touchable = true;
+		
+		_graphics = new UiGGraphic(texture);
+		
+		if ( texture != null ) {
+			if ( texture.frame != null ) {
+				width 	= Std.int(texture.frame.width);
+				height 	= Std.int(texture.frame.height);
+			} else {
+				width 	= Std.int(texture.regin.width);
+				height	= Std.int(texture.regin.height);
+			}
+			
+			_snap = new BitmapData(width, height, true, 0x00FF);
+			_snap.copyPixels( _graphics.getTexture().bitmapdata, _graphics.getTexture().regin, new Point() );
+		}
 	}
 	
-	public function setTouchabled(value:Bool):Void
+	override public function touchTest(point:Point, mouseDown:Bool):Bool
 	{
-		touchabled = value;
+		if ( touchable && hitTest(point) ) {
+			Mouse.cursor = buttonMode?MouseCursor.BUTTON:MouseCursor.AUTO;
+		}
+		return super.touchTest(point, mouseDown);
 	}
 	
-	public function getTouchabled():Bool
+	public function getDropTarget():UiGDisplayObject
 	{
-		return touchabled;
+		return _dropTarget;
 	}
 	
-	public function setButtonMode(value:Bool):Void
+	public function setUseHandCursor(value:Bool):Bool
 	{
-		buttonMode = value;
+		return useHandCursor;
+	}
+	
+	public function setButtonMode(value:Bool):Bool
+	{
+		_buttonMode = value;
+		return _buttonMode;
 	}
 	
 	public function getButtonMode():Bool
 	{
-		return buttonMode;
-	}
-	
-	public function touchTest(point:Point, mouseDown:Bool):Bool
-	{
-		if ( touchabled && hitTest(point) ) {
-			Mouse.cursor = buttonMode?MouseCursor.BUTTON:MouseCursor.AUTO;
-			
-			checkTouchStats(mouseDown?UiConst.TOUCHSTATS_IN_DOWN:UiConst.TOUCHSTATS_IN_UP);
-			return true;
-		}
-		Mouse.cursor = MouseCursor.AUTO;
-		checkTouchStats(mouseDown?UiConst.TOUCHSTATS_OUT_DOWN:UiConst.TOUCHSTATS_OUT_UP);
-		return false;
-	}
-	
-	private function checkTouchStats(value:Int):Void
-	{
-		touchstats.push(value);
-		
-		if ( value == UiConst.TOUCHSTATS_OUT_DOWN || value == UiConst.TOUCHSTATS_OUT_UP ) {
-			
-			SystemUtils.print(value);
-			
-			touchstats = [];
-		}
+		return _buttonMode;
 	}
 }
