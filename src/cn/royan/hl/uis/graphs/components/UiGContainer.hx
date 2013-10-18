@@ -74,7 +74,14 @@ class UiGContainer extends UiGSprite
 	{
 		_moveProp = effect;
 	}
-
+	
+	override public function draw():Void 
+	{
+		fillRow();
+		drawRow();
+		super.draw();
+	}
+	
 	function fillRow():Void
 	{
 		var rowW:Float	= 0;

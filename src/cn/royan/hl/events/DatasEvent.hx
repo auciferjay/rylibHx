@@ -39,6 +39,35 @@ class DatasEvent extends Event
 	 */
 	static public inline var DATA_ERROR:String		= "data_error";
 	
+	/**
+	 * 
+	 */
+	static public inline var MOUSE_UP:String		= "mouse_up";
+	
+	/**
+	 * 
+	 */
+	static public inline var MOUSE_DOWN:String		= "mouse_down";
+	
+	/**
+	 * 
+	 */
+	static public inline var MOUSE_CLICK:String		= "mouse_click";
+	
+	/**
+	 * 
+	 */
+	static public inline var MOUSE_RELEASE_OUT:String	= "mouse_release_out";
+	
+	/**
+	 * 
+	 */
+	static public inline var MOUSE_OVER:String		= "mouse_over";
+	
+	/**
+	 * 
+	 */
+	static public inline var MOUSE_OUT:String		= "mouse_out";
 	var _t:String;
 	var _d:Dynamic;
 	var _b:Bool;

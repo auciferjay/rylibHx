@@ -1,6 +1,7 @@
 package cn.royan.hl.uis.graphs;
 
 import cn.royan.hl.bases.TimerBase;
+import cn.royan.hl.consts.UiConst;
 import cn.royan.hl.uis.graphs.UiGDisplayObjectContainer;
 import flash.geom.Point;
 
@@ -17,7 +18,6 @@ import flash.events.TouchEvent;
 class UiGStage extends UiGDisplayObjectContainer
 {
 	private static var mouseChanges:Array<String> = [ MouseEvent.MOUSE_DOWN,  MouseEvent.MOUSE_MOVE, MouseEvent.MOUSE_UP ];
-	//private static var touchChanges:Array<String> = [ TouchEvent.TOUCH_OUT, TouchEvent.TOUCH_OVER, TouchEvent.TOUCH_ROLL_OUT, TouchEvent.TOUCH_ROLL_OVER ];
 	
 	var nativeStage:Stage;
 	
@@ -37,11 +37,6 @@ class UiGStage extends UiGDisplayObjectContainer
 		
 		for (touchEventType in mouseChanges)
             nativeStage.addEventListener(touchEventType, onTouch, false, 0, true);
-        
-		// register other event handlers
-		//nativeStage.addEventListener(KeyboardEvent.KEY_DOWN, onKey, false, 0, true);
-		//nativeStage.addEventListener(KeyboardEvent.KEY_UP, onKey, false, 0, true);
-		//nativeStage.addEventListener(Event.MOUSE_LEAVE, onMouseLeave, false, 0, true);
 	}
 	
 	private function onTouch(evt:Event):Void
@@ -55,10 +50,12 @@ class UiGStage extends UiGDisplayObjectContainer
 
 			isDown = cast(evt, MouseEvent).buttonDown;
 		}else {
-
+			
 		}
 		var point:Point = new Point(globalX, globalY);
-		touchTest(point, isDown);
+		var touchObj:UiGDisplayObject = touchTest(point, isDown);
+		if ( touchObj != null )
+			touchObj.checkTouchStats(isDown?UiConst.TOUCHSTATS_IN_DOWN:UiConst.TOUCHSTATS_IN_UP);
 	}
 	
 	public function getNativeStage():Stage

@@ -1,5 +1,6 @@
 package cn.royan.hl.uis.graphs;
 
+import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.utils.SystemUtils;
 import flash.geom.Point;
@@ -42,14 +43,19 @@ class UiGSprite extends UiGDisplayObjectContainer
 			_snap = new BitmapData(width, height, true, 0x00FF);
 			_snap.copyPixels( _graphics.getTexture().bitmapdata, _graphics.getTexture().regin, new Point() );
 		}
+		
+		addEventListener(DatasEvent.MOUSE_OVER, mouseOverHandler);
+		addEventListener(DatasEvent.MOUSE_OUT, mouseOutHandler);
 	}
 	
-	override public function touchTest(point:Point, mouseDown:Bool):Bool
+	function mouseOverHandler(evt:DatasEvent):Void
 	{
-		if ( touchable && hitTest(point) ) {
-			Mouse.cursor = buttonMode?MouseCursor.BUTTON:MouseCursor.AUTO;
-		}
-		return super.touchTest(point, mouseDown);
+		Mouse.cursor = _buttonMode?MouseCursor.BUTTON:MouseCursor.AUTO;
+	}
+	
+	function mouseOutHandler(evt:DatasEvent):Void
+	{
+		Mouse.cursor = MouseCursor.AUTO;
 	}
 	
 	public function getDropTarget():UiGDisplayObject

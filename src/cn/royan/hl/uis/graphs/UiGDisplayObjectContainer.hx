@@ -138,7 +138,7 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		cWidth 	= Std.int(Math.min(stage.getNativeStage().stageWidth, cWidth));
 		cHeight = Std.int(Math.min(stage.getNativeStage().stageHeight, cHeight));
 		
-		if ( cWidth > _width || cHeight > _height ) {
+		if ( cWidth > _width || cHeight > _height || _graphicFlags ) {
 			if ( _snap != null ) {
 				_snap.dispose();
 			}
@@ -249,23 +249,26 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		_blocks = [];
 		
 		_renderFlags = false;
+		_graphicFlags = false;
 	}
 	
-	override public function touchTest(point:Point, mouseDown:Bool):Bool
+	override public function touchTest(point:Point, isDown:Bool):UiGDisplayObject
 	{
 		_items.reverse();
 		var dp:Point = new Point();
+		var touchObj:UiGDisplayObject = null;
 		for ( item in _items ) {
 			if ( item.touchable ) {
 				dp.x = getBound().x;
 				dp.y = getBound().y;
-				if ( item.touchTest(point.subtract(dp), mouseDown) ) {
-					_items.reverse();
-					return true;
-				}
+				
+				var temp:UiGDisplayObject = item.touchTest(point.subtract(dp), isDown);
+				if( touchObj == null )
+					touchObj = temp;
 			}
 		}
 		_items.reverse();
-		return false;
+		if ( touchObj != null ) return touchObj;
+		return super.touchTest(point.subtract(dp), isDown);
 	}
 }

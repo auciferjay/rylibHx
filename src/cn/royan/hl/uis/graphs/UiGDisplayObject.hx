@@ -1,6 +1,8 @@
 package cn.royan.hl.uis.graphs;
 
+import cn.royan.hl.bases.DispatcherBase;
 import cn.royan.hl.consts.UiConst;
+import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiGBase;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.utils.SystemUtils;
@@ -15,7 +17,7 @@ import flash.ui.MouseCursor;
  * ...
  * @author RoYan
  */
-class UiGDisplayObject implements IUiGBase
+class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 {
 	public var alpha:Float;
 	public var name:String;
@@ -38,6 +40,7 @@ class UiGDisplayObject implements IUiGBase
 	private var _parent:UiGDisplayObjectContainer;
 	private var _graphics:UiGGraphic;
 	private var _renderFlags:Bool;
+	private var _graphicFlags:Bool;
 	private var _invaildBound:Bool;
 	private var _bound:Rectangle;
 	private var _height:Int;
@@ -54,8 +57,11 @@ class UiGDisplayObject implements IUiGBase
 	
 	public function new() 
 	{
+		super();
+		
 		_bound = new Rectangle();
 		_visible = true;
+		_graphicFlags = true;
 		_touchable = false;
 		_touchstats = [];
 	}
@@ -65,22 +71,21 @@ class UiGDisplayObject implements IUiGBase
 		return getBound().containsPoint(point);
 	}
 	
-	public function touchTest(point:Point, mouseDown:Bool):Bool
+	public function touchTest(point:Point, isDown:Bool):UiGDisplayObject
 	{
-		if ( touchable && hitTest(point) ) {
-			checkTouchStats(mouseDown?UiConst.TOUCHSTATS_IN_DOWN:UiConst.TOUCHSTATS_IN_UP);
-			return true;
+		if ( _touchable && hitTest(point) ) {
+			//checkTouchStats(isDown?UiConst.TOUCHSTATS_IN_DOWN:UiConst.TOUCHSTATS_IN_UP);
+			return this;
 		}
-		Mouse.cursor = MouseCursor.AUTO;
-		checkTouchStats(mouseDown?UiConst.TOUCHSTATS_OUT_DOWN:UiConst.TOUCHSTATS_OUT_UP);
-		return false;
+		checkTouchStats(isDown?UiConst.TOUCHSTATS_OUT_DOWN:UiConst.TOUCHSTATS_OUT_UP);
+		return null;
 	}
 
-	private function checkTouchStats(value:Int):Void
+	public function checkTouchStats(value:Int):Void
 	{
 		if ( _touchstats.length > 0 && _touchstats[_touchstats.length - 1] == value )
 			return;
-
+		
 		_touchstats.push(value);
 		var history:String = _touchstats.join("");
 		var index:Int = -1;
@@ -88,21 +93,33 @@ class UiGDisplayObject implements IUiGBase
 			case UiConst.TOUCHSTATS_IN_UP:
 				index = history.lastIndexOf("21");
 				if ( index != -1 )
-					SystemUtils.print("up");
+					dispatchEvent(new DatasEvent(DatasEvent.MOUSE_UP));
 				index = history.lastIndexOf("121");
 				if ( index != -1 )
-					SystemUtils.print("click");
+					dispatchEvent(new DatasEvent(DatasEvent.MOUSE_CLICK));
+				if ( history == "1" )
+					dispatchEvent(new DatasEvent(DatasEvent.MOUSE_OVER));
 			case UiConst.TOUCHSTATS_IN_DOWN:
 				index = history.lastIndexOf("12");
 				if ( index != -1 )
-					SystemUtils.print("down");
-			default:
-				index = history.lastIndexOf("123");
+					dispatchEvent(new DatasEvent(DatasEvent.MOUSE_DOWN));
+				index = history.lastIndexOf("32");
+				if( index != -1 )
+					dispatchEvent(new DatasEvent(DatasEvent.MOUSE_OVER));
+			case UiConst.TOUCHSTATS_OUT_UP:
+				index = history.lastIndexOf("1230");
 				if ( index != -1 )
-					SystemUtils.print("release_out");
+					dispatchEvent(new DatasEvent(DatasEvent.MOUSE_RELEASE_OUT));
+				index = history.lastIndexOf("10");
+				if ( index != -1 )
+					dispatchEvent(new DatasEvent(DatasEvent.MOUSE_OUT));
+			case UiConst.TOUCHSTATS_OUT_DOWN:
+				index = history.lastIndexOf("23");
+				if ( index != -1 )
+					dispatchEvent(new DatasEvent(DatasEvent.MOUSE_OUT));
 		}
-
-		if ( value == UiConst.TOUCHSTATS_OUT_DOWN || value == UiConst.TOUCHSTATS_OUT_UP ) {
+		
+		if ( value == UiConst.TOUCHSTATS_OUT_UP ) {
 			_touchstats = [];
 		}
 	}
@@ -121,9 +138,10 @@ class UiGDisplayObject implements IUiGBase
 	{
 		if ( !_renderFlags ) return;
 		if ( _invaildBound ) _snap = new BitmapData(width, height, true, 0x00FF);
-		if ( _snap != null ) _snap.copyPixels( _graphics.getTexture().bitmapdata, _graphics.getTexture().regin, new Point() );
+		if ( _graphicFlags ) _snap.copyPixels( _graphics.getTexture().bitmapdata, _graphics.getTexture().regin, new Point() );
 		_invaildBound = false;
 		_renderFlags = false;
+		_graphicFlags = false;
 	}
 	
 	public function getBound():Rectangle

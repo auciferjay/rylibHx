@@ -10,15 +10,14 @@ class UiConst
 	 * 默认样式
 	 */
 	public static inline var DEFAULT_CSS:String = "default_css";
-	
 	/**
+	 * 鼠标状态
 	 * 
 	 */
 	public static inline var TOUCHSTATS_OUT_UP:Int				= 0;
 	public static inline var TOUCHSTATS_IN_UP:Int				= 1;
 	public static inline var TOUCHSTATS_IN_DOWN:Int				= 2;
 	public static inline var TOUCHSTATS_OUT_DOWN:Int			= 3;
-	
 	/**
 	 * 视图状态 5
 	 * 正常->鼠标移入->鼠标按下->选中->禁用
