@@ -11,7 +11,9 @@ import flash.display.BitmapData;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.ui.Mouse;
+#if flash
 import flash.ui.MouseCursor;
+#end
 
 /**
  * ...

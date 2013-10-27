@@ -5,8 +5,8 @@ import cn.royan.hl.uis.graphs.UiGDisplayObject;
 import cn.royan.hl.uis.graphs.UiGStage;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.utils.SystemUtils;
-import flash.display.BitmapData;
 
+import flash.display.BitmapData;
 import flash.geom.Rectangle;
 import flash.geom.Point;
 import flash.display.BitmapData;
@@ -138,7 +138,7 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		cWidth 	= Std.int(Math.min(stage.getNativeStage().stageWidth, cWidth));
 		cHeight = Std.int(Math.min(stage.getNativeStage().stageHeight, cHeight));
 		
-		if ( cWidth > _width || cHeight > _height || _graphicFlags ) {
+		if ( cWidth > _width || cHeight > _height ) {
 			if ( _snap != null ) {
 				_snap.dispose();
 			}
@@ -156,40 +156,68 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		var rect:Rectangle = new Rectangle(0, 0, WIDTH, HEIGHT);
 		var rectregin:Rectangle = null;
 		var drawRect:Rectangle = null;
-		for ( block in _blocks ) {
-			var vx:Int = Math.ceil((block.x % WIDTH + block.width) / WIDTH);
-			var vy:Int = Math.ceil((block.y % HEIGHT + block.height) / HEIGHT);
+		if ( _graphicFlags ) {
+			var tx:Int = Math.ceil( width / WIDTH );
+			var ty:Int = Math.ceil( height / HEIGHT );
 			
-			for ( i in 0...vx ) {
-				for ( j in 0...vy ) {
-					rect.x = Std.int(block.x / WIDTH) * WIDTH + i * WIDTH;
-					rect.y = Std.int(block.y / HEIGHT) * HEIGHT + j * HEIGHT;
+			for ( i in 0...tx ) {
+				for ( j in 0...ty ) {
+					rect.x = i * WIDTH;
+					rect.y = j * HEIGHT;
 					
-					var isFind:Bool = false;
-					for ( z in rects ) {
-						if ( z.x == rect.x && z.y == rect.y ) {
-							isFind = true;
-							break;
+					rects.push(rect.clone());
+					rectregin = rect.clone();
+					
+					if ( _graphics.getTexture() != null ) {
+						point.x = rect.x;
+						point.y = rect.y;
+						
+						var cRect:Rectangle = _graphics.getTexture().frame != null ? _graphics.getTexture().frame: _graphics.getTexture().regin;
+						
+						rectregin.x += cRect.x;
+						rectregin.y += cRect.y;
+						
+						_snap.copyPixels( _graphics.getTexture().bitmapdata, rectregin.intersection(cRect), point );
+					} else
+						_snap.fillRect( rect, 0x00FF );
+				}
+			}
+		} else {
+			for ( block in _blocks ) {
+				var vx:Int = Math.ceil((block.x % WIDTH + block.width) / WIDTH);
+				var vy:Int = Math.ceil((block.y % HEIGHT + block.height) / HEIGHT);
+				
+				for ( i in 0...vx ) {
+					for ( j in 0...vy ) {
+						rect.x = Std.int(block.x / WIDTH) * WIDTH + i * WIDTH;
+						rect.y = Std.int(block.y / HEIGHT) * HEIGHT + j * HEIGHT;
+						
+						var isFind:Bool = false;
+						for ( z in rects ) {
+							if ( z.x == rect.x && z.y == rect.y ) {
+								isFind = true;
+								break;
+							}
 						}
-					}
-					
-					if ( !isFind ) {
-						rects.push(rect.clone());
 						
-						rectregin = rect.clone();
-						
-						if ( _graphics.getTexture() != null ) {
-							point.x = rect.x;
-							point.y = rect.y;
+						if ( !isFind ) {
+							rects.push(rect.clone());
 							
-							var cRect:Rectangle = _graphics.getTexture().frame != null ? _graphics.getTexture().frame: _graphics.getTexture().regin;
+							rectregin = rect.clone();
 							
-							rectregin.x += cRect.x;
-							rectregin.y += cRect.y;
-							
-							_snap.copyPixels( _graphics.getTexture().bitmapdata, rectregin.intersection(cRect), point );
-						} else
-							_snap.fillRect( rect, 0x00FF );
+							if ( _graphics.getTexture() != null ) {
+								point.x = rect.x;
+								point.y = rect.y;
+								
+								var cRect:Rectangle = _graphics.getTexture().frame != null ? _graphics.getTexture().frame: _graphics.getTexture().regin;
+								
+								rectregin.x += cRect.x;
+								rectregin.y += cRect.y;
+								
+								_snap.copyPixels( _graphics.getTexture().bitmapdata, rectregin.intersection(cRect), point );
+							} else
+								_snap.fillRect( rect, 0x00FF );
+						}
 					}
 				}
 			}

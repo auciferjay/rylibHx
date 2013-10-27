@@ -3,10 +3,13 @@ package cn.royan.hl.uis.graphs;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.utils.SystemUtils;
+
 import flash.geom.Point;
 import flash.display.BitmapData;
 import flash.ui.Mouse;
+#if flash
 import flash.ui.MouseCursor;
+#end
 
 /**
  * ...
@@ -50,12 +53,16 @@ class UiGSprite extends UiGDisplayObjectContainer
 	
 	function mouseOverHandler(evt:DatasEvent):Void
 	{
+		#if flash
 		Mouse.cursor = _buttonMode?MouseCursor.BUTTON:MouseCursor.AUTO;
+		#end
 	}
 	
 	function mouseOutHandler(evt:DatasEvent):Void
 	{
+		#if flash
 		Mouse.cursor = MouseCursor.AUTO;
+		#end
 	}
 	
 	public function getDropTarget():UiGDisplayObject

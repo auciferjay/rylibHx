@@ -8,7 +8,9 @@ import cn.royan.hl.uis.graphs.UiGSprite;
 import cn.royan.hl.uis.sparrow.Sparrow;
 
 import flash.ui.Mouse;
+#if flash
 import flash.ui.MouseCursor;
+#end
 import flash.display.BitmapData;
 import flash.geom.Point;
 
