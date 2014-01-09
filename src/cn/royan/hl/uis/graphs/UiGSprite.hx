@@ -42,13 +42,14 @@ class UiGSprite extends UiGDisplayObjectContainer
 				width 	= Std.int(texture.regin.width);
 				height	= Std.int(texture.regin.height);
 			}
-			
+			/*
 			var point:Point = new Point();
 				point.x = _graphics.getTexture().frame != null ? -_graphics.getTexture().frame.x: 0;
 				point.y = _graphics.getTexture().frame != null ? -_graphics.getTexture().frame.y: 0;
 			
 			_snap = new BitmapData(width, height, true, 0x00FF);
 			_snap.copyPixels( _graphics.getTexture().bitmapdata, _graphics.getTexture().regin, point );
+			*/
 		}
 		
 		addEventListener(DatasEvent.MOUSE_OVER, mouseOverHandler);

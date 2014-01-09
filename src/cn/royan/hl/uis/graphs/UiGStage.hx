@@ -3,6 +3,7 @@ package cn.royan.hl.uis.graphs;
 import cn.royan.hl.bases.TimerBase;
 import cn.royan.hl.consts.UiConst;
 import cn.royan.hl.uis.graphs.UiGDisplayObjectContainer;
+import flash.display.BitmapData;
 import flash.geom.Point;
 
 import flash.geom.Rectangle;
@@ -23,6 +24,8 @@ class UiGStage extends UiGDisplayObjectContainer
 	
 	var bounds:Array<Rectangle>;
 	
+	var snap:BitmapData;
+	
 	public function new(rootStage:Stage) 
 	{
 		super();
@@ -37,6 +40,8 @@ class UiGStage extends UiGDisplayObjectContainer
 		
 		width = nativeStage.stageWidth;
 		height = nativeStage.stageHeight;
+		
+		snap = new BitmapData(width, height , true, 0x00FF);
 		
 		for (touchEventType in mouseChanges)
             nativeStage.addEventListener(touchEventType, onTouch, false, 0, true);
@@ -61,11 +66,16 @@ class UiGStage extends UiGDisplayObjectContainer
 			touchObj.checkTouchStats(isDown?UiConst.TOUCHSTATS_IN_DOWN:UiConst.TOUCHSTATS_IN_UP);
 	}
 	
+	public function getSnap():BitmapData
+	{
+		return snap;
+	}
+	
 	public function getNativeStage():Stage
 	{
 		return nativeStage;
 	}
-	
+	/*
 	override public function recycle():Void 
 	{
 		//super.recycle();
@@ -77,5 +87,5 @@ class UiGStage extends UiGDisplayObjectContainer
 		if ( _childrensnap == null ) return;
 		_childrensnap.dispose();
 		_childrensnap = null;
-	}
+	}*/
 }

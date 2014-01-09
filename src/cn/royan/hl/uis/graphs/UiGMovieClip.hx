@@ -184,12 +184,13 @@ class UiGMovieClip extends UiGSprite
 	override public function updateDisplayList(item:UiGDisplayObject = null):Void 
 	{
 		_graphics.setTexture(_textures[currentFrame - 1]);
-		_graphicFlags = true;
+		//_graphicFlags = true;
+		_renderFlags |= UiGDisplayObject.RENDER_PICTURE;
 		super.updateDisplayList(item);
 	}
-	
+	/*
 	override public function recycle():Void 
 	{
 		//super.recycle();
-	}
+	}*/
 }

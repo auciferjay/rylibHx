@@ -45,8 +45,8 @@ class UiGButton extends UiGSprite
 				height	= Std.int(_textures[0].regin.height);
 			}
 			
-			_snap = new BitmapData(width, height, true, 0x00FF);
-			_snap.copyPixels( _graphics.getTexture().bitmapdata, _graphics.getTexture().regin, new Point() );
+			//_snap = new BitmapData(width, height, true, 0x00FF);
+			//_snap.copyPixels( _graphics.getTexture().bitmapdata, _graphics.getTexture().regin, new Point() );
 		}
 		
 		addEventListener(DatasEvent.MOUSE_DOWN, mouseDownHandler);
@@ -58,14 +58,14 @@ class UiGButton extends UiGSprite
 	function mouseDownHandler(evt:DatasEvent):Void 
 	{
 		_graphics.setTexture(_textures[2]);
-		_graphicFlags = true;
+		//_graphicFlags = true;
 		updateDisplayList();
 	}
 	
 	function mouseUpHandler(evt:DatasEvent):Void 
 	{
 		_graphics.setTexture(_textures[1]);
-		_graphicFlags = true;
+		//_graphicFlags = true;
 		updateDisplayList();
 	}
 	
@@ -78,7 +78,7 @@ class UiGButton extends UiGSprite
 	{
 		super.mouseOverHandler(evt);
 		_graphics.setTexture(_textures[1]);
-		_graphicFlags = true;
+		//_graphicFlags = true;
 		updateDisplayList();
 	}
 	
@@ -86,7 +86,7 @@ class UiGButton extends UiGSprite
 	{
 		super.mouseOutHandler(evt);
 		_graphics.setTexture(_textures[0]);
-		_graphicFlags = true;
+		//_graphicFlags = true;
 		updateDisplayList();
 	}
 }

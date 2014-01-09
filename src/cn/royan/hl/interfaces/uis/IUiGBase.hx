@@ -46,7 +46,7 @@ interface IUiGBase
 	function setY(value:Int):Int;
 	function getY():Int;
 	
-	function recycle():Void;
+//	function recycle():Void;
 	function dispose():Void;
 	
 	function registSparrow(type:String, name:String, isNew:Bool=false):Sparrow;

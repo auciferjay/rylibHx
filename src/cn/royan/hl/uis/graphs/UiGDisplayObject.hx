@@ -37,16 +37,16 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 	public var touchable(getTouchable, setTouchable):Bool;
 	public var x(getX, setX):Int;
 	public var y(getY, setY):Int;
-	public var snap(getSnap, setSnap):BitmapData;
+//	public var snap(getSnap, setSnap):BitmapData;
 	
 	private var _stage:UiGStage;
 	private var _alpha:Float;
 	private var _parent:UiGDisplayObjectContainer;
 	private var _graphics:UiGGraphic;
-	private var _renderFlags:Bool;
-	private var _graphicFlags:Bool;
-	private var _invaildBound:Bool;
-	private var _lastFlags:Bool;
+	private var _renderFlags:Int;
+//	private var _graphicFlags:Bool;
+//	private var _invaildBound:Bool;
+//	private var _lastFlags:Bool;
 	private var _bound:Rectangle;
 	private var _height:Int;
 	private var _rotation:Float;
@@ -57,11 +57,15 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 	private var _width:Int;
 	private var _x:Int;
 	private var _y:Int;
-	private var _snap:BitmapData;
+//	private var _snap:BitmapData;
 	private var _touchstats:Array<Int>;
 	
 	private var _mapKeys:Array<String>;
 	private static var _weakMap:WeakMap = WeakMap.getInstance();
+	
+	public static inline var RENDER_REFRESH:Int 	= 1;
+	public static inline var RENDER_RESIZE:Int 	= 2;
+	public static inline var RENDER_PICTURE:Int 	= 4;
 	
 	public function new() 
 	{
@@ -69,9 +73,11 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 		
 		_bound = new Rectangle();
 		_visible = true;
-		_graphicFlags = true;
+//		_graphicFlags = true;
 		_touchable = false;
 		_touchstats = [];
+		
+		_renderFlags = 0;
 		
 		_mapKeys = [];
 	}
@@ -138,7 +144,12 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 	{
 		if ( parent != null )
 			parent.updateDisplayList(this);
-		_renderFlags = true;
+		_renderFlags |= RENDER_REFRESH;
+	}
+	
+	public function getRenderFlags():Int
+	{
+		return _renderFlags;
 	}
 	
 	/**
@@ -146,8 +157,9 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 	 */
 	public function draw():Void
 	{
-		if ( !_renderFlags ) return;
-		if ( _invaildBound ) _snap = new BitmapData(width, height, true, 0x00FF);
+		if ( _renderFlags == 0 ) return;
+		//if ( _invaildBound ) _snap = new BitmapData(width, height, true, 0x00FF);
+		/*
 		if ( _graphicFlags && _snap != null ) {
 			_snap.fillRect(new Rectangle(0, 0, width, height), 0x00FF);
 			if ( _graphics != null && _graphics.getTexture() != null ) {
@@ -156,14 +168,14 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 					point.y = _graphics.getTexture().frame != null ? -_graphics.getTexture().frame.y: 0;
 				_snap.copyPixels( _graphics.getTexture().bitmapdata, _graphics.getTexture().regin, point );
 			}
-		}
-		_invaildBound = false;
-		_renderFlags = false;
-		_graphicFlags = false;
-		_lastFlags = false;
+		}*/
+		//_invaildBound = false;
+		_renderFlags = 0;
+		//_graphicFlags = false;
+		//_lastFlags = false;
 	}
 	
-	public function getBound(target:IUiGBase=null):Rectangle
+	public function getBound():Rectangle
 	{
 		_bound.x = _x;
 		_bound.y = _y;
@@ -262,7 +274,7 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 	public function setWidth(value:Int):Int
 	{
 		_width = value;
-		_invaildBound = true;
+		_renderFlags != RENDER_RESIZE;
 		updateDisplayList();
 		return _width;
 	}
@@ -275,7 +287,7 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 	public function setHeight(value:Int):Int
 	{
 		_height = value;
-		_invaildBound = true;
+		_renderFlags != RENDER_RESIZE;
 		updateDisplayList();
 		return _height;
 	}
@@ -319,7 +331,7 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 	{
 		return _y;
 	}
-	
+	/*
 	public function setSnap(value:BitmapData):BitmapData
 	{
 		_snap = value;
@@ -333,18 +345,13 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 		return _snap;
 	}
 	
-	public function getIsLastSnap():Bool
-	{
-		return _lastFlags;
-	}
-	
 	public function recycle():Void
 	{
 		if ( _snap == null ) return;
 		_snap.dispose();
 		_snap = null;
 	}
-	
+	*/
 	public function dispose():Void
 	{
 		while ( _mapKeys.length > 0 ) {
