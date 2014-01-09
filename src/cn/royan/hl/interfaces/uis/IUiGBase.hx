@@ -45,4 +45,10 @@ interface IUiGBase
 	
 	function setY(value:Int):Int;
 	function getY():Int;
+	
+	function recycle():Void;
+	function dispose():Void;
+	
+	function registSparrow(type:String, name:String, isNew:Bool=false):Sparrow;
+	function registSparrows(type:String, name:String, isNew:Bool=false):Array<Sparrow>;
 }

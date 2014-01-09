@@ -35,6 +35,9 @@ class UiGStage extends UiGDisplayObjectContainer
 		
 		nativeStage = rootStage;
 		
+		width = nativeStage.stageWidth;
+		height = nativeStage.stageHeight;
+		
 		for (touchEventType in mouseChanges)
             nativeStage.addEventListener(touchEventType, onTouch, false, 0, true);
 	}
@@ -61,5 +64,18 @@ class UiGStage extends UiGDisplayObjectContainer
 	public function getNativeStage():Stage
 	{
 		return nativeStage;
+	}
+	
+	override public function recycle():Void 
+	{
+		//super.recycle();
+		
+		for ( item in _items ) {
+			item.recycle();
+		}
+		
+		if ( _childrensnap == null ) return;
+		_childrensnap.dispose();
+		_childrensnap = null;
 	}
 }

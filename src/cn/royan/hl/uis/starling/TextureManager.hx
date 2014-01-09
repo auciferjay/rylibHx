@@ -42,10 +42,10 @@ class TextureManager
 			var xml:XML = Reflect.field(gameXMLs, type);
 			Reflect.setField(gameTextureAtlases, type, new TextureAtlas(texture, xml) );
 		}
-		if( Reflect.field(gameTextures, type+"_"+name) == null || isNew ){
-			Reflect.setField(gameTextures, type+"_"+name, Reflect.field(gameTextureAtlases, type).getTexture(name));
+		if( Reflect.field(gameTextures, type+"|"+name) == null || isNew ){
+			Reflect.setField(gameTextures, type+"|"+name, Reflect.field(gameTextureAtlases, type).getTexture(name));
 		}
-		return Reflect.field(gameTextures, type+"_"+name);
+		return Reflect.field(gameTextures, type+"|"+name);
 	}
 	
 	static public inline function getTextures(type:String, name:String, isNew:Bool = false):Vector<Texture>
@@ -57,26 +57,26 @@ class TextureManager
 			var xml:XML = Reflect.field(gameXMLs, type);
 			Reflect.setField(gameTextureAtlases, type, new TextureAtlas(texture, xml) );
 		}
-		if( Reflect.field(gameTextures, type+"_"+name) == null || isNew ){
-			Reflect.setField(gameTextures, type+"_"+name, Reflect.field(gameTextureAtlases, type).getTextures(name));
+		if( Reflect.field(gameTextures, type+"|"+name) == null || isNew ){
+			Reflect.setField(gameTextures, type+"|"+name, Reflect.field(gameTextureAtlases, type).getTextures(name));
 		}
-		return Reflect.field(gameTextures, type+"_"+name);
+		return Reflect.field(gameTextures, type+"|"+name);
 	}
 	
 	static public inline function disposeTextures(type:String, name:String):Void
 	{
-		if ( Reflect.field(gameTextures, type + "_" + name) != null )
+		if ( Reflect.field(gameTextures, type + "|" + name) != null )
 		{
-			if ( Std.is( Reflect.field(gameTextures, type + "_" + name), Vector) )
+			if ( Std.is( Reflect.field(gameTextures, type + "|" + name), Vector) )
 			{
-				var list:Vector<Texture> = Reflect.field(gameTextures, type + "_" + name);
+				var list:Vector<Texture> = Reflect.field(gameTextures, type + "|" + name);
 				for( i in 0...list.length){
 					list[i].dispose();
 					list[i] = null;
 				}
 			}else{
-				Reflect.field(gameTextures, type+"_"+name).dispose();
-				Reflect.deleteField(gameTextures, type + "_" + name);
+				Reflect.field(gameTextures, type+"|"+name).dispose();
+				Reflect.deleteField(gameTextures, type + "|" + name);
 			}
 		}
 	}

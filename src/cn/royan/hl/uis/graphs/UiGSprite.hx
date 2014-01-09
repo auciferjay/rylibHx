@@ -33,7 +33,7 @@ class UiGSprite extends UiGDisplayObjectContainer
 		_touchable = true;
 		
 		_graphics = new UiGGraphic(texture);
-		
+		SystemUtils.print(_graphics);
 		if ( texture != null ) {
 			if ( texture.frame != null ) {
 				width 	= Std.int(texture.frame.width);
@@ -43,8 +43,12 @@ class UiGSprite extends UiGDisplayObjectContainer
 				height	= Std.int(texture.regin.height);
 			}
 			
+			var point:Point = new Point();
+				point.x = _graphics.getTexture().frame != null ? -_graphics.getTexture().frame.x: 0;
+				point.y = _graphics.getTexture().frame != null ? -_graphics.getTexture().frame.y: 0;
+			
 			_snap = new BitmapData(width, height, true, 0x00FF);
-			_snap.copyPixels( _graphics.getTexture().bitmapdata, _graphics.getTexture().regin, new Point() );
+			_snap.copyPixels( _graphics.getTexture().bitmapdata, _graphics.getTexture().regin, point );
 		}
 		
 		addEventListener(DatasEvent.MOUSE_OVER, mouseOverHandler);

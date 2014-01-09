@@ -20,6 +20,8 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 	static var WIDTH:Int 	= 256;
 	static var HEIGHT:Int 	= 256;
 	
+	private var _childrensnap:BitmapData;
+	
 	private var _current:String;
 	private var _states:Array<String>;
 	private var _items:Array<UiGDisplayObject>;
@@ -68,9 +70,12 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		return value;
 	}
 	
-	public function removeChild(value:UiGDisplayObject):UiGDisplayObject
+	public function removeChild(value:UiGDisplayObject, needDispose:Bool=false):UiGDisplayObject
 	{
 		_items.remove(value);
+		
+		if ( needDispose ) value.dispose();
+		
 		value.setStage(null);
 		value.setParent(null);
 		
@@ -78,7 +83,7 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		return value;
 	}
 	
-	public function removeChildAt(index:Int):UiGDisplayObject
+	public function removeChildAt(index:Int, needDispose:Bool=false):UiGDisplayObject
 	{
 		var prev:Array<UiGDisplayObject> = _items.slice(0, index);
 		var next:Array<UiGDisplayObject> = _items.slice(index);
@@ -87,6 +92,8 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		
 		_items = prev.concat(next);
 		
+		if ( needDispose ) value.dispose();
+		
 		value.setStage(null);
 		value.setParent(null);
 		
@@ -94,11 +101,14 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		return value;
 	}
 	
-	public function removeChildren():Void
+	public function removeChildren(needDispose:Bool=false):Void
 	{
 		var item:UiGDisplayObject;
 		while ( _items.length > 0 ) {
 			item = _items.shift();
+			
+			if ( needDispose ) item.dispose();
+			
 			item.setStage(null);
 			item.setParent(null);
 		}
@@ -117,6 +127,10 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 	override public function draw():Void
 	{
 		if ( !_renderFlags ) return;
+		if ( _invaildBound ) {
+			_snap = new BitmapData(width, height, true, 0x00FF);
+			_childrensnap = new BitmapData(width, height, true, 0x00FF);
+		}
 		
 		var range:Rectangle;
 		var cWidth:Int 	= 0;
@@ -139,16 +153,13 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		cHeight = Std.int(Math.min(stage.getNativeStage().stageHeight, cHeight));
 		
 		if ( cWidth > _width || cHeight > _height ) {
-			if ( _snap != null ) {
-				_snap.dispose();
+			if ( _childrensnap != null ) {
+				_childrensnap.dispose();
 			}
 			
 			width = cWidth;
 			height = cHeight;
-			_snap = new BitmapData(width, height, true, 0x00FF);
-			if ( _graphics.getTexture() != null ) {
-				_snap.copyPixels( _graphics.getTexture().bitmapdata, _graphics.getTexture().regin, new Point() );
-			}
+			_childrensnap = new BitmapData(width, height, true, 0x00FF);
 		}
 		
 		var point:Point = new Point();
@@ -169,10 +180,10 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 					rectregin = rect.clone();
 					
 					if ( _graphics.getTexture() != null ) {
-						point.x = rect.x;
-						point.y = rect.y;
+						point.x = rect.x - (_graphics.getTexture().frame != null?_graphics.getTexture().frame.x:0);
+						point.y = rect.y - (_graphics.getTexture().frame != null?_graphics.getTexture().frame.y:0);
 						
-						var cRect:Rectangle = _graphics.getTexture().frame != null ? _graphics.getTexture().frame: _graphics.getTexture().regin;
+						var cRect:Rectangle = _graphics.getTexture().regin;
 						
 						rectregin.x += cRect.x;
 						rectregin.y += cRect.y;
@@ -206,10 +217,10 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 							rectregin = rect.clone();
 							
 							if ( _graphics.getTexture() != null ) {
-								point.x = rect.x;
-								point.y = rect.y;
+								point.x = rect.x - (_graphics.getTexture().frame != null?_graphics.getTexture().frame.x:0);
+								point.y = rect.y - (_graphics.getTexture().frame != null?_graphics.getTexture().frame.y:0);
 								
-								var cRect:Rectangle = _graphics.getTexture().frame != null ? _graphics.getTexture().frame: _graphics.getTexture().regin;
+								var cRect:Rectangle = _graphics.getTexture().regin;
 								
 								rectregin.x += cRect.x;
 								rectregin.y += cRect.y;
@@ -226,7 +237,7 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		for ( item in _items ) {
 			if ( !item.getVisible() ) continue;
 			range = item.getBound().clone();
-			
+			SystemUtils.print(range);
 			for ( rect in rects ) {
 				if ( rect.containsRect(range) ) {
 					point.x = range.x;
@@ -236,7 +247,7 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 					drawRect.x = 0;
 					drawRect.y = 0;
 					
-					_snap.copyPixels(item.snap, drawRect, point, null, null, true);
+					_childrensnap.copyPixels(item.snap, drawRect, point, null, null, true);
 				} else if ( rect.intersects(range) ) {
 					drawRect = range.intersection(rect);
 					if ( drawRect.y != rect.y ) {
@@ -269,13 +280,16 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 						}
 					}
 					
-					_snap.copyPixels(item.snap, drawRect, point, null, null, true);
+					_childrensnap.copyPixels(item.snap, drawRect, point, null, null, true);
 				}
 			}
 		}
 		
+		_snap.copyPixels(_childrensnap, new Rectangle(0,0,cWidth,cHeight), new Point(), null, null, true);
+		
 		_blocks = [];
 		
+		_invaildBound = false;
 		_renderFlags = false;
 		_graphicFlags = false;
 	}
@@ -298,5 +312,18 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		_items.reverse();
 		if ( touchObj != null ) return touchObj;
 		return super.touchTest(point.subtract(dp), isDown);
+	}
+	
+	override public function recycle():Void 
+	{
+		super.recycle();
+		
+		for ( item in _items ) {
+			item.recycle();
+		}
+		
+		if ( _childrensnap == null ) return;
+		_childrensnap.dispose();
+		_childrensnap = null;
 	}
 }

@@ -1,10 +1,12 @@
 package cn.royan.hl.uis.graphs;
 
 import cn.royan.hl.bases.DispatcherBase;
+import cn.royan.hl.bases.WeakMap;
 import cn.royan.hl.consts.UiConst;
 import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.interfaces.uis.IUiGBase;
 import cn.royan.hl.uis.sparrow.Sparrow;
+import cn.royan.hl.uis.sparrow.SparrowManager;
 import cn.royan.hl.utils.SystemUtils;
 
 import flash.display.BitmapData;
@@ -57,6 +59,9 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 	private var _snap:BitmapData;
 	private var _touchstats:Array<Int>;
 	
+	private var _mapKeys:Array<String>;
+	private static var _weakMap:WeakMap = WeakMap.getInstance();
+	
 	public function new() 
 	{
 		super();
@@ -66,6 +71,8 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 		_graphicFlags = true;
 		_touchable = false;
 		_touchstats = [];
+		
+		_mapKeys = [];
 	}
 	
 	public function hitTest(point:Point):Bool
@@ -140,7 +147,15 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 	{
 		if ( !_renderFlags ) return;
 		if ( _invaildBound ) _snap = new BitmapData(width, height, true, 0x00FF);
-		if ( _graphicFlags ) _snap.copyPixels( _graphics.getTexture().bitmapdata, _graphics.getTexture().regin, new Point() );
+		if ( _graphicFlags && _snap != null ) {
+			_snap.fillRect(new Rectangle(0, 0, width, height), 0x00FF);
+			if ( _graphics != null && _graphics.getTexture() != null ) {
+				var point:Point = new Point();
+					point.x = _graphics.getTexture().frame != null ? -_graphics.getTexture().frame.x: 0;
+					point.y = _graphics.getTexture().frame != null ? -_graphics.getTexture().frame.y: 0;
+				_snap.copyPixels( _graphics.getTexture().bitmapdata, _graphics.getTexture().regin, point );
+			}
+		}
 		_invaildBound = false;
 		_renderFlags = false;
 		_graphicFlags = false;
@@ -312,5 +327,39 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 	public function getSnap():BitmapData
 	{
 		return _snap;
+	}
+	
+	public function recycle():Void
+	{
+		if ( _snap == null ) return;
+		_snap.dispose();
+		_snap = null;
+	}
+	
+	public function dispose():Void
+	{
+		while ( _mapKeys.length > 0 ) {
+			var key:String = _mapKeys.shift();
+			
+			_weakMap.clear( key );
+			
+			var keys:Array<String> = key.split("|");
+			
+			SparrowManager.disposeSparrow(keys[0], keys[1]);
+		}
+	}
+	
+	public function registSparrow(type:String, name:String, isNew:Bool=false):Sparrow
+	{
+		var sparrow:Sparrow = SparrowManager.getSparrow(type, name, isNew);
+		_weakMap.set(type+"|"+name, sparrow);
+		return sparrow;
+	}
+	
+	public function registSparrows(type:String, name:String, isNew:Bool=false):Array<Sparrow>
+	{
+		var sparrows:Array<Sparrow> = SparrowManager.getSparrows(type, name, isNew);
+		_weakMap.set(type+"|"+name, sparrows);
+		return sparrows;
 	}
 }
