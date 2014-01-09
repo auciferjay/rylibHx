@@ -116,6 +116,11 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		updateDisplayList();
 	}
 	
+	public function getNumChildren():Int
+	{
+		return _items.length;
+	}
+	
 	override public function setStage(value:UiGStage):UiGStage 
 	{
 		for ( item in _items) {
@@ -152,13 +157,14 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		cWidth 	= Std.int(Math.min(stage.getNativeStage().stageWidth, cWidth));
 		cHeight = Std.int(Math.min(stage.getNativeStage().stageHeight, cHeight));
 		
-		if ( cWidth > _width || cHeight > _height ) {
+		if ( cWidth > _width || cHeight > _height || _childrensnap == null ) {
 			if ( _childrensnap != null ) {
 				_childrensnap.dispose();
 			}
 			
 			width = cWidth;
 			height = cHeight;
+			
 			_childrensnap = new BitmapData(width, height, true, 0x00FF);
 		}
 		
@@ -168,6 +174,21 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		var rectregin:Rectangle = null;
 		var drawRect:Rectangle = null;
 		if ( _graphicFlags ) {
+			if ( _snap == null )
+				_snap = new BitmapData(width, height, true, 0x00FF);
+			else
+				_snap.fillRect(new Rectangle(0, 0, width, height), 0x00FF);
+			
+			if ( _graphics != null && _graphics.getTexture() != null ) {
+				var point:Point = new Point();
+					point.x = _graphics.getTexture().frame != null ? -_graphics.getTexture().frame.x: 0;
+					point.y = _graphics.getTexture().frame != null ? -_graphics.getTexture().frame.y: 0;
+				_snap.copyPixels( _graphics.getTexture().bitmapdata, _graphics.getTexture().regin, point );
+			}
+			/*
+			if ( _snap == null )
+				_snap = new BitmapData(width, height, true, 0x00FF);
+				
 			var tx:Int = Math.ceil( width / WIDTH );
 			var ty:Int = Math.ceil( height / HEIGHT );
 			
@@ -192,7 +213,7 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 					} else
 						_snap.fillRect( rect, 0x00FF );
 				}
-			}
+			}*/
 		} else {
 			for ( block in _blocks ) {
 				var vx:Int = Math.ceil((block.x % WIDTH + block.width) / WIDTH);
@@ -237,7 +258,6 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		for ( item in _items ) {
 			if ( !item.getVisible() ) continue;
 			range = item.getBound().clone();
-			SystemUtils.print(range);
 			for ( rect in rects ) {
 				if ( rect.containsRect(range) ) {
 					point.x = range.x;
@@ -292,6 +312,7 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		_invaildBound = false;
 		_renderFlags = false;
 		_graphicFlags = false;
+		_lastFlags = false;
 	}
 	
 	override public function touchTest(point:Point, isDown:Bool):UiGDisplayObject

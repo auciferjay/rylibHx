@@ -1,7 +1,10 @@
 package cn.royan.hl.uis.graphs;
 
 import cn.royan.hl.bases.TimerBase;
+import cn.royan.hl.uis.graphs.UiGDisplayObject;
 import cn.royan.hl.uis.sparrow.Sparrow;
+import flash.geom.Point;
+import flash.geom.Rectangle;
 
 /**
  * ...
@@ -31,7 +34,12 @@ class UiGMovieClip extends UiGSprite
 		_textures 		= sparrows;
 		_timer 			= new TimerBase( Std.int( 1000 / fps ), timerHandler );
 		
-		super( sparrows[0] );
+		super( _textures[_currentFrame-1] );
+	}
+	
+	override public function draw():Void 
+	{
+		super.draw();
 	}
 	
 	/**
@@ -142,7 +150,7 @@ class UiGMovieClip extends UiGSprite
 			_currentFrame++;
 			if( _currentFrame > _totalFrames )
 			{
-				if( _loop ) _currentFrame = 0;
+				if( _loop ) _currentFrame = 1;
 				else _timer.stop();
 			}
 		}
@@ -171,5 +179,17 @@ class UiGMovieClip extends UiGSprite
 	public function getTotalFrames():Int
 	{
 		return _totalFrames;
+	}
+	
+	override public function updateDisplayList(item:UiGDisplayObject = null):Void 
+	{
+		_graphics.setTexture(_textures[currentFrame - 1]);
+		_graphicFlags = true;
+		super.updateDisplayList(item);
+	}
+	
+	override public function recycle():Void 
+	{
+		//super.recycle();
 	}
 }

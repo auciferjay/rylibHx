@@ -33,7 +33,7 @@ class UiGSprite extends UiGDisplayObjectContainer
 		_touchable = true;
 		
 		_graphics = new UiGGraphic(texture);
-		SystemUtils.print(_graphics);
+		
 		if ( texture != null ) {
 			if ( texture.frame != null ) {
 				width 	= Std.int(texture.frame.width);

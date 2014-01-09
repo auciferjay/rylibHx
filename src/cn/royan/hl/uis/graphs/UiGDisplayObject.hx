@@ -46,6 +46,7 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 	private var _renderFlags:Bool;
 	private var _graphicFlags:Bool;
 	private var _invaildBound:Bool;
+	private var _lastFlags:Bool;
 	private var _bound:Rectangle;
 	private var _height:Int;
 	private var _rotation:Float;
@@ -159,9 +160,10 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 		_invaildBound = false;
 		_renderFlags = false;
 		_graphicFlags = false;
+		_lastFlags = false;
 	}
 	
-	public function getBound():Rectangle
+	public function getBound(target:IUiGBase=null):Rectangle
 	{
 		_bound.x = _x;
 		_bound.y = _y;
@@ -321,12 +323,19 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 	public function setSnap(value:BitmapData):BitmapData
 	{
 		_snap = value;
+		_lastFlags = false;
 		return _snap;
 	}
 	
 	public function getSnap():BitmapData
 	{
+		_lastFlags = true;
 		return _snap;
+	}
+	
+	public function getIsLastSnap():Bool
+	{
+		return _lastFlags;
 	}
 	
 	public function recycle():Void
