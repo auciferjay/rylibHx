@@ -31,8 +31,6 @@ class UiSLabelButton extends UiSBmpdButton, implements IUiTextBase, implements I
 	{
 		super(texture);
 		
-		bgTextures = [];
-		
 		btnLabel = label;
 		textColors = getDefaultTextColor();
 		
@@ -41,7 +39,7 @@ class UiSLabelButton extends UiSBmpdButton, implements IUiTextBase, implements I
 		btnLabelText.touchable = false;
 		addChild(btnLabelText);
 		
-		setSize(100, 20);
+		setSize(Math.max(containerWidth, 1), Math.max(containerHeight,1));
 		
 		setMouseRender(true);
 	}
@@ -94,7 +92,7 @@ class UiSLabelButton extends UiSBmpdButton, implements IUiTextBase, implements I
 	override public function setSize(cWidth:Float, cHeight:Float):Void
 	{
 		super.setSize(cWidth, cHeight);
-		btnLabelText.setSize(cWidth, cHeight);
+		if( btnLabelText != null ) btnLabelText.setSize(cWidth, cHeight);
 	}
 	
 	override public function setScale(value:Float):Void 

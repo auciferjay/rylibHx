@@ -3,6 +3,7 @@ package cn.royan.hl.uis.starling;
 import cn.royan.hl.bases.Dictionary;
 import cn.royan.hl.consts.PrintConst;
 import cn.royan.hl.consts.UiConst;
+import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.geom.Range;
 import cn.royan.hl.interfaces.uis.IUiBase;
 import cn.royan.hl.uis.style.Style;
@@ -68,6 +69,8 @@ class InteractiveUiS extends Sprite, implements IUiBase
 	public var graphics:Image;
 	public var buttonMode:Bool;
 	
+	private var _isOver:Bool;
+	
 	//Constructor
 	public function new(texture:Texture = null)
 	{
@@ -83,6 +86,8 @@ class InteractiveUiS extends Sprite, implements IUiBase
 		
 		status = UiConst.INTERACTIVE_STATUS_NORMAL;
 		
+		_isOver = false;
+		
 		if (texture != null) {
 			bgTexture = texture;
 			
@@ -92,7 +97,7 @@ class InteractiveUiS extends Sprite, implements IUiBase
 		}
 		
 		if ( containerHeight > 0 && containerWidth > 0 ) {
-			graphics = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
+			graphics = new Image(texture != null?texture:Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
 									[0x000000], [0x00], 1, borderColor, borderThick, borderAlpha, borderRx, borderRy)));
 			addChild( graphics );
 		}
@@ -180,7 +185,7 @@ class InteractiveUiS extends Sprite, implements IUiBase
 		SystemUtils.print(w + ":" + h, PrintConst.UIS);
 		containerWidth = w;
 		containerHeight = h;
-	
+		
 		draw();
 	}
 
@@ -214,6 +219,14 @@ class InteractiveUiS extends Sprite, implements IUiBase
 			bgTexture = texture;
 			
 			type = 1;
+			
+			if ( graphics != null ) {
+				removeChild(graphics);
+				graphics.dispose();
+			}
+			graphics = new Image(bgTexture);
+			graphics.touchable = false;
+			addChildAt(graphics, 0);
 			
 			setSize(Std.int(bgTexture.width), Std.int(bgTexture.height));
 		}
@@ -254,6 +267,8 @@ class InteractiveUiS extends Sprite, implements IUiBase
 		status = value?UiConst.INTERACTIVE_STATUS_NORMAL:UiConst.INTERACTIVE_STATUS_DISABLE;
 		
 		setMouseRender(value);
+		
+		if ( !value ) mouseOutHandler();
 		
 		draw();
 	}
@@ -297,22 +312,35 @@ class InteractiveUiS extends Sprite, implements IUiBase
 
 	override public function dispose():Void
 	{
+		if ( graphics != null )
+			graphics.dispose();
 		if ( bgTexture != null )
 			bgTexture.dispose();
 		removeAllChildren();
 		removeEventListeners();
+		
+		super.dispose();
 	}
 	
 	function mouseTouchHandler(evt:TouchEvent):Void
 	{
         if ( !mouseEnabled ) return;
 		
-		if ( evt.getTouch(this, TouchPhase.HOVER) != null/* && 
-			!bounds.contains(evt.getTouch(this, TouchPhase.HOVER).previousGlobalX, evt.getTouch(this, TouchPhase.HOVER).previousGlobalY) &&
-			bounds.contains(evt.getTouch(this, TouchPhase.HOVER).globalX, evt.getTouch(this, TouchPhase.HOVER).globalY)*/) {
-			mouseOverHandler(evt.getTouch(this, TouchPhase.HOVER));
+		if ( evt.getTouch(this, TouchPhase.HOVER) != null ) {
+			if ( getBounds(this).containsPoint(evt.getTouch(this, TouchPhase.HOVER).getLocation(this)) ) {
+				if ( buttonMode )
+					Mouse.cursor = MouseCursor.BUTTON;
+				if( !getBounds(this).containsPoint(evt.getTouch(this, TouchPhase.HOVER).getPreviousLocation(this)) ){
+					mouseOverHandler(evt.getTouch(this, TouchPhase.HOVER));
+					_isOver = true;
+				}else if ( !_isOver ) {
+					mouseOverHandler(evt.getTouch(this, TouchPhase.HOVER));
+					_isOver = true;
+				}
+			}
         } else if (	evt.getTouch(this, TouchPhase.HOVER) == null ){
 			mouseOutHandler();
+			_isOver = false;
         }
 		
 		if (evt.getTouch(this, TouchPhase.BEGAN) != null) {
@@ -337,8 +365,10 @@ class InteractiveUiS extends Sprite, implements IUiBase
 		if ( isMouseRender ) draw();
 		if ( callbacks != null && callbacks.over != null ) callbacks.over(this, touch);
 		
-		if ( buttonMode )
-			Mouse.cursor = MouseCursor.BUTTON;
+		if ( buttonMode ) {
+			//Mouse.cursor = MouseCursor.BUTTON;
+			dispatchEvent(new Event(UiConst.BUTTON_MOUSE_OVER, true));
+		}
 	}
 	
 	function mouseOutHandler():Void

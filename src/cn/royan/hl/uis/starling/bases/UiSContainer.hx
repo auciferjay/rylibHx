@@ -84,7 +84,7 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase
 		
 		item.setScale(getScale());
 		
-		addChildAt(cast( item, DisplayObject ), index);
+		addChildAt(cast( item, DisplayObject ), index+(graphics==null?0:1));
 		
 		draw();
 		
@@ -101,20 +101,21 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase
 	public function removeItem(item:IUiBase):IUiBase
 	{
 		SystemUtils.print(item, PrintConst.UIS);
-		items.remove(item);
+		if ( items.remove(item) ) {
+			if ( hideProp != null ) {
+				hideProp( item, callback(removeChild, cast(item, DisplayObject)) );
+			}else {
+				removeChild(cast(item, DisplayObject));
+			}
+			
+			draw();
 		
-		if ( hideProp != null ) {
-			hideProp( item, callback(removeChild, cast(item, DisplayObject)) );
-		}else {
-			removeChild(cast(item, DisplayObject));
+			if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
+			else dispatchEvent(new Event(DatasEvent.DATA_CHANGE));
+			
+			return item;
 		}
-		
-		draw();
-		
-		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
-		else dispatchEvent(new Event(DatasEvent.DATA_CHANGE));
-		
-		return item;
+		return null;
 	}
 	
 	public function removeItemAt(index:Int):IUiBase
@@ -130,15 +131,15 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase
 		return item;
 	}
 	
-	public function removeAllItems():Void
+	public function removeAllItems(dispose:Bool=false):Void
 	{
 		while ( items.length > 0 ) {
 			var item:IUiBase = items.shift();
 			
 			if ( hideProp != null ) {
-				hideProp( item, callback(removeChild, cast(item, DisplayObject)) );
+				hideProp( item, callback(removeChild, cast(item, DisplayObject), dispose) );
 			}else {
-				removeChild(cast(item, DisplayObject));
+				removeChild(cast(item, DisplayObject), dispose);
 			}
 		}
 		
@@ -208,5 +209,21 @@ class UiSContainer extends InteractiveUiS, implements IUiContainerBase
 	public function setHide(effect:Dynamic->Dynamic->Void):Void
 	{
 		hideProp = effect;
+	}
+	
+	override public function dispose():Void 
+	{
+		super.dispose();
+		
+		var i:Int;
+		for(i in 0...numChildren){
+			if ( Std.is(getChildAt(i), IUiBase) ) {
+				var item:IUiBase = cast(getChildAt(i), IUiBase);
+					item.dispose();
+			} else {
+				var item:DisplayObject = cast(getChildAt(i), DisplayObject);
+					item.dispose();
+			}
+		}
 	}
 }

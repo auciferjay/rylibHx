@@ -40,7 +40,7 @@ interface IUiContainerGroupBase implements IUiContainerAlignBase
 	/**
 	 * 清空显示项
 	 */
-	function removeAllGroupItems():Void;
+	function removeAllGroupItems(dispse:Bool = false):Void;
 	
 	/**
 	 * 获取显示项

@@ -154,7 +154,7 @@ class UiNContainer extends InteractiveUiN, implements IUiContainerBase
 		return item;
 	}
 	
-	public function removeAllItems():Void
+	public function removeAllItems(dispose:Bool=false):Void
 	{
 		dels = items.concat([]);
 		items = [];

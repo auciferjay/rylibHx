@@ -52,22 +52,22 @@ class BytesUtils
 	{
 		bytes.position = 0;
 		
-		if ( bytes.readUnsignedByte() != 0xff ) {
+		if ( bytes.bytesAvailable < 4 || bytes.readUnsignedByte() != 0xff ) {
 			bytes.position = 0;
 			return false;
 		}
-		if ( bytes.readUnsignedByte() != 0xd8 ) {
+		if ( bytes.bytesAvailable < 3 || bytes.readUnsignedByte() != 0xd8 ) {
 			bytes.position = 0;
 			return false;
 		}
 		
 		bytes.position = bytes.length - 2;
 		
-		if ( bytes.readUnsignedByte() != 0xff ) {
+		if ( bytes.bytesAvailable < 2 || bytes.readUnsignedByte() != 0xff ) {
 			bytes.position = 0;
 			return false;
 		}
-		if ( bytes.readUnsignedByte() != 0xd9 ) {
+		if ( bytes.bytesAvailable < 1 || bytes.readUnsignedByte() != 0xd9 ) {
 			bytes.position = 0;
 			return false;
 		}
@@ -84,35 +84,35 @@ class BytesUtils
 	{
 		bytes.position = 0;
 		
-		if ( bytes.readUnsignedByte() != 0x89 ) {
+		if ( bytes.bytesAvailable < 8 || bytes.readUnsignedByte() != 0x89 ) {
 			bytes.position = 0;
 			return false;
 		}
-		if ( bytes.readUnsignedByte() != 0x50 ) {
+		if ( bytes.bytesAvailable < 7 || bytes.readUnsignedByte() != 0x50 ) {
 			bytes.position = 0;
 			return false;
 		}
-		if ( bytes.readUnsignedByte() != 0x4E ) {
+		if ( bytes.bytesAvailable < 6 || bytes.readUnsignedByte() != 0x4E ) {
 			bytes.position = 0;
 			return false;
 		}
-		if ( bytes.readUnsignedByte() != 0x47 ) {
+		if ( bytes.bytesAvailable < 5 || bytes.readUnsignedByte() != 0x47 ) {
 			bytes.position = 0;
 			return false;
 		}
-		if ( bytes.readUnsignedByte() != 0x0D ) {
+		if ( bytes.bytesAvailable < 4 || bytes.readUnsignedByte() != 0x0D ) {
 			bytes.position = 0;
 			return false;
 		}
-		if ( bytes.readUnsignedByte() != 0x0A ) {
+		if (bytes.bytesAvailable < 3 || bytes.readUnsignedByte() != 0x0A ) {
 			bytes.position = 0;
 			return false;
 		}
-		if ( bytes.readUnsignedByte() != 0x1A ) {
+		if ( bytes.bytesAvailable < 2 || bytes.readUnsignedByte() != 0x1A ) {
 			bytes.position = 0;
 			return false;
 		}
-		if ( bytes.readUnsignedByte() != 0x0A ) {
+		if ( bytes.bytesAvailable < 1 || bytes.readUnsignedByte() != 0x0A ) {
 			bytes.position = 0;
 			return false;
 		}
@@ -127,6 +127,7 @@ class BytesUtils
 	public static function isSWF(bytes:ByteArray):Bool
 	{
 		bytes.position = 0;
+		if ( bytes.bytesAvailable < 3 ) return false;
 		var header:String = bytes.readUTFBytes(3);
 		bytes.position = 0;
 		return header == "CWS" || header == "FWS";
@@ -140,6 +141,7 @@ class BytesUtils
 	public static function isXML(bytes:ByteArray):Bool
 	{
 		bytes.position = 0;
+		if ( bytes.bytesAvailable < 5 ) return false;
 		var header:String = bytes.readUTFBytes(5);
 		bytes.position = 0;
 		return header == "<?xml";
@@ -152,27 +154,27 @@ class BytesUtils
 	 */
 	public static function isGIF(bytes:ByteArray):Bool
 	{
-		if ( bytes.readUnsignedByte() != 0x47 ) {
+		if ( bytes.bytesAvailable < 6 || bytes.readUnsignedByte() != 0x47 ) {
 			bytes.position = 0;
 			return false;
 		}
-		if ( bytes.readUnsignedByte() != 0x49 ) {
+		if ( bytes.bytesAvailable < 5 || bytes.readUnsignedByte() != 0x49 ) {
 			bytes.position = 0;
 			return false;
 		}
-		if ( bytes.readUnsignedByte() != 0x46 ) {
+		if ( bytes.bytesAvailable < 4 || bytes.readUnsignedByte() != 0x46 ) {
 			bytes.position = 0;
 			return false;
 		}
-		if ( bytes.readUnsignedByte() != 0x38 ) {
+		if ( bytes.bytesAvailable < 3 || bytes.readUnsignedByte() != 0x38 ) {
 			bytes.position = 0;
 			return false;
 		}
-		if ( bytes.readUnsignedByte() != 0x39 && bytes.readUnsignedByte() != 0x37 ) {
+		if ( bytes.bytesAvailable < 2 || bytes.readUnsignedByte() != 0x39 && bytes.readUnsignedByte() != 0x37 ) {
 			bytes.position = 0;
 			return false;
 		}
-		if ( bytes.readUnsignedByte() != 0x61 ) {
+		if ( bytes.bytesAvailable < 1 || bytes.readUnsignedByte() != 0x61 ) {
 			bytes.position = 0;
 			return false;
 		}
@@ -186,11 +188,11 @@ class BytesUtils
 	 */
 	public static function isBMP(bytes:ByteArray):Bool
 	{
-		if ( bytes.readUnsignedByte() != 0x42 ) {
+		if ( bytes.bytesAvailable < 2 || bytes.readUnsignedByte() != 0x42 ) {
 			bytes.position = 0;
 			return false;
 		}
-		if ( bytes.readUnsignedByte() != 0x4d ) {
+		if ( bytes.bytesAvailable < 1 || bytes.readUnsignedByte() != 0x4d ) {
 			bytes.position = 0;
 			return false;
 		}
@@ -206,6 +208,7 @@ class BytesUtils
 	public static function isFLV(bytes:ByteArray):Bool
 	{
 		bytes.position = 0;
+		if ( bytes.bytesAvailable < 3 ) return false;
 		var header:String = bytes.readUTFBytes(3);
 		bytes.position = 0;
 		return header == "FLV";
@@ -219,6 +222,7 @@ class BytesUtils
 	public static function isMP3(bytes:ByteArray):Bool
 	{
 		bytes.position = 0;
+		if ( bytes.bytesAvailable < 3 ) return false;
 		var header:String = bytes.readUTFBytes(3);
 		bytes.position = 0;
 		return header == "ID3";
@@ -234,6 +238,7 @@ class BytesUtils
 		bytes.position = 0;
 		var BYTE_KEY:Array<Int> = [10, 40, 90];
 		var isEnc:Bool = true;
+		if ( bytes.bytesAvailable < 3 ) return false;
 		for (i in 0...3) {
 			if (bytes.readByte() != BYTE_KEY[i]) {
 				isEnc = false;

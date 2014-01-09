@@ -95,6 +95,14 @@ class PoolMap
 			pool.push( object );
 		}
 	}
+	
+	public static function clear( type:Class<Dynamic> ):Void
+	{
+		var pool:Array<Dynamic> = getPool( type );
+		while ( pool.length > 0 ) {
+			pool.shift();
+		}
+	}
 }
 
 class WaterDrop

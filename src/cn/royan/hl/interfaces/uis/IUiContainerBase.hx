@@ -36,7 +36,7 @@ interface IUiContainerBase implements IUiBase
 	/**
 	 * 清空显示项
 	 */
-	function removeAllItems():Void;
+	function removeAllItems(dispose:Bool=false):Void;
 	
 	/**
 	 * 获取显示项

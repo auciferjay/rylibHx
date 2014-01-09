@@ -74,7 +74,7 @@ class UninteractiveUiS extends Sprite, implements IUiBase
 		}
 		
 		if ( containerHeight > 0 && containerWidth > 0 ) {
-			graphics = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
+			graphics = new Image(texture != null?texture:Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
 											[0x000000], [0x00], 1, borderColor, borderThick, borderAlpha, borderRx, borderRy)));
 			graphics.touchable = false;
 			addChild( graphics );
@@ -249,7 +249,10 @@ class UninteractiveUiS extends Sprite, implements IUiBase
 	
 	override public function dispose():Void
 	{
+		if ( graphics != null )
+			graphics.dispose();
 		if ( bgTexture != null )
 			bgTexture.dispose();
+		super.dispose();
 	}
 }

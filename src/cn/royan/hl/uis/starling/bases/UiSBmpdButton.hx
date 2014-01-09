@@ -53,7 +53,7 @@ class UiSBmpdButton extends InteractiveUiS, implements IUiItemGroupBase
 			return;
 		}
 		
-		currentStatus = new Image(Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
+		currentStatus = new Image(bgTextures[status] != null?bgTextures[status]:Texture.fromBitmapData(BitmapDataUtils.fromColors(Std.int(containerWidth), Std.int(containerHeight), 
 									[0x00000], [0], 1, borderColor, borderThick, borderAlpha, borderRx, borderRy)));
 		if ( bgTextures[status] != null ) {
 			currentStatus.texture = bgTextures[status];

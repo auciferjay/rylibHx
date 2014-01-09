@@ -207,4 +207,10 @@ class UiSContainerAlign extends UiSContainer, implements IUiContainerAlignBase
 			offsetY += rows[i].height + gapY;
 		}
 	}
+	
+	override public function setState(value:String):Void 
+	{
+		super.setState(value);
+		draw();
+	}
 }

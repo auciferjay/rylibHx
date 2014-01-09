@@ -128,7 +128,7 @@ class UiNContainerGroup extends UiNContainerAlign, implements IUiContainerGroupB
 		return item;
 	}
 	
-	public function removeAllGroupItems():Void
+	public function removeAllGroupItems(dispose:Bool=false):Void
 	{
 		dels = items.concat([]);
 		items = [];
@@ -297,5 +297,5 @@ class UiNContainerGroup extends UiNContainerAlign, implements IUiContainerGroupB
 	
 	override public function removeItemAt(index:Int):IUiBase { return null; }
 	
-	override public function removeAllItems():Void {}
+	override public function removeAllItems(dispose:Bool=false):Void {}
 }

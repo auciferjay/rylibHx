@@ -120,11 +120,14 @@ class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupB
 		return item;
 	}
 	
-	public function removeAllGroupItems():Void
+	public function removeAllGroupItems(dispose:Bool = false):Void
 	{
 		while ( items.length > 0 ) {
-			removeGroupItem(cast(items.shift(), IUiItemGroupBase));
+			var item:IUiBase = items.shift();
+			removeChild(cast(item, DisplayObject), dispose);
 		}
+		
+		draw();
 		
 		if ( callbacks != null && callbacks.change != null ) callbacks.change(this);
 		else dispatchEvent(new Event(DatasEvent.DATA_CHANGE));
@@ -282,5 +285,5 @@ class UiSContainerGroup extends UiSContainerAlign, implements IUiContainerGroupB
 	
 	override public function removeItemAt(index:Int):IUiBase { return null; }
 	
-	override public function removeAllItems():Void {}
+	override public function removeAllItems(dispose:Bool = false):Void {}
 }

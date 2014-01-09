@@ -222,6 +222,7 @@ class TakeService extends DispatcherBase, implements IServiceBase
 	
 	function analyze():Void
 	{
+		serviceData = BytesUtils.simpleDecode(serviceData, "gameuzgame");
 		switch( BytesUtils.getType(serviceData) ){
 			case "SWF","PNG","JPEG","GIF","BMP":
 				swfLoader = new Loader();

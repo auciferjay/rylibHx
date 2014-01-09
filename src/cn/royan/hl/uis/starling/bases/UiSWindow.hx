@@ -16,7 +16,7 @@ class UiSWindow extends UiSContainer
 		
 		super(texture);
 		
-		header.setSize(getRange().width, header.getRange().height);
+		header.setSize(getRange().width, 30);
 		header.setCallbacks( { move:moveHandler } );
 		header.buttonMode = false;
 		addItem(header);
