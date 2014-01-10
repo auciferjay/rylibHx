@@ -5,6 +5,7 @@ import cn.royan.hl.uis.graphs.UiGDisplayObject;
 import cn.royan.hl.uis.graphs.UiGStage;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.utils.SystemUtils;
+import flash.geom.Matrix;
 
 import flash.display.BitmapData;
 import flash.geom.Rectangle;
@@ -20,12 +21,12 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 	static var WIDTH:Int 	= 256;
 	static var HEIGHT:Int 	= 256;
 	
-//	private var _childrensnap:BitmapData;
-	
 	private var _current:String;
 	private var _states:Array<String>;
 	private var _items:Array<UiGDisplayObject>;
 	private var _blocks:Array<Rectangle>;
+	
+	private var _stageSnap:BitmapData;
 	
 	public function new() 
 	{
@@ -39,7 +40,7 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 	override public function updateDisplayList(item:UiGDisplayObject = null):Void 
 	{
 		if ( item != null ) {
-			_blocks.push(item.getBound().clone());
+			_blocks.push(item.getRelativePosition());
 		}
 		super.updateDisplayList();
 	}
@@ -48,7 +49,6 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 	{
 		_items.push(value);
 		
-		value.setStage(stage);
 		value.setParent(this);
 		
 		updateDisplayList(value);
@@ -61,7 +61,6 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		var next:Array<UiGDisplayObject> = _items.slice(index);
 		
 		prev.push(value);
-		value.setStage(stage);
 		value.setParent(this);
 		
 		_items = prev.concat(next);
@@ -76,7 +75,6 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		
 		if ( needDispose ) value.dispose();
 		
-		value.setStage(null);
 		value.setParent(null);
 		
 		updateDisplayList(value);
@@ -94,7 +92,6 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		
 		if ( needDispose ) value.dispose();
 		
-		value.setStage(null);
 		value.setParent(null);
 		
 		updateDisplayList(value);
@@ -109,7 +106,6 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 			
 			if ( needDispose ) item.dispose();
 			
-			item.setStage(null);
 			item.setParent(null);
 		}
 		
@@ -121,211 +117,137 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		return _items.length;
 	}
 	
-	override public function setStage(value:UiGStage):UiGStage 
-	{
-		for ( item in _items) {
-			item.setStage(value);
-		}
-		return super.setStage(value);
-	}
-	
 	override public function draw():Void
 	{
 		if ( _renderFlags == 0 ) return;
-//		if ( _invaildBound ) {
-//			_snap = new BitmapData(width, height, true, 0x00FF);
-//			_childrensnap = new BitmapData(width, height, true, 0x00FF);
-//		}
-		
+
 		var range:Rectangle;
-		var cWidth:Int 	= 0;
-		var cHeight:Int = 0;
-		
-		for ( item in _items ) {
-			if ( !item.getVisible() ) continue;
-			item.draw();
-			range = item.getBound();
-			cWidth 	= Std.int(Math.max(cWidth, range.x + range.width));
-			cHeight = Std.int(Math.max(cHeight, range.y + range.height));
-		}
-		
-		if ( _graphics.getTexture() != null ) {
-			cWidth 	= Std.int(_graphics.getTexture().frame != null ? _graphics.getTexture().frame.width : _graphics.getTexture().regin.width);
-			cHeight = Std.int(_graphics.getTexture().frame != null ? _graphics.getTexture().frame.height : _graphics.getTexture().regin.height);
-		}
-		
-		cWidth 	= Std.int(Math.min(stage.getNativeStage().stageWidth, cWidth));
-		cHeight = Std.int(Math.min(stage.getNativeStage().stageHeight, cHeight));
-		/*
-		if ( cWidth > _width || cHeight > _height || _childrensnap == null ) {
-			if ( _childrensnap != null ) {
-				_childrensnap.dispose();
-			}
-			
-			width = cWidth;
-			height = cHeight;
-			
-			_childrensnap = new BitmapData(width, height, true, 0x00FF);
-		}
-		*/
 		var point:Point = new Point();
 		var rects:Array<Rectangle> = [];
 		var rect:Rectangle = new Rectangle(0, 0, WIDTH, HEIGHT);
-		var rectregin:Rectangle = null;
 		var drawRect:Rectangle = null;
-//		if ( _renderFlags > 0 ) {
-//			if ( _snap == null )
-//				_snap = new BitmapData(width, height, true, 0x00FF);
-//			else
-//				_snap.fillRect(new Rectangle(0, 0, width, height), 0x00FF);
-//			
-//			if ( _graphics != null && _graphics.getTexture() != null ) {
-//				var point:Point = new Point();
-//					point.x = _graphics.getTexture().frame != null ? -_graphics.getTexture().frame.x: 0;
-//					point.y = _graphics.getTexture().frame != null ? -_graphics.getTexture().frame.y: 0;
-//				_snap.copyPixels( _graphics.getTexture().bitmapdata, _graphics.getTexture().regin, point );
-//			}
-			/*
-			if ( _snap == null )
-				_snap = new BitmapData(width, height, true, 0x00FF);
-				
-			var tx:Int = Math.ceil( width / WIDTH );
-			var ty:Int = Math.ceil( height / HEIGHT );
+		var texture:Sparrow;
+		var isFull:Bool = false;
+		if ( _stageSnap == null ) _stageSnap = stage.getSnap();
+		for ( block in _blocks ) {
+			var vx:Int = Math.ceil((block.x % WIDTH + block.width) / WIDTH);
+			var vy:Int = Math.ceil((block.y % HEIGHT + block.height) / HEIGHT);
 			
-			for ( i in 0...tx ) {
-				for ( j in 0...ty ) {
-					rect.x = i * WIDTH;
-					rect.y = j * HEIGHT;
+			for ( i in 0...vx ) {
+				for ( j in 0...vy ) {
+					rect.x = Std.int(block.x / WIDTH) * WIDTH + i * WIDTH;
+					rect.y = Std.int(block.y / HEIGHT) * HEIGHT + j * HEIGHT;
 					
-					rects.push(rect.clone());
-					rectregin = rect.clone();
-					
-					if ( _graphics.getTexture() != null ) {
-						point.x = rect.x - (_graphics.getTexture().frame != null?_graphics.getTexture().frame.x:0);
-						point.y = rect.y - (_graphics.getTexture().frame != null?_graphics.getTexture().frame.y:0);
-						
-						var cRect:Rectangle = _graphics.getTexture().regin;
-						
-						rectregin.x += cRect.x;
-						rectregin.y += cRect.y;
-						
-						_snap.copyPixels( _graphics.getTexture().bitmapdata, rectregin.intersection(cRect), point );
-					} else
-						_snap.fillRect( rect, 0x00FF );
-				}
-			}*/
-//		} else {
-			for ( block in _blocks ) {
-				var vx:Int = Math.ceil((block.x % WIDTH + block.width) / WIDTH);
-				var vy:Int = Math.ceil((block.y % HEIGHT + block.height) / HEIGHT);
-				
-				for ( i in 0...vx ) {
-					for ( j in 0...vy ) {
-						rect.x = Std.int(block.x / WIDTH) * WIDTH + i * WIDTH;
-						rect.y = Std.int(block.y / HEIGHT) * HEIGHT + j * HEIGHT;
-						
-						var isFind:Bool = false;
-						for ( z in rects ) {
-							if ( z.x == rect.x && z.y == rect.y ) {
-								isFind = true;
-								break;
-							}
-						}
-						
-						if ( !isFind ) {
-							rects.push(rect.clone());
-							
-							rectregin = rect.clone();
-							/*
-							if ( _graphics.getTexture() != null ) {
-								point.x = rect.x - (_graphics.getTexture().frame != null?_graphics.getTexture().frame.x:0);
-								point.y = rect.y - (_graphics.getTexture().frame != null?_graphics.getTexture().frame.y:0);
-								
-								var cRect:Rectangle = _graphics.getTexture().regin;
-								
-								rectregin.x += cRect.x;
-								rectregin.y += cRect.y;
-								
-								_snap.copyPixels( _graphics.getTexture().bitmapdata, rectregin.intersection(cRect), point );
-							} else
-								_snap.fillRect( rect, 0x00FF );
-							*/
-						}
-					}
-				}
-			}
-//		}
-		
-		var item:UiGDisplayObject;
-		//SystemUtils.print(rects);
-		for ( i in 0..._items.length ) {
-			item = _items[i];
-			//SystemUtils.print(item);
-			if ( !item.getVisible() ) continue;
-			range = item.getBound().clone();
-			for ( rect in rects ) {
-				if ( rect.containsRect(range) ) {
-					point.x = range.x - (item.getGraphics().getTexture().frame != null?item.getGraphics().getTexture().frame.x:0);
-					point.y = range.y - (item.getGraphics().getTexture().frame != null?item.getGraphics().getTexture().frame.y:0);
-					
-					drawRect = range.clone();
-					drawRect.x = 0 + item.getGraphics().getTexture().regin.x;
-					drawRect.y = 0 + item.getGraphics().getTexture().regin.y;
-					drawRect.width = Math.min(range.width, item.getGraphics().getTexture().regin.width);
-					drawRect.height = Math.min(range.width, item.getGraphics().getTexture().regin.height);
-					
-					stage.getSnap().copyPixels(item.getGraphics().getTexture().bitmapdata, drawRect, point, null, null, true);
-					//_childrensnap.copyPixels(item.snap, drawRect, point, null, null, true);
-				} else if ( rect.intersects(range) ) {
-					drawRect = range.intersection(rect);
-					if ( drawRect.y != rect.y ) {
-						if ( drawRect.x != rect.x ) {
-							drawRect.x = drawRect.x - range.x + item.getGraphics().getTexture().regin.x;
-							drawRect.y = drawRect.y - range.y + item.getGraphics().getTexture().regin.y;
-
-							point.x = range.x - (item.getGraphics().getTexture().frame != null?item.getGraphics().getTexture().frame.x:0);
-							point.y = range.y - (item.getGraphics().getTexture().frame != null?item.getGraphics().getTexture().frame.y:0);
-						} else {
-							drawRect.x = rect.x - range.x + item.getGraphics().getTexture().regin.x;
-							drawRect.y = drawRect.y - range.y + item.getGraphics().getTexture().regin.y;
-
-							point.x = rect.x - (item.getGraphics().getTexture().frame != null?item.getGraphics().getTexture().frame.x:0);
-							point.y = range.y - (item.getGraphics().getTexture().frame != null?item.getGraphics().getTexture().frame.y:0);
-						}
-					} else {
-						if ( drawRect.x != rect.x ) {
-							drawRect.x = drawRect.x - range.x + item.getGraphics().getTexture().regin.x;
-							drawRect.y = rect.y - range.y + item.getGraphics().getTexture().regin.y;
-
-							point.x = range.x - (item.getGraphics().getTexture().frame != null?item.getGraphics().getTexture().frame.x:0);
-							point.y = rect.y - (item.getGraphics().getTexture().frame != null?item.getGraphics().getTexture().frame.y:0);
-						} else {
-							drawRect.x = rect.x - range.x + item.getGraphics().getTexture().regin.x;
-							drawRect.y = rect.y - range.y + item.getGraphics().getTexture().regin.y;
-
-							point.x = rect.x - (item.getGraphics().getTexture().frame != null?item.getGraphics().getTexture().frame.x:0);
-							point.y = rect.y - (item.getGraphics().getTexture().frame != null?item.getGraphics().getTexture().frame.y:0);
+					var isFind:Bool = false;
+					for ( z in rects ) {
+						if ( z.x == rect.x && z.y == rect.y ) {
+							isFind = true;
+							break;
 						}
 					}
 					
-					drawRect.width = Math.min(range.width, item.getGraphics().getTexture().regin.width);
-					drawRect.height = Math.min(range.width, item.getGraphics().getTexture().regin.height);
-					stage.getSnap().copyPixels(item.getGraphics().getTexture().bitmapdata, drawRect, point, null, null, true);
-					//_childrensnap.copyPixels(item.snap, drawRect, point, null, null, true);
+					if ( !isFind ) {
+						rects.push(new Rectangle(rect.x, rect.y, rect.width, rect.height));
+						
+						_stageSnap.fillRect(rect, 0x00FF);
+					}
 				}
-				//SystemUtils.print(item.getGraphics().getTexture().bitmapdata+", "+drawRect+", "+point);
-				
 			}
+			
+			isFull = rects.length >= vx * vx;
 		}
 		
-		//_snap.copyPixels(_childrensnap, new Rectangle(0,0,cWidth,cHeight), new Point(), null, null, true);
-		
+		var item:UiGDisplayObject;
+		for ( i in 0..._items.length ) {
+			item = _items[i];
+			if ( !item.getVisible() ) continue;
+			item.draw();
+			
+			if ( item.getGraphics().getTexture() == null ) continue;
+			
+			range = item.getRelativePosition();
+			texture = item.getGraphics().getTexture();
+			
+			if ( isFull ) {
+				point.x = range.x - (texture.frame != null?texture.frame.x:0);
+				point.y = range.y - (texture.frame != null?texture.frame.y:0);
+				
+				drawRect = new Rectangle(texture.regin.x, texture.regin.y, texture.regin.width, texture.regin.height);
+				
+				_stageSnap.copyPixels(texture.bitmapdata, drawRect, point, null, null, true);
+					
+				continue;
+			}
+			
+			for ( rect in rects ) {
+				if ( rect.containsRect(range) ) {//contains changed rect
+					point.x = range.x - (texture.frame != null?texture.frame.x:0);
+					point.y = range.y - (texture.frame != null?texture.frame.y:0);
+					
+					drawRect = new Rectangle(texture.regin.x, texture.regin.y, texture.regin.width, texture.regin.height);
+					
+					_stageSnap.copyPixels(texture.bitmapdata, drawRect, point, null, null, true);
+				} else if ( rect.intersects(range) ) {
+					//drawRect = range.intersection(rect);
+					var offset:Rectangle = texture.frame != null?texture.frame:new Rectangle();
+					if ( range.y >= rect.y ) {//top
+						if ( range.x <= rect.x ) {//left top
+							point.x = range.x - (texture.frame != null?texture.frame.x:0);
+							point.y = range.y - (texture.frame != null?texture.frame.y:0);
+							
+							drawRect = new Rectangle(texture.regin.x, texture.regin.y, texture.regin.width, texture.regin.height);
+							drawRect.width = Math.min(drawRect.width, rect.x + rect.width - range.x + offset.x);
+							drawRect.height = Math.min(drawRect.height, rect.y + rect.height - range.y + offset.y);
+						} else {//right top
+							point.x = rect.x;
+							point.y = range.y - (texture.frame != null?texture.frame.y:0);
+							
+							drawRect = new Rectangle(texture.regin.x, texture.regin.y, texture.regin.width, texture.regin.height);
+							if ( rect.x - range.x + offset.x > 0 ) {
+								drawRect.x += rect.x - range.x + offset.x;
+								drawRect.width -= rect.x - range.x + offset.x;
+							}
+							
+							drawRect.height = Math.min(drawRect.height, rect.y + rect.height - range.y + offset.y);
+						}
+					} else {//bottom
+						if ( range.x <= rect.x ) {//left bottom
+							point.x = range.x - (texture.frame != null?texture.frame.x:0);
+							point.y = rect.y;
+							
+							drawRect = new Rectangle(texture.regin.x, texture.regin.y, texture.regin.width, texture.regin.height);
+							if ( rect.y - range.y + offset.y > 0 ) {
+								drawRect.y += rect.y - range.y + offset.y;
+								drawRect.height -= rect.y - range.y + offset.y;
+							}
+							
+							drawRect.width = Math.min(drawRect.width, rect.x + rect.width - range.x + offset.x);
+						} else {//right bottom
+							point.x = rect.x;
+							point.y = rect.y;
+							
+							drawRect = new Rectangle(texture.regin.x, texture.regin.y, texture.regin.width, texture.regin.height);
+							if ( rect.x - range.x + offset.x > 0 ) {
+								drawRect.x += rect.x - range.x + offset.x;
+								drawRect.width -= rect.x - range.x + offset.x;
+							} else {
+								drawRect.width = Math.min(drawRect.width, rect.x + rect.width - range.x + offset.x);
+							}
+							
+							if ( rect.y - range.y + offset.y > 0 ) {
+								drawRect.y += rect.y - range.y + offset.y;
+								drawRect.height -= rect.y - range.y + offset.y;
+							} else {
+								drawRect.height = Math.min(drawRect.height, rect.y + rect.height - range.y + offset.y);
+							}
+						}
+					}
+					_stageSnap.copyPixels(texture.bitmapdata, drawRect, point, null, null, true);
+				}
+			}
+		}
 		_blocks = [];
-		
-		//_invaildBound = false;
 		_renderFlags = 0;
-		//_graphicFlags = false;
-		//_lastFlags = false;
 	}
 	
 	override public function touchTest(point:Point, isDown:Bool):UiGDisplayObject
@@ -347,17 +269,4 @@ class UiGDisplayObjectContainer extends UiGDisplayObject
 		if ( touchObj != null ) return touchObj;
 		return super.touchTest(point.subtract(dp), isDown);
 	}
-	/*
-	override public function recycle():Void 
-	{
-		super.recycle();
-		
-		for ( item in _items ) {
-			item.recycle();
-		}
-		
-		if ( _childrensnap == null ) return;
-		_childrensnap.dispose();
-		_childrensnap = null;
-	}*/
 }

@@ -1,16 +1,19 @@
 package cn.royan.hl.uis.graphs;
 
 import cn.royan.hl.bases.TimerBase;
+import cn.royan.hl.events.DatasEvent;
 import cn.royan.hl.uis.graphs.UiGDisplayObject;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import flash.ui.Mouse;
+import flash.ui.MouseCursor;
 
 /**
  * ...
  * @author RoYan
  */
-class UiGMovieClip extends UiGSprite
+class UiGMovieClip extends UiGDisplayObject
 {
 	public var currentFrame(getCurrentFrame, null):Int;
 	public var totalFrames(getTotalFrames, null):Int;
@@ -24,8 +27,19 @@ class UiGMovieClip extends UiGSprite
 	private var _autoPlay:Bool;
 	private var _sequence:Bool;
 	
+	public var buttonMode(getButtonMode, setButtonMode):Bool;
+	public var dropTarget(getDropTarget, never):UiGDisplayObject;
+	public var useHandCursor(default, setUseHandCursor):Bool;
+	
+	private var _cursorCallbackOut:Dynamic->Void;
+	private var _cursorCallbackOver:Dynamic->Void;
+	private var _dropTarget:UiGDisplayObject;
+	private var _buttonMode:Bool;
+	
 	public function new( sparrows:Array<Sparrow>, fps:Int )
 	{
+		super();
+		
 		_currentFrame 	= 1;
 		_totalFrames 	= _toFrame = sparrows.length;
 		_loop 			= true;
@@ -34,12 +48,57 @@ class UiGMovieClip extends UiGSprite
 		_textures 		= sparrows;
 		_timer 			= new TimerBase( Std.int( 1000 / fps ), timerHandler );
 		
-		super( _textures[_currentFrame-1] );
+		_touchable = true;
+		
+		_graphics = new UiGGraphic(_textures[_currentFrame-1]);
+		
+		if ( _textures[_currentFrame-1] != null ) {
+			if ( _textures[_currentFrame-1].frame != null ) {
+				width 	= Std.int(_textures[_currentFrame-1].frame.width);
+				height 	= Std.int(_textures[_currentFrame-1].frame.height);
+			} else {
+				width 	= Std.int(_textures[_currentFrame-1].regin.width);
+				height	= Std.int(_textures[_currentFrame-1].regin.height);
+			}
+		}
+		
+		addEventListener(DatasEvent.MOUSE_OVER, mouseOverHandler);
+		addEventListener(DatasEvent.MOUSE_OUT, mouseOutHandler);
 	}
 	
-	override public function draw():Void 
+	function mouseOverHandler(evt:DatasEvent):Void
 	{
-		super.draw();
+		#if flash
+		Mouse.cursor = _buttonMode?MouseCursor.BUTTON:MouseCursor.AUTO;
+		#end
+	}
+	
+	function mouseOutHandler(evt:DatasEvent):Void
+	{
+		#if flash
+		Mouse.cursor = MouseCursor.AUTO;
+		#end
+	}
+	
+	public function getDropTarget():UiGDisplayObject
+	{
+		return _dropTarget;
+	}
+	
+	public function setUseHandCursor(value:Bool):Bool
+	{
+		return useHandCursor;
+	}
+	
+	public function setButtonMode(value:Bool):Bool
+	{
+		_buttonMode = value;
+		return _buttonMode;
+	}
+	
+	public function getButtonMode():Bool
+	{
+		return _buttonMode;
 	}
 	
 	/**
@@ -76,6 +135,7 @@ class UiGMovieClip extends UiGSprite
 		_loop = false;
 		_currentFrame = frame;
 		
+		updateTexture();
 		updateDisplayList();
 	}
 
@@ -92,8 +152,6 @@ class UiGMovieClip extends UiGSprite
 		_sequence = from <= to;
 		_currentFrame 	= from;
 		_toFrame 		= to;
-		
-		updateDisplayList();
 		
 		_timer.start();
 	}
@@ -113,6 +171,8 @@ class UiGMovieClip extends UiGSprite
 	{
 		_timer.stop();
 		_currentFrame = 1;
+		updateTexture();
+		updateDisplayList();
 	}
 	
 	/**
@@ -130,6 +190,7 @@ class UiGMovieClip extends UiGSprite
 		{
 			_currentFrame = 1;
 		}
+		updateTexture();
 		updateDisplayList();
 	}
 	
@@ -140,6 +201,7 @@ class UiGMovieClip extends UiGSprite
 		{
 			_currentFrame = _totalFrames;
 		}
+		updateTexture();
 		updateDisplayList();
 	}
 	
@@ -168,6 +230,7 @@ class UiGMovieClip extends UiGSprite
 			_timer.stop();
 		}
 		
+		updateTexture();
 		updateDisplayList();
 	}
 	
@@ -181,16 +244,9 @@ class UiGMovieClip extends UiGSprite
 		return _totalFrames;
 	}
 	
-	override public function updateDisplayList(item:UiGDisplayObject = null):Void 
+	function updateTexture():Void
 	{
 		_graphics.setTexture(_textures[currentFrame - 1]);
-		//_graphicFlags = true;
 		_renderFlags |= UiGDisplayObject.RENDER_PICTURE;
-		super.updateDisplayList(item);
 	}
-	/*
-	override public function recycle():Void 
-	{
-		//super.recycle();
-	}*/
 }

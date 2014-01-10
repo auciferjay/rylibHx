@@ -13,7 +13,7 @@ interface IUiGBase
 {
 	function getBound():Rectangle;
 	
-	function setStage(value:UiGStage):UiGStage;
+//	function setStage(value:UiGStage):UiGStage;
 	function getStage():UiGStage;
 	
 	function setParent(value:UiGDisplayObjectContainer):UiGDisplayObjectContainer;

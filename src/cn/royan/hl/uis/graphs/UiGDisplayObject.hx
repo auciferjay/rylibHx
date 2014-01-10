@@ -8,6 +8,7 @@ import cn.royan.hl.interfaces.uis.IUiGBase;
 import cn.royan.hl.uis.sparrow.Sparrow;
 import cn.royan.hl.uis.sparrow.SparrowManager;
 import cn.royan.hl.utils.SystemUtils;
+import flash.geom.Matrix;
 
 import flash.display.BitmapData;
 import flash.geom.Point;
@@ -30,24 +31,21 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 	public var rotation(getRotation, setRotation):Float;
 	public var scaleX(getScaleX, setScaleX):Float;
 	public var scaleY(getScaleY, setScaleY):Float;
-	public var stage(getStage, setStage):UiGStage;
+	public var stage(getStage, never):UiGStage;
 	public var visible(getVisible, setVisible):Bool;
 	public var width(getWidth, setWidth):Int;
 	public var height(getHeight, setHeight):Int;
 	public var touchable(getTouchable, setTouchable):Bool;
 	public var x(getX, setX):Int;
 	public var y(getY, setY):Int;
-//	public var snap(getSnap, setSnap):BitmapData;
 	
 	private var _stage:UiGStage;
 	private var _alpha:Float;
 	private var _parent:UiGDisplayObjectContainer;
 	private var _graphics:UiGGraphic;
 	private var _renderFlags:Int;
-//	private var _graphicFlags:Bool;
-//	private var _invaildBound:Bool;
-//	private var _lastFlags:Bool;
 	private var _bound:Rectangle;
+	private var _globalbounds:Rectangle;
 	private var _height:Int;
 	private var _rotation:Float;
 	private var _scaleX:Float;
@@ -57,14 +55,15 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 	private var _width:Int;
 	private var _x:Int;
 	private var _y:Int;
-//	private var _snap:BitmapData;
 	private var _touchstats:Array<Int>;
 	
 	private var _mapKeys:Array<String>;
 	private static var _weakMap:WeakMap = WeakMap.getInstance();
 	
+	private var _transformationMatrix:Matrix;
+	
 	public static inline var RENDER_REFRESH:Int 	= 1;
-	public static inline var RENDER_RESIZE:Int 	= 2;
+	public static inline var RENDER_RESIZE:Int 		= 2;
 	public static inline var RENDER_PICTURE:Int 	= 4;
 	
 	public function new() 
@@ -73,9 +72,10 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 		
 		_bound = new Rectangle();
 		_visible = true;
-//		_graphicFlags = true;
 		_touchable = false;
 		_touchstats = [];
+		
+		_transformationMatrix = new Matrix();
 		
 		_renderFlags = 0;
 		
@@ -158,21 +158,27 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 	public function draw():Void
 	{
 		if ( _renderFlags == 0 ) return;
-		//if ( _invaildBound ) _snap = new BitmapData(width, height, true, 0x00FF);
-		/*
-		if ( _graphicFlags && _snap != null ) {
-			_snap.fillRect(new Rectangle(0, 0, width, height), 0x00FF);
-			if ( _graphics != null && _graphics.getTexture() != null ) {
-				var point:Point = new Point();
-					point.x = _graphics.getTexture().frame != null ? -_graphics.getTexture().frame.x: 0;
-					point.y = _graphics.getTexture().frame != null ? -_graphics.getTexture().frame.y: 0;
-				_snap.copyPixels( _graphics.getTexture().bitmapdata, _graphics.getTexture().regin, point );
-			}
-		}*/
-		//_invaildBound = false;
 		_renderFlags = 0;
-		//_graphicFlags = false;
-		//_lastFlags = false;
+	}
+	
+	public function getRelativePosition(target:UiGDisplayObject=null):Rectangle
+	{
+		if ( _globalbounds != null && _renderFlags == 0 ) return _globalbounds;
+		if ( target == null ) target = stage;
+		var currentObject:UiGDisplayObject = this;
+		var currentBounds = new Rectangle(0,0,width,height);
+		while ( currentObject.parent != null )
+		{
+			if ( currentObject == target ) {
+				_globalbounds = currentBounds;
+				return currentBounds;
+			} else {
+				currentBounds.offset( currentObject.x, currentObject.y);
+				currentObject = currentObject.parent;
+			}
+		}
+		_globalbounds = currentBounds;
+		return currentBounds;
 	}
 	
 	public function getBound():Rectangle
@@ -184,15 +190,21 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 		return _bound;
 	}
 	
-	public function setStage(value:UiGStage):UiGStage
-	{
-		_stage = value;
-		return _stage;
-	}
-	
 	public function getStage():UiGStage
 	{
-		return _stage;
+		if ( _renderFlags == 0 ) return _stage;
+		var currentObject:UiGDisplayObject = this;
+		while ( currentObject.parent != null )
+		{
+			if ( Std.is( currentObject.parent, UiGStage) ) {
+				_stage = cast(currentObject.parent);
+				return cast(currentObject.parent);
+			}
+			else
+				currentObject = currentObject.parent;
+		}
+		_stage = null;
+		return null;
 	}
 	
 	public function setParent(value:UiGDisplayObjectContainer):UiGDisplayObjectContainer
@@ -274,7 +286,7 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 	public function setWidth(value:Int):Int
 	{
 		_width = value;
-		_renderFlags != RENDER_RESIZE;
+		_renderFlags |= RENDER_RESIZE;
 		updateDisplayList();
 		return _width;
 	}
@@ -287,7 +299,7 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 	public function setHeight(value:Int):Int
 	{
 		_height = value;
-		_renderFlags != RENDER_RESIZE;
+		_renderFlags |= RENDER_RESIZE;
 		updateDisplayList();
 		return _height;
 	}
@@ -331,27 +343,7 @@ class UiGDisplayObject extends DispatcherBase, implements IUiGBase
 	{
 		return _y;
 	}
-	/*
-	public function setSnap(value:BitmapData):BitmapData
-	{
-		_snap = value;
-		_lastFlags = false;
-		return _snap;
-	}
 	
-	public function getSnap():BitmapData
-	{
-		_lastFlags = true;
-		return _snap;
-	}
-	
-	public function recycle():Void
-	{
-		if ( _snap == null ) return;
-		_snap.dispose();
-		_snap = null;
-	}
-	*/
 	public function dispose():Void
 	{
 		while ( _mapKeys.length > 0 ) {

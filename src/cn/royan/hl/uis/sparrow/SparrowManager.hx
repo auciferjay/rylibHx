@@ -19,7 +19,6 @@ class SparrowManager
 	
 	static public inline function setAtlas(type:String, bitmap:Bitmap, xml:Xml):Void
 	{
-		SystemUtils.print(type+":"+bitmap+":"+xml, PrintConst.UIS);
 		Reflect.setField(gameBitmaps, type, bitmap);
 		Reflect.setField(gameXMLs, type, xml);
 	}

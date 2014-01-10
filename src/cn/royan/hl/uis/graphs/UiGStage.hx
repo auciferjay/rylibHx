@@ -3,6 +3,7 @@ package cn.royan.hl.uis.graphs;
 import cn.royan.hl.bases.TimerBase;
 import cn.royan.hl.consts.UiConst;
 import cn.royan.hl.uis.graphs.UiGDisplayObjectContainer;
+import cn.royan.hl.uis.graphs.UiGStage;
 import flash.display.BitmapData;
 import flash.geom.Point;
 
@@ -29,8 +30,6 @@ class UiGStage extends UiGDisplayObjectContainer
 	public function new(rootStage:Stage) 
 	{
 		super();
-		
-		stage = this;
 		
 		bounds = [];
 		
@@ -74,6 +73,11 @@ class UiGStage extends UiGDisplayObjectContainer
 	public function getNativeStage():Stage
 	{
 		return nativeStage;
+	}
+	
+	override public function getStage():UiGStage 
+	{
+		return this;
 	}
 	/*
 	override public function recycle():Void 
